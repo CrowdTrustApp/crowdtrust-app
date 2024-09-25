@@ -1,0 +1,27 @@
+build/
+dist/
+tmp/
+node_modules/
+
+*.zip
+
+.DS_Store
+
+log
+*~
+*.sqlite3
+
+*.env*
+
+# Playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/
+
+# IDE
+.vscode/
+.idea/
+
+*lang.postcss.json
+
+analyse.html

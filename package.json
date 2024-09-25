@@ -1,0 +1,37 @@
+{
+  "name": "crowdtrust-app",
+  "version": "1.0.0",
+  "description": "Web frontend, backend, and smart contracts for https://crowdtrust.app",
+  "engines": {
+    "node": ">=18",
+    "npm": ">=8"
+  },
+  "type": "module",
+  "scripts": {
+    "format": "prettier -w \"{**/*,*}.{ts,js,json}\"",
+    "format:check": "prettier --check \"{**/*,*}.{ts,js,json,vue}\"",
+    "lint": "oxlint .",
+    "lint:style": "./node_modules/stylelint/bin/stylelint.js \"**/src/**/*.{css,vue}\"",
+    "dev:web:run": "pnpm --filter '@crowdtrust/app' run dev",
+    "prod:web:build": "pnpm --filter '@crowdtrust/app' run build",
+    "dev:backend:build": "cd backend && cargo build",
+    "dev:backend:run": "cd backend && cargo run",
+    "prod:backend:build": "cd backend && cargo build --release",
+    "prune": "tools/scripts/prune-all.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CrowdTrustApp/crowdtrust-app.git"
+  },
+  "keywords": [],
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CrowdTrustApp/crowdtrust-app/issues"
+  },
+  "homepage": "https://github.com/CrowdTrustApp/crowdtrust-app#README",
+  "author": "CrowdTrust",
+  "devDependencies": {
+    "oxlint": "^0.9.7",
+    "prettier": "^3.3.3"
+  }
+}

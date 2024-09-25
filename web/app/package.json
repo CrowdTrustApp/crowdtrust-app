@@ -1,0 +1,55 @@
+{
+  "name": "@crowdtrust/app",
+  "version": "1.0.0",
+  "description": "CrowdTrust web frontend",
+  "type": "module",
+  "main": "dist/crowdtrust-app.es.js",
+  "module": "dist/crowdtrust-app.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/crowdtrust-app.es.js"
+    },
+    "./dist/*.css": {
+      "import": "./dist/*.css"
+    }
+  },
+  "types": "dist/index.d.mts.d.ts",
+  "files": [
+    "lib",
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/crowdtrust/crowdtrust-app.git"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@floating-ui/vue": "^1.1.4",
+    "@samatech/vue-store": "^0.6.0",
+    "@sampullman/fetch-api": "^0.12.1",
+    "date-fns": "^3.6.0",
+    "jwt-decode": "^4.0.0",
+    "petite-vue-i18n": "^9.13.1",
+    "vue": "catalog:",
+    "vue-router": "catalog:"
+  },
+  "devDependencies": {
+    "@rollup/plugin-terser": "catalog:",
+    "@vitejs/plugin-vue": "catalog:",
+    "postcss": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "postcss-mixins": "catalog:",
+    "postcss-simple-vars": "catalog:",
+    "postcss-nested": "catalog:",
+    "@types/node": "^20.14.9",
+    "lightningcss": "^1.25.1",
+    "prettier": "^3.3.2"
+  }
+}
