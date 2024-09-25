@@ -50,6 +50,26 @@ const router = createRouter({
           name: 'Connect',
           component: () => import('./views/Connect.vue'),
         },
+        {
+          path: '/terms',
+          name: 'Terms',
+          component: () => import('./views/Terms.vue'),
+        },
+        {
+          path: '/cookies',
+          name: 'Cookies',
+          component: () => import('./views/Cookies.vue'),
+        },
+        {
+          path: '/privacy',
+          name: 'Privacy',
+          component: () => import('./views/Privacy.vue'),
+        },
+        {
+          path: '/trust',
+          name: 'Trust',
+          component: () => import('./views/Trust.vue'),
+        },
       ],
     },
     {

@@ -9,7 +9,7 @@
       {{ `${goal}${ts('goal')}` }}
     </div>
     <div class="progress-wrap">
-      <div class="progress"></div>
+      <div class="progress" :style="{ width: `${Math.min(goal, 100)}%` }"></div>
     </div>
   </div>
 </template>
@@ -73,6 +73,7 @@ defineProps<{
   position: relative;
 }
 .progress-wrap {
+  margin-top: 4px;
   height: 2px;
   background-color: rgba(255, 255, 255, 0.25);
   position: relative;
@@ -81,6 +82,7 @@ defineProps<{
   position: absolute;
   left: 0;
   top: 0;
+  bottom: 0;
   background-color: $blue2;
 }
 

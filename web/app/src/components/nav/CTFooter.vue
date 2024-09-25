@@ -42,10 +42,10 @@ import Twitter from '../svg/Twitter.vue'
             <router-link :to="{ name: 'Back' }" class="link">{{
               ts('back.title')
             }}</router-link>
-            <router-link :to="{ name: 'Back' }" class="link">{{
+            <router-link :to="{ name: 'Services' }" class="link">{{
               ts('services.title')
             }}</router-link>
-            <router-link :to="{ name: 'Back' }" class="link">{{
+            <router-link :to="{ name: 'How' }" class="link">{{
               ts('how.title')
             }}</router-link>
           </div>
@@ -65,21 +65,21 @@ import Twitter from '../svg/Twitter.vue'
       </div>
     </div>
     <div class="footer-bottom">
-      <a href="" class="bottom-link">
+      <router-link :to="{ name: 'Trust' }" class="bottom-link">
         {{ ts('footer.trust') }}
-      </a>
+      </router-link>
       <div class="bottom-divider"></div>
-      <a href="" class="bottom-link">
+      <router-link :to="{ name: 'Terms' }" class="bottom-link">
         {{ ts('footer.terms') }}
-      </a>
+      </router-link>
       <div class="bottom-divider"></div>
-      <a href="" class="bottom-link">
+      <router-link :to="{ name: 'Privacy' }" class="bottom-link">
         {{ ts('footer.privacy') }}
-      </a>
+      </router-link>
       <div class="bottom-divider"></div>
-      <a href="" class="bottom-link">
+      <router-link :to="{ name: 'Cookies' }" class="bottom-link">
         {{ ts('footer.cookie') }}
-      </a>
+      </router-link>
     </div>
   </footer>
 </template>
@@ -94,6 +94,7 @@ import Twitter from '../svg/Twitter.vue'
   align-items: center;
   position: relative;
   height: 48px;
+  background-color: white;
 }
 .bottom-divider {
   height: 100%;

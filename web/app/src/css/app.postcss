@@ -60,3 +60,32 @@ $overlay: rgba(0, 0, 0, 0.6);
     border-color: black;
   }
 }
+
+.blog-content {
+  max-width: 900px;
+  padding: 0 20px;
+  margin: 0 auto;
+  padding: 48px 0 96px;
+  min-height: calc(100vh - 360px);
+  position: relative;
+  li {
+    margin-top: 12px;
+  }
+}
+
+.blog-title {
+  @mixin title 32px;
+}
+
+.blog-head {
+  @mixin title 20px;
+  font-weight: 800;
+  margin-top: 24px;
+}
+
+.blog-text {
+  @mixin text 16px;
+  color: $text2;
+  margin-top: 16px;
+  line-height: 1.4em;
+}
