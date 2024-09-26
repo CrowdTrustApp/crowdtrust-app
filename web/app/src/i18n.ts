@@ -41,6 +41,23 @@ const fallback: I18nObject = {
   },
   services: {
     title: 'Our Services',
+    services: 'Services',
+    offer: 'We Offer',
+    campaign: 'Campaign Management',
+    campaign_text:
+      'Launch and manage your crowdfunding campaign with ease. Our intuitive platform guides you through every step, from setting up your campaign to tracking progress and engaging with backers.',
+    ai: 'AI-Enhanced Insights',
+    ai_text:
+      'Leverage our AI tools to analyze your campaign data and optimize strategies. Whether it’s audience targeting, pricing, or content creation, our AI-driven insights help you make informed decisions.',
+    market: 'Market Network',
+    market_text:
+      'Access a curated marketplace of professional services. Need help with marketing, video production, or legal advice? The CrowdTrust Market Network connects you with experts who can help elevate your campaign.',
+    security: 'TrustGuard Fund Security',
+    security_text:
+      'Protect your backers and build trust with TrustGuard. This innovative system holds funds in escrow until you meet pre-set milestones, ensuring that your backers’ contributions are used effectively.',
+    community: 'Community Engagement',
+    community_text:
+      'Build and engage with a global community of backers and supporters. Use our platform’s tools to communicate with your audience, provide updates, and keep your campaign momentum strong.',
   },
   how: {
     title: 'How It Works',

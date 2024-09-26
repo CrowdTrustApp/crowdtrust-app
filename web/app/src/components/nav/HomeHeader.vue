@@ -5,15 +5,9 @@
         <Logo class="header-logo" />
       </router-link>
       <div class="links">
-        <router-link :to="{ name: 'Back' }">
-          {{ ts('back.title') }}
-        </router-link>
-        <router-link :to="{ name: 'Services' }">
-          {{ ts('services.title') }}
-        </router-link>
-        <router-link :to="{ name: 'How' }">
-          {{ ts('how.title') }}
-        </router-link>
+        <HeaderLink to="Back" :text="ts('back.title')" />
+        <HeaderLink to="Services" :text="ts('services.title')" />
+        <HeaderLink to="How" :text="ts('how.title')" />
       </div>
       <router-link :to="{ name: 'Connect' }" class="join-link">
         <div class="join button1">
@@ -41,6 +35,7 @@ import Logo from '../svg/Logo.vue'
 import Burger from '../widgets/Burger.vue'
 import Drawer from './Drawer.vue'
 import DrawerLink from './DrawerLink.vue'
+import HeaderLink from './HeaderLink.vue'
 
 const rightActive = ref(false)
 </script>
@@ -51,6 +46,7 @@ const rightActive = ref(false)
 header {
   width: 100%;
   position: relative;
+  z-index: 1;
 }
 .header {
   @mixin text 16px;
@@ -70,10 +66,6 @@ header {
   display: flex;
   margin-left: auto;
   align-items: center;
-  a {
-    color: black;
-    margin: 0 24px;
-  }
 }
 .join {
   margin-left: 24px;
