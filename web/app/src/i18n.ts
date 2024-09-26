@@ -63,8 +63,17 @@ const fallback: I18nObject = {
     title: 'How It Works',
   },
   connect: {
-    title: 'Connect',
+    title: 'Welcome to <span>CrowdTrust<span>',
+    text: 'Join our community and support groundbreaking projects through the power of blockchain. Connect your MetaMask wallet to log in or register!',
+    login: 'Log in / Register with MetaMask',
+    secure: 'Securely access your account in just a few clicks.',
     join: 'Join Us',
+    button: 'CONNECT',
+    how: 'How It Works:',
+    install:
+      'If you don’t have MetaMask installed, <a href="https://metamask.io" target="_blank">download it here</a>.',
+    click: 'Click above to connect your MetaMask wallet and verify your identity.',
+    email: 'Add an email to help recover your account if you lose your wallet',
   },
   footer: {
     copyright: '© 2024 CrowdTrust - All Rights Reserved.',
