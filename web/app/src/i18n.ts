@@ -6,6 +6,7 @@ const fallback: I18nObject = {
   start: 'GET STARTED',
   browse: 'BROWSE PROJECTS',
   goal: '% Goal Met',
+  email: 'Email',
   welcome_title: 'Welcome to CrowdTrust - Empowering Creators, Protecting Backers',
   welcome_text:
     'CrowdTrust is a next-generation crowdfunding platform designed to revolutionize how creators bring their ideas to life and how backers support innovative projects. By combining advanced technology with a user-centric approach, CrowdTrust offers a secure, transparent, and successful crowdfunding experience for all.',
@@ -74,6 +75,9 @@ const fallback: I18nObject = {
       'If you don’t have MetaMask installed, <a href="https://metamask.io" target="_blank">download it here</a>.',
     click: 'Click above to connect your MetaMask wallet and verify your identity.',
     email: 'Add an email to help recover your account if you lose your wallet',
+    register: 'Register',
+    register_text:
+      'Add an optional email to help recover your account if you lose your wallet.',
   },
   footer: {
     copyright: '© 2024 CrowdTrust - All Rights Reserved.',

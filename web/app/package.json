@@ -32,6 +32,7 @@
   "dependencies": {
     "@floating-ui/vue": "^1.1.4",
     "@samatech/vue-store": "^0.6.0",
+    "@samatech/vue3-eth": "link:../../../../samatech/vue3-eth",
     "@sampullman/fetch-api": "^0.12.1",
     "date-fns": "^3.6.0",
     "jwt-decode": "^4.0.0",
@@ -41,15 +42,16 @@
   },
   "devDependencies": {
     "@rollup/plugin-terser": "catalog:",
+    "@types/node": "^20.14.9",
     "@vitejs/plugin-vue": "catalog:",
+    "lightningcss": "^1.25.1",
     "postcss": "catalog:",
+    "postcss-mixins": "catalog:",
+    "postcss-nested": "catalog:",
+    "postcss-simple-vars": "catalog:",
+    "prettier": "^3.3.2",
     "typescript": "catalog:",
     "vite": "catalog:",
-    "postcss-mixins": "catalog:",
-    "postcss-simple-vars": "catalog:",
-    "postcss-nested": "catalog:",
-    "@types/node": "^20.14.9",
-    "lightningcss": "^1.25.1",
-    "prettier": "^3.3.2"
+    "vite-plugin-node-polyfills": "^0.22.0"
   }
 }

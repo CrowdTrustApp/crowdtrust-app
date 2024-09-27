@@ -1,25 +1,59 @@
 <template>
   <div class="connect-wrap">
-    <h1 class="connect-title" v-html="ts('connect.title')"></h1>
-    <div class="connect-text">
-      {{ ts('connect.text') }}
-    </div>
-    <div class="button1 button2">
-      {{ ts('connect.button') }}
-    </div>
-    <div class="how">
-      {{ ts('connect.how') }}
-    </div>
-    <ol class="how-items">
-      <li v-html="ts('connect.install')"></li>
-      <li>{{ ts('connect.click') }}</li>
-      <li>{{ ts('connect.email') }}</li>
-    </ol>
+    <TransitionGroup name="fade">
+      <ConnectWelcome
+        v-if="state === 'welcome'"
+        :loadingAccount="loadingAccount"
+        @connect="connect"
+      />
+      <ConnectRegister
+        v-if="state === 'register'"
+        :loading="false"
+        @register="register"
+      />
+    </TransitionGroup>
   </div>
 </template>
 
+<script lang="ts">
+type ConnectState = 'welcome' | 'register'
+</script>
+
 <script lang="ts" setup>
-import { ts } from '../i18n'
+import { onMounted, ref, watch } from 'vue'
+import { useChain } from '@samatech/vue3-eth'
+import ConnectWelcome from '../components/connect/ConnectWelcome.vue'
+import ConnectRegister from '../components/connect/ConnectRegister.vue'
+
+const {
+  walletConnected,
+  wallets,
+  loadingAccount,
+  wrongNetwork,
+  connectError,
+  getBalance,
+  connectWallet,
+  reconnectWallet,
+  disconnectWallet,
+} = useChain()
+
+const state = ref<ConnectState>('welcome')
+
+watch(walletConnected, async (connected) => {
+  if (connected) {
+    // API Auth
+  }
+})
+
+const connect = () => {
+  connectWallet('metamask')
+}
+
+const register = async () => {}
+
+onMounted(() => {
+  reconnectWallet('metamask')
+})
 </script>
 
 <style lang="postcss" scoped>
@@ -30,38 +64,30 @@ import { ts } from '../i18n'
   position: relative;
 }
 
-.connect-title {
+:deep(.connect-title) {
   @mixin title 40px;
   margin: 0;
   text-align: center;
   font-weight: 800;
   position: relative;
-  :deep(span) {
+  span {
     color: $blue3;
   }
 }
-.connect-text {
+:deep(.connect-text) {
   @mixin text 16px;
   margin: 16px auto 0;
   max-width: 420px;
   text-align: center;
 }
-.button2 {
-  width: 120px;
-  margin: 24px auto 0;
-  text-align: center;
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
 }
-.how {
-  @mixin title 20px;
-  margin-top: 48px;
-  text-align: center;
-}
-.how-items {
-  @mixin text 18px;
-  max-width: 480px;
-  margin: 16px auto;
-  li {
-    margin-top: 12px;
-  }
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
