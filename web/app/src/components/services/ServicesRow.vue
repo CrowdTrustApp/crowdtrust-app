@@ -1,5 +1,5 @@
 <template>
-  <div class="services-row" :class="{ reverse }">
+  <div ref="rowRef" class="services-row" :class="{ reverse, active }">
     <ServicesText :icon="icon" :title="title" :text="text" />
     <ServicesImage :image="image" />
   </div>
@@ -8,14 +8,34 @@
 <script lang="ts" setup>
 import ServicesText from './ServicesText.vue'
 import ServicesImage from './ServicesImage.vue'
+import { computed, onMounted, ref } from 'vue'
 
-defineProps<{
+const { yPos } = defineProps<{
   icon: string
   title: string
   text: string
   image: string
   reverse?: boolean
+  yPos: number
 }>()
+
+const rowRef = ref()
+const rowY = ref()
+
+const active = computed(() => {
+  if (rowY.value) {
+    const triggerY = rowY.value - window.screen.height * 0.5
+    if (yPos > triggerY) {
+      return true
+    }
+  }
+  return false
+})
+
+onMounted(() => {
+  const rect = rowRef.value.getBoundingClientRect()
+  rowY.value = rect.top
+})
 </script>
 
 <style lang="postcss" scoped>
@@ -28,8 +48,16 @@ defineProps<{
   width: 100%;
   margin: 96px auto 0;
   justify-content: center;
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateX(-400px);
   &.reverse {
     flex-direction: row-reverse;
+    transform: translateX(400px);
+  }
+  &.active {
+    transform: translateX(0);
+    opacity: 1;
   }
 }
 @media (max-width: 600px) {

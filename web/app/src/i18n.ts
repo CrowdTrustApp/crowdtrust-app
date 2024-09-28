@@ -39,6 +39,17 @@ const fallback: I18nObject = {
   join: 'JOIN CROWDTRUST',
   back: {
     title: 'Back With Us',
+    why: 'Why Back with <span>CrowdTrust?</span>',
+    text: 'Backing a project on CrowdTrust means more than just funding an idea—it’s about being part of a trusted, secure, and innovative community. Our platform is designed to protect your contributions and ensure that you’re supporting projects that are well-managed and transparent.',
+    secure: '<span>Secure</span> Your Investment',
+    secure_text:
+      'With <span>TrustGuard</span>, your funds are safe and only released when milestones are met.',
+    informed: 'Stay <span>Informed</span>',
+    informed_text:
+      'Receive regular updates and engage directly with creators throughout the campaign.',
+    support: 'Support <span>Innovation</span>',
+    support_text:
+      'Help bring groundbreaking ideas to life and be part of a global community of forward-thinkers.',
   },
   services: {
     title: 'Our Services',

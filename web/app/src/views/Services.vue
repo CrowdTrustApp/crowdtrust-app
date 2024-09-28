@@ -11,6 +11,7 @@
         :title="ts('services.campaign')"
         :text="ts('services.campaign_text')"
         :image="Campaign"
+        :yPos="yPos"
       />
       <ServicesRow
         :icon="AiIcon"
@@ -18,12 +19,14 @@
         :text="ts('services.ai_text')"
         :image="Ai"
         :reverse="true"
+        :yPos="yPos"
       />
       <ServicesRow
         :icon="MarketIcon"
         :title="ts('services.market')"
         :text="ts('services.market_text')"
         :image="Market"
+        :yPos="yPos"
       />
       <ServicesRow
         :icon="SecurityIcon"
@@ -31,12 +34,14 @@
         :text="ts('services.security_text')"
         :image="Security"
         :reverse="true"
+        :yPos="yPos"
       />
       <ServicesRow
         :icon="CommunityIcon"
         :title="ts('services.community')"
         :text="ts('services.community_text')"
         :image="Community"
+        :yPos="yPos"
       />
     </div>
     <HomeStart />
@@ -58,6 +63,9 @@ import SecurityIcon from '../assets/img/security-icon.svg'
 import Community from '../assets/img/community.jpg'
 import CommunityIcon from '../assets/img/community-icon.svg'
 import ServicesBg from '../components/services/ServicesBg.vue'
+import { useScroll } from '../util/use-scroll'
+
+const { yPos } = useScroll()
 </script>
 
 <style lang="postcss" scoped>

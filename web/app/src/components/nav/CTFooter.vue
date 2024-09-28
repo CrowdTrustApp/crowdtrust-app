@@ -1,11 +1,3 @@
-<script setup lang="ts">
-import { ts } from '../../i18n'
-import Logo from '../svg/Logo.vue'
-import Medium from '../svg/Medium.vue'
-import Telegram from '../svg/Telegram.vue'
-import Twitter from '../svg/Twitter.vue'
-</script>
-
 <template>
   <footer>
     <div class="footer-wrap">
@@ -39,50 +31,101 @@ import Twitter from '../svg/Twitter.vue'
           </div>
           <div class="footer-col">
             <div class="label">{{ ts('footer.links') }}</div>
-            <router-link :to="{ name: 'Back' }" class="link">{{
-              ts('back.title')
-            }}</router-link>
-            <router-link :to="{ name: 'Services' }" class="link">{{
-              ts('services.title')
-            }}</router-link>
-            <router-link :to="{ name: 'How' }" class="link">{{
-              ts('how.title')
-            }}</router-link>
+            <router-link
+              :to="{ name: 'Back' }"
+              class="link"
+              :class="{ active: route.name === 'Back' }"
+            >
+              {{ ts('back.title') }}
+            </router-link>
+            <router-link
+              :to="{ name: 'Services' }"
+              class="link"
+              :class="{ active: route.name === 'Services' }"
+            >
+              {{ ts('services.title') }}
+            </router-link>
+            <router-link
+              :to="{ name: 'How' }"
+              class="link"
+              :class="{ active: route.name === 'How' }"
+            >
+              {{ ts('how.title') }}
+            </router-link>
           </div>
           <div class="footer-col">
             <div class="label empty-label">&nbsp;</div>
-            <router-link :to="{ name: 'Projects' }" c class="link">{{
-              ts('footer.browse')
-            }}</router-link>
-            <router-link :to="{ name: 'Launch' }" c class="link">{{
-              ts('footer.launch')
-            }}</router-link>
-            <router-link :to="{ name: 'Connect' }" c class="link">{{
-              ts('connect.join')
-            }}</router-link>
+            <router-link
+              :to="{ name: 'Projects' }"
+              class="link"
+              :class="{ active: route.name === 'Projects' }"
+            >
+              {{ ts('footer.browse') }}
+            </router-link>
+            <router-link
+              :to="{ name: 'Launch' }"
+              class="link"
+              :class="{ active: route.name === 'Launch' }"
+            >
+              {{ ts('footer.launch') }}
+            </router-link>
+            <router-link
+              :to="{ name: 'Connect' }"
+              class="link"
+              :class="{ active: route.name === 'Connect' }"
+            >
+              {{ ts('connect.join') }}
+            </router-link>
           </div>
         </div>
       </div>
     </div>
     <div class="footer-bottom">
-      <router-link :to="{ name: 'Trust' }" class="bottom-link">
+      <router-link
+        :to="{ name: 'Trust' }"
+        class="bottom-link"
+        :class="{ active: route.name === 'Trust' }"
+      >
         {{ ts('footer.trust') }}
       </router-link>
       <div class="bottom-divider"></div>
-      <router-link :to="{ name: 'Terms' }" class="bottom-link">
+      <router-link
+        :to="{ name: 'Terms' }"
+        class="bottom-link"
+        :class="{ active: route.name === 'Terms' }"
+      >
         {{ ts('footer.terms') }}
       </router-link>
       <div class="bottom-divider"></div>
-      <router-link :to="{ name: 'Privacy' }" class="bottom-link">
+      <router-link
+        :to="{ name: 'Privacy' }"
+        class="bottom-link"
+        :class="{ active: route.name === 'Privacy' }"
+      >
         {{ ts('footer.privacy') }}
       </router-link>
       <div class="bottom-divider"></div>
-      <router-link :to="{ name: 'Cookies' }" class="bottom-link">
+      <router-link
+        :to="{ name: 'Cookies' }"
+        class="bottom-link"
+        :class="{ active: route.name === 'Cookies' }"
+      >
         {{ ts('footer.cookie') }}
       </router-link>
     </div>
   </footer>
 </template>
+
+<script lang="ts" setup>
+import { useRoute } from 'vue-router'
+import { ts } from '../../i18n'
+import Logo from '../svg/Logo.vue'
+import Medium from '../svg/Medium.vue'
+import Telegram from '../svg/Telegram.vue'
+import Twitter from '../svg/Twitter.vue'
+
+const route = useRoute()
+</script>
 
 <style lang="postcss" scoped>
 @import '../../css/defines.postcss';
@@ -109,6 +152,9 @@ import Twitter from '../svg/Twitter.vue'
   &:hover {
     color: rgb(110, 110, 110);
   }
+}
+a.active {
+  color: $blue2;
 }
 .footer-wrap {
   border-top: 2px solid rgb(240, 240, 240);
