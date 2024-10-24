@@ -10,8 +10,8 @@
   "scripts": {
     "format": "prettier -w \"{**/*,*}.{ts,js,json}\"",
     "format:check": "prettier --check \"{**/*,*}.{ts,js,json,vue}\"",
-    "lint": "oxlint .",
-    "lint:style": "./node_modules/stylelint/bin/stylelint.js \"**/src/**/*.{css,vue}\"",
+    "lint": "oxlint -c .oxlintrc.json .",
+    "lint:style": "./node_modules/.bin/stylelint \"**/src/**/*.{css,vue}\"",
     "dev:web:run": "pnpm --filter '@crowdtrust/app' run dev",
     "prod:web:build": "pnpm --filter '@crowdtrust/app' run build",
     "dev:backend:build": "cd backend && cargo build",
@@ -38,6 +38,9 @@
   "author": "CrowdTrust",
   "devDependencies": {
     "oxlint": "^0.9.10",
-    "prettier": "^3.3.3"
+    "postcss-html": "^1.7.0",
+    "prettier": "^3.3.3",
+    "stylelint": "^16.10.0",
+    "stylelint-config-recommended-vue": "^1.5.0"
   }
 }

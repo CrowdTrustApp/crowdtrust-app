@@ -69,6 +69,26 @@ const raised = computed(() => {
 <style lang="postcss" scoped>
 @import '../../css/defines.postcss';
 
+.image-overlay {
+  background-color: rgba(255, 255, 255, 0.25);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.active {
+  color: $text3;
+  opacity: 0;
+  transition: opacity 0.25 ease;
+}
+.active-wrap {
+  @mixin medium 13px;
+  position: absolute;
+  right: 8px;
+  top: 6px;
+  display: flex;
+  align-items: center;
+}
+
 .project-card {
   position: relative;
   cursor: pointer;
@@ -84,12 +104,6 @@ const raised = computed(() => {
   &.empty {
     opacity: 0;
   }
-}
-
-.image-overlay {
-  background-color: rgba(255, 255, 255, 0.25);
-  opacity: 0;
-  transition: opacity 0.25s ease;
 }
 .image-wrap {
   height: 180px;
@@ -120,19 +134,6 @@ const raised = computed(() => {
 .project-blurb {
   @mixin text 15px;
   max-width: 90%;
-}
-.active {
-  color: $text3;
-  opacity: 0;
-  transition: opacity 0.25 ease;
-}
-.active-wrap {
-  @mixin medium 13px;
-  position: absolute;
-  right: 8px;
-  top: 6px;
-  display: flex;
-  align-items: center;
 }
 .dot {
   @mixin size 12px;

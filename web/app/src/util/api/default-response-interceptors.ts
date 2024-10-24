@@ -24,6 +24,7 @@ export const plainResponseInterceptors = [
     let data: IJsonObject
     try {
       data = await res.json()
+      // eslint-disable-next-line no-unused-vars
     } catch (_e) {
       // Avoid crashing on empty response
       data = {}

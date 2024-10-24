@@ -71,6 +71,4 @@ const listDimension = computed(() => {
 .cols-1 .card {
   width: 100%;
 }
-.card {
-}
 </style>

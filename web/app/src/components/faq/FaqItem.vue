@@ -28,7 +28,6 @@ const open = ref(false)
 @import '../../css/defines.postcss';
 
 .faq-item {
-  margin-top: 16px;
   position: relative;
   max-width: 912px;
   width: 100%;
@@ -97,7 +96,5 @@ const open = ref(false)
   .vertical {
     background-color: white;
   }
-}
-@media (max-width: 1200px) {
 }
 </style>

@@ -104,8 +104,6 @@ const joined = computed(() => {
   display: flex;
   width: 100%;
   padding: 40px 0;
-}
-.profile-top {
   margin: 0 auto;
   max-width: 1080px;
 }

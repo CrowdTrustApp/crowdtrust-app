@@ -130,6 +130,25 @@ import { ts } from '../../i18n'
   border-radius: 12px;
   box-shadow: rgba(125, 125, 125, 0.25) 2px 2px 16px -2px;
 }
+.box-big-overlay {
+  bottom: 0;
+  height: 150px;
+  left: 0;
+  position: absolute;
+  right: 0;
+  transition: height 0.25s ease;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+.box-small-overlay {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  position: absolute;
+  transition: top 0.25s ease;
+  border-radius: 12px;
+}
 .box-big {
   width: 300px;
   height: 300px;
@@ -168,25 +187,6 @@ import { ts } from '../../i18n'
       left: 4px;
     }
   }
-}
-.box-big-overlay {
-  bottom: 0;
-  height: 150px;
-  left: 0;
-  position: absolute;
-  right: 0;
-  transition: height 0.25s ease;
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
-}
-.box-small-overlay {
-  bottom: 0;
-  left: 0;
-  right: 0;
-  top: 0;
-  position: absolute;
-  transition: top 0.25s ease;
-  border-radius: 12px;
 }
 .box1-overlay {
   background: linear-gradient(180deg, rgba(26, 170, 226, 0) 0%, rgb(26, 170, 226) 100%);
@@ -238,6 +238,7 @@ import { ts } from '../../i18n'
   .box-big {
     width: 240px;
     height: 240px;
+    padding: 0 28px 32px;
   }
   .box-small {
     width: 220px;
@@ -248,9 +249,6 @@ import { ts } from '../../i18n'
   }
   .join-box-link {
     font-size: 18px;
-  }
-  .box-big {
-    padding: 0 28px 32px;
   }
   .join-divider {
     margin-top: 16px;

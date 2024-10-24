@@ -9,7 +9,6 @@ import {
   TEST_PRIVATE_KEY2,
   testagent,
   TestAgent,
-  USER1_ADDRESS,
   USER1_PRIVATE_KEY,
 } from '../helpers'
 import { testConfig } from '../test.config'

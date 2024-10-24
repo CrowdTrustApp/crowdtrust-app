@@ -90,8 +90,6 @@ const delivery = (time: number): string => {
   align-items: center;
   justify-content: space-between;
 }
-.name {
-}
 .price {
   margin-left: 8px;
   font-size: 14px;

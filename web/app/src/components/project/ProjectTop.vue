@@ -83,7 +83,6 @@ const goal = computed(() => {
   position: relative;
   width: 55%;
   background-color: #dee2e4;
-  position: relative;
   height: 280px;
   img {
     width: 100%;

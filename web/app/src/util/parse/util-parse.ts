@@ -4,7 +4,8 @@ import { formatISO } from 'date-fns/formatISO'
 export function str2bool(str: string): boolean | undefined {
   try {
     return JSON.parse(str)
-  } catch (e) {
+    // eslint-disable-next-line no-unused-vars
+  } catch (_e) {
     return undefined
   }
 }

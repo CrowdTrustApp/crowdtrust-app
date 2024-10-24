@@ -15,7 +15,6 @@ img {
   user-select: none;
 }
 .faq-bg {
-  position: relative;
   height: 600px;
   left: 0;
   mask: linear-gradient(180deg, #000000 0%, rgba(0, 0, 0, 0) 100%) add;
