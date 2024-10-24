@@ -29,7 +29,7 @@ jobs:
           concurrent_skipping: 'never'
           skip_after_successful_duplicate: 'true'
           # Changes to paths must be synced with pr-merge*.yml
-          paths: '[".github/workflows/pr-commit.yml", "apps/**", "backend/**", "libs/**", "*"]'
+          paths: '[".github/workflows/pr-commit.yml", "web/**", "backend/**", "*"]'
           paths_ignore: '["**/README.md", "skaffold*.yaml"]'
 
   repo-metadata:
@@ -61,8 +61,8 @@ jobs:
         with:
           fetch-depth: 0
       - uses: ./.github/actions/env-setup
-      - name: Build apps
-        run: npx nx run-many -t build --projects="web*" --parallel=3
+      - name: Build web app
+        run: npm run prod:web:build
 
   build-backend:
     needs: pre_job
