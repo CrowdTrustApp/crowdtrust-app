@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { store } from '@app/store'
 import { ts } from '../../i18n'
 </script>
 
@@ -28,7 +29,7 @@ import { ts } from '../../i18n'
             </div>
           </div>
         </router-link>
-        <router-link :to="{ name: 'Launch' }">
+        <router-link :to="{ name: store.auth.loggedIn.value ? 'Create' : 'Connect' }">
           <div class="join-box box-big">
             <img class="box-img overlay" src="../../assets/img/join-box2.jpg" />
             <div class="box2-overlay box-big-overlay"></div>
