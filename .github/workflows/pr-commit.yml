@@ -292,7 +292,7 @@ jobs:
   #         npx nx affected:e2e --base=origin/main
 
   clear-artifacts:
-    needs: [crowdtrust-api-tests, e2e-tests]
+    needs: [crowdtrust-api-tests]
     name: Clean up artifacts
     if: always()
     runs-on: ubuntu-22.04
