@@ -76,9 +76,9 @@
               {{ ts('footer.browse') }}
             </router-link>
             <router-link
-              :to="{ name: 'Launch' }"
+              :to="{ name: 'Create' }"
               class="link"
-              :class="{ active: route.name === 'Launch' }"
+              :class="{ active: route.name === 'Create' }"
             >
               {{ ts('footer.launch') }}
             </router-link>

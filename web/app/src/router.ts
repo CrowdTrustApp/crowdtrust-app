@@ -133,11 +133,6 @@ const router = createRouter({
           name: 'Create',
           component: () => import('./views/Create.vue'),
         },
-        {
-          path: '/launch',
-          name: 'Launch',
-          component: () => import('./views/Launch.vue'),
-        },
       ],
     },
   ],
