@@ -14,6 +14,7 @@
     "lint:style": "./node_modules/.bin/stylelint \"**/src/**/*.{css,vue}\"",
     "dev:web:run": "pnpm --filter '@crowdtrust/app' run dev",
     "prod:web:build": "pnpm --filter '@crowdtrust/app' run build",
+    "prod:web:preview": "pnpm --filter '@crowdtrust/app' run preview",
     "dev:backend:build": "cd backend && cargo build",
     "dev:build-aarch": "cd backend && CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-unknown-linux-gnu-gcc cargo build --target aarch64-unknown-linux-gnu",
     "prod:build-aarch": "cd backend && CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-unknown-linux-gnu-gcc cargo build --release --target aarch64-unknown-linux-gnu",

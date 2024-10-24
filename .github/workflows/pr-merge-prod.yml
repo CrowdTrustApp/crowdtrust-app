@@ -98,8 +98,8 @@ jobs:
         with:
           fetch-depth: 0
       - uses: ./.github/actions/env-setup
-      - name: Build apps
-        run: npx nx run-many -t build --projects="web*" --parallel=3
+      - name: Build web app
+        run: npm run prod:web:build
 
   build-backend:
     needs: pre_job
