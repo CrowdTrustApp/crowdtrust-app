@@ -222,7 +222,7 @@ jobs:
     name: Web Prod Image
     runs-on: ubuntu-22.04
     env:
-      APP_NAME: web
+      APP_NAME: app
       BRANCH_NAME: prod
     steps:
       - name: Checkout code into workspace directory
@@ -244,58 +244,58 @@ jobs:
             "LAST_COMMIT_SHA=${{needs.repo-metadata.outputs.sha8}}"
             "RELEASE_VERSION=${{needs.repo-metadata.outputs.next_version}}"
           push: true
-          file: ${{env.WORKSPACE_ROOT}}/apps/${{env.APP_NAME}}/Dockerfile
+          file: ${{env.WORKSPACE_ROOT}}/web/${{env.APP_NAME}}/Dockerfile
           target: prod
           tags: |
             ${{needs.repo-metadata.outputs.repo_slug}}/${{env.ENVIRONMENT}}/${{env.APP_NAME}}:${{env.BRANCH_NAME}}-${{needs.repo-metadata.outputs.sha8}}-${{github.run_number}}
             ${{needs.repo-metadata.outputs.repo_slug}}/${{env.ENVIRONMENT}}/${{env.APP_NAME}}:latest
 
-  build-docker-web-admin-prod:
-    needs: [pre_job, repo-metadata]
-    if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
-    name: Web Admin Prod Image
-    runs-on: ubuntu-22.04
-    env:
-      APP_NAME: web-admin
-      BRANCH_NAME: prod
-    steps:
-      - name: Checkout code into workspace directory
-        uses: actions/checkout@v4
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{github.actor}}
-          password: ${{secrets.GITHUB_TOKEN}}
-      - name: Sanitize repo owner slug
-        uses: actions/github-script@v6
-        id: repo_slug
-        with:
-          result-encoding: string
-          script: return `ghcr.io/${context.repo.owner.toLowerCase()}/${context.repo.repo.toLowerCase()}`
-      - name: Build and push staging docker image
-        id: docker_build
-        uses: docker/build-push-action@v5
-        with:
-          context: ${{env.WORKSPACE_ROOT}}
-          build-args: |
-            "LAST_COMMIT_SHA=${{needs.repo-metadata.outputs.sha8}}"
-            "RELEASE_VERSION=${{needs.repo-metadata.outputs.next_version}}"
-          push: true
-          file: ${{env.WORKSPACE_ROOT}}/apps/${{env.APP_NAME}}/Dockerfile
-          target: prod
-          tags: |
-            ${{needs.repo-metadata.outputs.repo_slug}}/${{env.ENVIRONMENT}}/${{env.APP_NAME}}:${{env.BRANCH_NAME}}-${{needs.repo-metadata.outputs.sha8}}-${{github.run_number}}
-            ${{needs.repo-metadata.outputs.repo_slug}}/${{env.ENVIRONMENT}}/${{env.APP_NAME}}:latest
+  # build-docker-web-admin-prod:
+  #   needs: [pre_job, repo-metadata]
+  #   if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
+  #   name: Web Admin Prod Image
+  #   runs-on: ubuntu-22.04
+  #   env:
+  #     APP_NAME: admin
+  #     BRANCH_NAME: prod
+  #   steps:
+  #     - name: Checkout code into workspace directory
+  #       uses: actions/checkout@v4
+  #     - name: Set up Docker Buildx
+  #       uses: docker/setup-buildx-action@v3
+  #     - name: Login to GitHub Container Registry
+  #       uses: docker/login-action@v3
+  #       with:
+  #         registry: ghcr.io
+  #         username: ${{github.actor}}
+  #         password: ${{secrets.GITHUB_TOKEN}}
+  #     - name: Sanitize repo owner slug
+  #       uses: actions/github-script@v6
+  #       id: repo_slug
+  #       with:
+  #         result-encoding: string
+  #         script: return `ghcr.io/${context.repo.owner.toLowerCase()}/${context.repo.repo.toLowerCase()}`
+  #     - name: Build and push staging docker image
+  #       id: docker_build
+  #       uses: docker/build-push-action@v5
+  #       with:
+  #         context: ${{env.WORKSPACE_ROOT}}
+  #         build-args: |
+  #           "LAST_COMMIT_SHA=${{needs.repo-metadata.outputs.sha8}}"
+  #           "RELEASE_VERSION=${{needs.repo-metadata.outputs.next_version}}"
+  #         push: true
+  #         file: ${{env.WORKSPACE_ROOT}}/web/${{env.APP_NAME}}/Dockerfile
+  #         target: prod
+  #         tags: |
+  #           ${{needs.repo-metadata.outputs.repo_slug}}/${{env.ENVIRONMENT}}/${{env.APP_NAME}}:${{env.BRANCH_NAME}}-${{needs.repo-metadata.outputs.sha8}}-${{github.run_number}}
+  #           ${{needs.repo-metadata.outputs.repo_slug}}/${{env.ENVIRONMENT}}/${{env.APP_NAME}}:latest
 
   release:
     needs:
       - build-docker-db-app-prod
       - build-docker-crowdtrust-api-prod
       - build-docker-web-prod
-      - build-docker-web-admin-prod
+      # - build-docker-web-admin-prod
     name: Release
     runs-on: ubuntu-latest
     steps:
