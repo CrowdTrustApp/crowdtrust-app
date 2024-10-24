@@ -109,7 +109,7 @@ impl UserRepoTrait for UserRepo {
       "#,
         )
         .bind(dto.email.clone())
-        .bind(dto.email)
+        .bind("")
         .bind(password_hash)
         .bind(dto.eth_address)
         .bind(UserType::User.to_string())

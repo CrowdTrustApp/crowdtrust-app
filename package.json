@@ -16,6 +16,7 @@
     "prod:web:build": "pnpm --filter '@crowdtrust/app' run build",
     "dev:backend:build": "cd backend && cargo build",
     "dev:build-aarch": "cd backend && CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-unknown-linux-gnu-gcc cargo build --target aarch64-unknown-linux-gnu",
+    "prod:build-aarch": "cd backend && CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-unknown-linux-gnu-gcc cargo build --release --target aarch64-unknown-linux-gnu",
     "dev:backend:run": "cd backend && cargo run",
     "manual:db:run": "cd backend/db-app && ../target/debug/db-app",
     "manual:api-test-helper:run": "cd backend/api-test-helper && ../target/debug/api-test-helper",

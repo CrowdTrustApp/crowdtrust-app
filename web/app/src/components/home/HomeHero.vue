@@ -3,12 +3,16 @@
     <div class="hero-left">
       <h1 class="title" v-html="ts('future')"></h1>
       <div class="buttons">
-        <div class="button1 button2">
+        <router-link
+          v-if="!store.auth.loggedIn.value"
+          :to="{ name: 'Connect' }"
+          class="button1 button2"
+        >
           {{ ts('start') }}
-        </div>
-        <div class="button1 button3">
+        </router-link>
+        <router-link :to="{ name: 'Projects' }" class="button1 button3">
           {{ ts('browse') }}
-        </div>
+        </router-link>
       </div>
     </div>
     <div class="hero-right">
@@ -36,6 +40,7 @@ import Box1 from '../../assets/img/box1.jpg'
 import Box2 from '../../assets/img/box2.jpg'
 import Box3 from '../../assets/img/box3.jpg'
 import Box4 from '../../assets/img/box4.jpg'
+import { store } from '@app/store'
 
 const projects = [
   {

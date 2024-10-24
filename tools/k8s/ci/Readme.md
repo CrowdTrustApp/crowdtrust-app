@@ -49,8 +49,6 @@ docker exec -it k3d-crowdtrust-ci-cluster-server-0 crictl images
 kubectl apply -f ./tools/k8s/ci/shared
 kubectl apply -f ./tools/k8s/ci/db
 kubectl apply -f ./tools/k8s/ci/crowdtrust-api
-kubectl apply -f ./tools/k8s/ci/jobs
-kubectl apply -f ./tools/k8s/ci/site-api
 kubectl get events
 kubectl get pods,deploy,services,pv,pvc -o wide
 ```

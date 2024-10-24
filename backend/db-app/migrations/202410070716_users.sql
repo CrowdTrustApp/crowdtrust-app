@@ -8,7 +8,7 @@ $body$ LANGUAGE 'plpgsql';
 
 CREATE TABLE users (
     id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    name TEXT UNIQUE NOT NULL DEFAULT '',
+    name TEXT NOT NULL DEFAULT '',
     description TEXT NOT NULL DEFAULT '',
     link TEXT NOT NULL DEFAULT '',
     location TEXT NOT NULL DEFAULT '',
