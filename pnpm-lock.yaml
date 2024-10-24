@@ -75,8 +75,8 @@ importers:
         specifier: ^0.6.0
         version: 0.6.0(vue@3.5.8(typescript@5.6.2))
       '@samatech/vue3-eth':
-        specifier: link:../../../../samatech/vue3-eth
-        version: link:../../../../samatech/vue3-eth
+        specifier: 0.8.0
+        version: 0.8.0(vue@3.5.8(typescript@5.6.2))
       date-fns:
         specifier: ^3.6.0
         version: 3.6.0
@@ -630,6 +630,10 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
+  '@metamask/detect-provider@2.0.0':
+    resolution: {integrity: sha512-sFpN+TX13E9fdBDh9lvQeZdJn4qYoRb/6QF2oZZK/Pn559IhCFacPMU1rMuqyXoFQF3JSJfii2l98B87QDPeCQ==}
+    engines: {node: '>=14.0.0'}
+
   '@noble/curves@1.2.0':
     resolution: {integrity: sha512-oYclrNgRaM9SsBUBVbb8M6DTV7ZHRTKugureoYEncY5c65HOmRzvSiTE3y5CYaPYJA/GVkrhXEoF0M3Ya9PMnw==}
 
@@ -803,6 +807,11 @@ packages:
     resolution: {integrity: sha512-65AW7dej6YtUwPJumAHYEhJwl8Zdg6OXbJWoSR5aRnLCv6htpWFlIaxEpJe/0vof4YN/2eQzxg96aL9PGHyGqg==}
     peerDependencies:
       vue: '>=3.2.0'
+
+  '@samatech/vue3-eth@0.8.0':
+    resolution: {integrity: sha512-I6blXL8QhtbnFT0szs0cl+RCReUdXulDs104xFRIRhvNOymyyo+6JQO+2ZQiZoHnK3vL7mXt4aULgW2xkSHVxQ==}
+    peerDependencies:
+      vue: ^3.5.0
 
   '@sinclair/typebox@0.27.8':
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
@@ -3425,6 +3434,8 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
+  '@metamask/detect-provider@2.0.0': {}
+
   '@noble/curves@1.2.0':
     dependencies:
       '@noble/hashes': 1.3.2
@@ -3544,6 +3555,15 @@ snapshots:
   '@samatech/vue-store@0.6.0(vue@3.5.8(typescript@5.6.2))':
     dependencies:
       vue: 3.5.8(typescript@5.6.2)
+
+  '@samatech/vue3-eth@0.8.0(vue@3.5.8(typescript@5.6.2))':
+    dependencies:
+      '@metamask/detect-provider': 2.0.0
+      ethers: 6.13.2
+      vue: 3.5.8(typescript@5.6.2)
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
 
   '@sinclair/typebox@0.27.8': {}
 
