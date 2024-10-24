@@ -57,4 +57,5 @@ runs:
         sleep 100s
         kubectl get events
         kubectl get pods,deploy,services,pv,pvc -o wide
+        kubectl logs deploy/crowdtrust-api
     - uses: ./.github/actions/env-setup
