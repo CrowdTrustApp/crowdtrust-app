@@ -54,6 +54,7 @@ runs:
         kubectl apply -f ${{env.K8S_DIR}}/shared
         kubectl apply -f ${{env.K8S_DIR}}/db
         kubectl apply -f ${{env.K8S_DIR}}/crowdtrust-api
+        sleep 100s
         kubectl get events
         kubectl get pods,deploy,services,pv,pvc -o wide
     - uses: ./.github/actions/env-setup
