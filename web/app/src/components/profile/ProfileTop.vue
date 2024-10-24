@@ -122,7 +122,7 @@ const joined = computed(() => {
   position: relative;
 }
 .profile-name {
-  @mixin semibold 28px;
+  @mixin semibold 24px;
   text-align: center;
   margin-top: 20px;
 }
