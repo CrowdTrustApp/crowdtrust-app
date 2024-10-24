@@ -1,15 +1,21 @@
 name: PR Merge (prod)
 
+# on:
+#   pull_request:
+#     types: [edited]
+#     branches: [prod]
+#   issue_comment:
+#     types: [created]
+#   workflow_dispatch:
+#     inputs:
+#       source:
+#         description: 'Input a trigger source'
+
 on:
-  pull_request:
-    types: [edited]
-    branches: [prod]
-  issue_comment:
-    types: [created]
-  workflow_dispatch:
-    inputs:
-      source:
-        description: 'Input a trigger source'
+  push:
+    branches: [main]
+  repository_dispatch:
+    types: [trigger-workflow]
 
 env:
   WORKSPACE_ROOT: .
@@ -21,31 +27,31 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  fast_forward_job:
-    name: Fast Forward
-    if: github.event_name == 'workflow_dispatch' || (github.event.issue.pull_request && contains(github.event.comment.body, '/ff'))
-    runs-on: ubuntu-22.04
-    steps:
-      # To use this repository's private action, you must check out the repository
-      - name: Checkout code into workspace directory
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          persist-credentials: false
-      # Basic use case example
-      - name: Fast Forward PR
-        if: ${{ github.event_name != 'workflow_dispatch' }}
-        id: ff-action
-        uses: samatechtw/fast-forward-js-action@master
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          success_message: 'Success! Fast forwarded `prod` to `main` with ```git checkout prod && git merge main --ff-only```'
-          failure_message: 'Failed! Cannot fast forward!'
-          staging_branch: 'main'
-          production_branch: 'prod'
+  # fast_forward_job:
+  #   name: Fast Forward
+  #   if: github.event_name == 'workflow_dispatch' || (github.event.issue.pull_request && contains(github.event.comment.body, '/ff'))
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #     # To use this repository's private action, you must check out the repository
+  #     - name: Checkout code into workspace directory
+  #       uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 0
+  #         persist-credentials: false
+  #     # Basic use case example
+  #     - name: Fast Forward PR
+  #       if: ${{ github.event_name != 'workflow_dispatch' }}
+  #       id: ff-action
+  #       uses: samatechtw/fast-forward-js-action@master
+  #       with:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #         success_message: 'Success! Fast forwarded `prod` to `main` with ```git checkout prod && git merge main --ff-only```'
+  #         failure_message: 'Failed! Cannot fast forward!'
+  #         staging_branch: 'main'
+  #         production_branch: 'prod'
 
   pre_job:
-    needs: fast_forward_job
+    # needs: fast_forward_job
     name: Run Workflow?
     runs-on: ubuntu-22.04
     outputs:
@@ -58,7 +64,7 @@ jobs:
           concurrent_skipping: 'never'
           skip_after_successful_duplicate: 'true'
           # Changes to paths must be synced with pr-merge*.yml
-          paths: '[".github/workflows/pr-merge-*.yml", "apps/**", "backend/**", "libs/**", "*"]'
+          paths: '[".github/workflows/pr-commit.yml", "web/**", "backend/**", "*"]'
           paths_ignore: '["**/README.md", "skaffold*.yaml"]'
 
   repo-metadata:
