@@ -24,10 +24,23 @@
         <div class="footer-cols">
           <div class="footer-col">
             <div class="label">{{ ts('footer.resources') }}</div>
-            <a href="http://bit.ly/3ZW1YY3" class="link" target="_blank">{{
-              ts('footer.whitepaper')
-            }}</a>
-            <a class="link">{{ ts('footer.faq') }}</a>
+            <a href="http://bit.ly/3ZW1YY3" class="link" target="_blank">
+              {{ ts('footer.whitepaper') }}
+            </a>
+            <router-link
+              :to="{ name: 'About' }"
+              class="link"
+              :class="{ active: route.name === 'About' }"
+            >
+              {{ ts('footer.about') }}
+            </router-link>
+            <router-link
+              :to="{ name: 'Faq' }"
+              class="link"
+              :class="{ active: route.name === 'Faq' }"
+            >
+              {{ ts('footer.faq') }}
+            </router-link>
           </div>
           <div class="footer-col">
             <div class="label">{{ ts('footer.links') }}</div>
@@ -130,6 +143,9 @@ const route = useRoute()
 <style lang="postcss" scoped>
 @import '../../css/defines.postcss';
 
+.footer {
+  position: relative;
+}
 .footer-bottom {
   display: flex;
   padding: 16px 0 16px;
@@ -174,7 +190,7 @@ a.active {
 .copyright {
   @mixin text 13px;
   letter-spacing: 0.03em;
-  color: $text2;
+  color: $text3;
   margin-top: 8px;
 }
 .footer-cols {
@@ -196,7 +212,7 @@ a.active {
 .link {
   @mixin text 15px;
   margin-top: 12px;
-  color: $text2;
+  color: $text3;
 }
 .socials {
   display: flex;

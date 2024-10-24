@@ -1,0 +1,33 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": false,
+    "target": "es2017",
+    "module": "esnext",
+    "lib": ["es2017", "dom"],
+    "jsx": "preserve",
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "paths": {
+      "@app/api": ["web/app/src/api/index.ts"],
+      "@app/features": ["web/app/src/features/index.ts"],
+      "@app/store": ["web/app/src/store/index.ts"],
+      "@app/types": ["web/app/src/types/index.ts"],
+      "@app/util": ["web/app/src/util/index.ts"],
+      "@app/util-app": ["web/app/src/util-app/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

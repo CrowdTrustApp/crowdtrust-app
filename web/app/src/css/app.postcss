@@ -1,5 +1,9 @@
 $overlay: rgba(0, 0, 0, 0.6);
 
+.app-content {
+  position: relative;
+}
+
 .f-center {
   display: flex;
   flex-direction: row;
@@ -42,6 +46,12 @@ $overlay: rgba(0, 0, 0, 0.6);
     background-color: $blue3;
     color: white;
   }
+  &.disabled {
+    border-color: $border1;
+    color: $border1;
+    pointer-events: none;
+    cursor: not-allowed;
+  }
 }
 
 .button2 {
@@ -58,6 +68,15 @@ $overlay: rgba(0, 0, 0, 0.6);
     background-color: white;
     color: black;
     border-color: black;
+  }
+}
+
+.button-cancel {
+  background-color: $bg-light1;
+  color: black;
+  &:hover {
+    background-color: $bg-light2;
+    color: black;
   }
 }
 
@@ -84,7 +103,18 @@ $overlay: rgba(0, 0, 0, 0.6);
 
 .blog-text {
   @mixin text 16px;
-  color: $text2;
+  color: $text3;
   margin-top: 16px;
   line-height: 1.4em;
+}
+
+.modal-title {
+  @mixin bold 28px;
+  color: $text3;
+}
+.modal-text {
+  @mixin medium 16px;
+  line-height: 140%;
+  color: $text1;
+  margin-top: 16px;
 }

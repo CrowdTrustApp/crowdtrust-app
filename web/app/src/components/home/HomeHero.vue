@@ -19,6 +19,7 @@
         <HeroBox
           v-for="project in projects"
           :key="project.id"
+          :id="project.id"
           :name="project.name"
           :goal="project.goal"
           :image="project.image"
@@ -37,10 +38,30 @@ import Box3 from '../../assets/img/box3.jpg'
 import Box4 from '../../assets/img/box4.jpg'
 
 const projects = [
-  { id: '1', name: 'Vintage Player', goal: 112, image: Box1 },
-  { id: '2', name: 'Hi-Fi Sphere', goal: 140, image: Box2 },
-  { id: '3', name: 'Repair Shop', goal: 125, image: Box3 },
-  { id: '4', name: 'Community Event', goal: 90, image: Box4 },
+  {
+    id: '3e42e273-546d-4989-a97c-f6eb173e8450',
+    name: 'Vintage Player',
+    goal: 112,
+    image: Box1,
+  },
+  {
+    id: 'fa4d21c2-16a3-46cf-8162-98f4a82b59aa',
+    name: 'Hi-Fi Sphere',
+    goal: 140,
+    image: Box2,
+  },
+  {
+    id: '9e8f0c6f-1edf-4d68-a096-7a2bb4625c98',
+    name: 'Repair Shop',
+    goal: 125,
+    image: Box3,
+  },
+  {
+    id: '00df0e23-22af-4959-874c-aca385b54eed',
+    name: 'Community Event',
+    goal: 90,
+    image: Box4,
+  },
 ]
 </script>
 

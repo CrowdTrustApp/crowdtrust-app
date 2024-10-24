@@ -5,8 +5,14 @@ declare module 'vue-router' {
     title?: string
     noScroll?: boolean
     scrollAnchor?: string
+    requiresAuth?: boolean
   }
 }
+
+const metaAuth = (title: string) => ({
+  title,
+  requiresAuth: true,
+})
 
 const router = createRouter({
   history: createWebHistory(),
@@ -39,7 +45,7 @@ const router = createRouter({
         },
         {
           path: '/faq',
-          name: 'FAQ',
+          name: 'Faq',
           component: () => import('./views/Faq.vue'),
         },
         {
@@ -86,13 +92,46 @@ const router = createRouter({
     },
     {
       path: '/profile',
-      name: 'Profile',
-      component: () => import('./views/Profile.vue'),
+      component: () => import('./views/AppWrap.vue'),
       children: [
+        {
+          path: '',
+          name: 'Profile',
+          component: () => import('./views/Profile.vue'),
+          redirect: '/profile/backed',
+          meta: metaAuth('Profile'),
+          children: [
+            {
+              path: 'created',
+              name: 'Created',
+              component: () => import('./components/profile/CreatedProjects.vue'),
+            },
+            {
+              path: 'backed',
+              name: 'Backed',
+              component: () => import('./components/profile/BackedProjects.vue'),
+            },
+            {
+              path: 'settings',
+              name: 'Settings',
+              component: () => import('./components/profile/Settings.vue'),
+            },
+          ],
+        },
         {
           path: '/projects',
           name: 'Projects',
           component: () => import('./views/Projects.vue'),
+        },
+        {
+          path: '/project/:id',
+          name: 'Project',
+          component: () => import('./views/Project.vue'),
+        },
+        {
+          path: '/create',
+          name: 'Create',
+          component: () => import('./views/Create.vue'),
         },
         {
           path: '/launch',

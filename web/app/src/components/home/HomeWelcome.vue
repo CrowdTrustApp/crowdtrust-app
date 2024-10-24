@@ -55,7 +55,7 @@ import { ts } from '../../i18n'
 
 .welcome-text {
   @mixin text 18px;
-  color: $text2;
+  color: $text3;
   margin-top: 20px;
   line-height: 1.4em;
 }

@@ -10,6 +10,7 @@ catalog:
   vue-router: 4.4.5
   vite: 5.4.7
   typescript: 5.6.2
+  '@samatech/fetch-api': 0.12.1
   '@types/node': 20.15.0
   '@vitejs/plugin-vue': 5.1.4
   '@rollup/plugin-terser': 0.4.4

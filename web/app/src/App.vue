@@ -2,7 +2,21 @@
   <router-view />
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { onMounted } from 'vue'
+import { getUser, loggedIn } from './features'
+import { useLoginRedirect } from './util-app'
+
+const { watchAuthRedirect } = useLoginRedirect()
+
+watchAuthRedirect()
+
+onMounted(async () => {
+  if (loggedIn.value) {
+    await getUser()
+  }
+})
+</script>
 
 <style lang="postcss">
 @import './css/font.postcss';

@@ -1,36 +1,93 @@
 $primary: #277cea;
-$blue1: #1476f1;
 $blue1: rgb(20, 118, 241);
 $blue2: rgb(26, 170, 226);
 $blue3: rgb(1, 98, 162);
 $disabled1: #908e8e;
 $text1: rgb(41, 41, 41);
-$text2: rgb(59, 59, 59);
+$text2: rgb(51, 51, 51);
+$text3: rgb(59, 59, 59);
 $text-light: #707073;
 $text-light2: #838d8f;
 $red: #f46a6a;
+$bg-light1: #eef0f6;
+$bg-light2: #e0eaef;
 $border1: rgb(227, 227, 227);
 
+$color-error: $red;
+$color-error-bg: #fff5f5;
+$color-error-border: #ff6565;
+$color-error-light: #cc0000;
+
+$font-text: 'CrowdTrust', Helvetica, sans-serif;
+
+@define-mixin size $width, $height: $width {
+  width: $width;
+  height: $height;
+}
+
+@define-mixin truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@define-mixin tooltip {
+  @mixin thin 12px;
+  padding: 6px 8px;
+  position: relative;
+  color: $text3;
+  user-select: none;
+  background-color: white;
+  border-radius: 2px;
+  box-shadow: 1px 1px 24px 8px rgba(0, 0, 0, 0.1);
+}
+
+@define-mixin input {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-color: black;
+  border-width: 1px;
+  border-radius: 2px;
+  box-shadow: none;
+  &:focus {
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-color: $blue1;
+    border-width: 1.5px;
+  }
+}
+
 @define-mixin title $size {
-  font-family: 'CrowdTrust', Helvetica, sans-serif;
+  font-family: $font-text;
   font-weight: 900;
   font-size: $size;
 }
 
+@define-mixin bold $size {
+  font-family: $font-text;
+  font-weight: 700;
+  font-size: $size;
+}
+
 @define-mixin semibold $size {
-  font-family: 'CrowdTrust', Helvetica, sans-serif;
+  font-family: $font-text;
   font-weight: 600;
   font-size: $size;
 }
 
 @define-mixin medium $size {
-  font-family: 'CrowdTrust', Helvetica, sans-serif;
+  font-family: $font-text;
   font-weight: 500;
   font-size: $size;
 }
 
 @define-mixin text $size {
-  font-family: 'CrowdTrust', Helvetica, sans-serif;
+  font-family: $font-text;
   font-weight: 400;
+  font-size: $size;
+}
+
+@define-mixin thin $size {
+  font-family: $font-text;
+  font-weight: 300;
   font-size: $size;
 }

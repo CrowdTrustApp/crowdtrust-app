@@ -42,6 +42,8 @@ const emit = defineEmits<{
   left: 100%;
   transition: left 0.3s ease;
   background-color: white;
+  z-index: 1000;
+  height: 100vh;
   &.active {
     left: 0;
   }
@@ -56,6 +58,7 @@ const emit = defineEmits<{
 }
 .drawer-content {
   padding: 32px 24px 0;
+  background-color: white;
 }
 .drawer-close {
   padding: 4px;

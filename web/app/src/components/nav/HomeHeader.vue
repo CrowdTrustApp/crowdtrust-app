@@ -9,13 +9,14 @@
         <HeaderLink to="Services" :text="ts('services.title')" />
         <HeaderLink to="How" :text="ts('how.title')" />
       </div>
-      <router-link :to="{ name: 'Connect' }" class="join-link">
+      <CTUserMenu v-if="loggedIn" class="user-menu" />
+      <router-link v-else :to="{ name: 'Connect' }" class="join-link">
         <div class="join button1">
           {{ ts('connect.join') }}
         </div>
       </router-link>
       <Burger @click="rightActive = true" />
-      <Drawer :active="rightActive" @close="rightActive = false">
+      <Drawer :active="rightActive" @close="rightActive = false" class="header-drawer">
         <DrawerLink to="Back" :text="ts('back.title')" @click="rightActive = false" />
         <DrawerLink
           to="Services"
@@ -36,6 +37,8 @@ import Burger from '../widgets/Burger.vue'
 import Drawer from './Drawer.vue'
 import DrawerLink from './DrawerLink.vue'
 import HeaderLink from './HeaderLink.vue'
+import { loggedIn } from '@app/features'
+import CTUserMenu from './CTUserMenu.vue'
 
 const rightActive = ref(false)
 </script>
@@ -57,7 +60,6 @@ header {
   max-width: 1000px;
   margin: 0 auto;
   position: relative;
-  overflow: hidden;
 }
 .header-logo {
   width: 178px;
@@ -70,9 +72,15 @@ header {
 .join {
   margin-left: 24px;
 }
+.user-menu {
+  margin-left: auto;
+}
 .burger {
   display: none;
-  margin-left: auto;
+  margin-left: 16px;
+}
+.header-drawer {
+  display: none;
 }
 @media (max-width: 860px) {
   .header {
@@ -88,6 +96,9 @@ header {
 @media (max-width: 680px) {
   .links {
     display: none;
+  }
+  .header-drawer {
+    display: block;
   }
   .join-link {
     margin-left: auto;

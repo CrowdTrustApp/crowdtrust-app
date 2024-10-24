@@ -24,7 +24,7 @@ const rowY = ref()
 
 const active = computed(() => {
   if (rowY.value) {
-    const triggerY = rowY.value - window.screen.height * 0.5
+    const triggerY = rowY.value - window.screen.height * 0.55
     if (yPos > triggerY) {
       return true
     }

@@ -49,14 +49,14 @@ import { ts } from '../../i18n'
               </div>
             </div>
           </router-link>
-          <router-link :to="{ name: 'FAQ' }">
+          <router-link :to="{ name: 'Faq' }">
             <div class="join-box box-small f-center-col">
               <img class="box-img overlay" src="../../assets/img/join-box4.jpg" />
               <div class="box4-overlay box-small-overlay"></div>
               <div class="box-text">
                 <div class="join-box-label">{{ ts('learn') }}</div>
                 <div class="join-box-link">
-                  {{ ts('faq') }}
+                  {{ ts('faq.link') }}
                 </div>
               </div>
             </div>

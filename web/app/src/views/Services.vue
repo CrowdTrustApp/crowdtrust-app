@@ -49,6 +49,7 @@
 </template>
 
 <script lang="ts" setup>
+import { useScroll } from '@app/util-app'
 import HomeStart from '../components/home/HomeStart.vue'
 import ServicesRow from '../components/services/ServicesRow.vue'
 import { ts } from '../i18n'
@@ -63,7 +64,6 @@ import SecurityIcon from '../assets/img/security-icon.svg'
 import Community from '../assets/img/community.jpg'
 import CommunityIcon from '../assets/img/community-icon.svg'
 import ServicesBg from '../components/services/ServicesBg.vue'
-import { useScroll } from '../util/use-scroll'
 
 const { yPos } = useScroll()
 </script>

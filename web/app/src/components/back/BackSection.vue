@@ -69,7 +69,7 @@ onMounted(() => {
   flex-direction: row;
   display: flex;
   width: 1000px;
-  color: $text2;
+  color: $text3;
   margin: 32px auto 0;
   padding: 0 0 0 100px;
   &.reversed {

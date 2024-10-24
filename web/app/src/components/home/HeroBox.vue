@@ -1,45 +1,50 @@
 <template>
-  <div class="hero-box f-col">
-    <img :src="image" class="box-image overlay" />
-    <div class="box-mask" />
-    <div class="name">
-      {{ name }}
+  <router-link :to="{ name: 'Project', params: { id } }" class="hero-box-wrap">
+    <div class="hero-box f-col">
+      <img :src="image" class="box-image overlay" />
+      <div class="box-mask" />
+      <div class="name">
+        {{ name }}
+      </div>
+      <div class="goal">
+        {{ `${goal}${ts('goal')}` }}
+      </div>
+      <div class="progress-wrap">
+        <div class="progress" :style="{ width: `${Math.min(goal, 100)}%` }"></div>
+      </div>
     </div>
-    <div class="goal">
-      {{ `${goal}${ts('goal')}` }}
-    </div>
-    <div class="progress-wrap">
-      <div class="progress" :style="{ width: `${Math.min(goal, 100)}%` }"></div>
-    </div>
-  </div>
+  </router-link>
 </template>
 
 <script lang="ts" setup>
 import { ts } from '../../i18n'
 
 defineProps<{
+  id: string
   name: string
   goal: number
   image: string
 }>()
 </script>
 
-<style lang="postcss" setup>
+<style lang="postcss" scoped>
 @import '../../css/defines.postcss';
 
+.hero-box-wrap {
+  margin: 10px 6px 0 6px;
+  &:first-child {
+    margin-top: 48px;
+  }
+}
 .hero-box {
   box-shadow: rgba(191, 191, 191, 0.25) 2px 2px 12px 2px;
   width: 200px;
   height: 200px;
   position: relative;
-  margin: 10px 6px 0 6px;
   padding: 16px 20px;
   transition: all 0.25s ease;
   top: 0;
   left: 0;
-  &:first-child {
-    margin-top: 48px;
-  }
   &:hover {
     top: 4px;
     left: 4px;

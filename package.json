@@ -15,8 +15,14 @@
     "dev:web:run": "pnpm --filter '@crowdtrust/app' run dev",
     "prod:web:build": "pnpm --filter '@crowdtrust/app' run build",
     "dev:backend:build": "cd backend && cargo build",
+    "dev:build-aarch": "cd backend && CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-unknown-linux-gnu-gcc cargo build --target aarch64-unknown-linux-gnu",
     "dev:backend:run": "cd backend && cargo run",
+    "manual:db:run": "cd backend/db-app && ../target/debug/db-app",
+    "manual:api-test-helper:run": "cd backend/api-test-helper && ../target/debug/api-test-helper",
+    "manual:api:run": "cd backend/crowdtrust-api && ../target/debug/crowdtrust-api",
     "prod:backend:build": "cd backend && cargo build --release",
+    "backend-test": "cd web/backend-test && nx jest --",
+    "skaffold:basic": "(skaffold dev --platform linux/arm64 -f skaffold.basic.yaml --cache-artifacts=true)",
     "prune": "tools/scripts/prune-all.sh"
   },
   "repository": {
@@ -31,7 +37,7 @@
   "homepage": "https://github.com/CrowdTrustApp/crowdtrust-app#README",
   "author": "CrowdTrust",
   "devDependencies": {
-    "oxlint": "^0.9.7",
+    "oxlint": "^0.9.10",
     "prettier": "^3.3.3"
   }
 }

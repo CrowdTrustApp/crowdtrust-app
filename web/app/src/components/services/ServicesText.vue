@@ -46,7 +46,7 @@ defineProps<{
 }
 .text {
   @mixin text 16px;
-  color: rgb(51, 51, 51);
+  color: $text2;
   margin-top: 8px;
 }
 @media (max-width: 600px) {

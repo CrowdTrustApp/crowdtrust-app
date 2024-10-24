@@ -38,7 +38,7 @@ import BackSection from '../components/back/BackSection.vue'
 import SecureImg from '../assets/img/back-secure.png'
 import InformedImg from '../assets/img/back-informed.png'
 import SupportImg from '../assets/img/back-support.png'
-import { useScroll } from '../util/use-scroll'
+import { useScroll } from '@app/util-app'
 
 const { yPos } = useScroll()
 </script>
@@ -68,7 +68,7 @@ const { yPos } = useScroll()
   width: 100%;
   margin: 20px auto 0;
   text-align: center;
-  color: $text2;
+  color: $text3;
 }
 .back-sections {
   padding-bottom: 140px;
