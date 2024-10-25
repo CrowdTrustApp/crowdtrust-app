@@ -71,7 +71,11 @@
     </SettingsRow>
     <SettingsRow :title="ts('wallet')" :text="ts('profile.wallet_text')">
       <template #right>
-        <SwitchWallet v-if="walletUpdate" class="wallet-right f-col" />
+        <SwitchWallet
+          v-if="walletUpdate"
+          class="wallet-right f-col"
+          @cancel="walletUpdate = false"
+        />
         <div v-else class="wallet-right f-col">
           <CTButton
             :text="ts('profile.update_wallet')"
@@ -175,12 +179,5 @@ const savePassword = async () => {
 }
 .password-input {
   margin-bottom: 8px;
-}
-.cancel {
-  @mixin semibold 14px;
-  margin-right: 16px;
-  color: $red;
-  cursor: pointer;
-  user-select: none;
 }
 </style>

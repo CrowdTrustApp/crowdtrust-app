@@ -12,7 +12,12 @@
         :error="ts(errorKey || authErrorKey)"
         class="switch-error"
       />
-      <CTButton :text="ts('connect.button')" class="switch-button" @click="connect" />
+      <div class="switch-buttons">
+        <div class="cancel" @click="emit('cancel')">
+          {{ ts('cancel') }}
+        </div>
+        <CTButton :text="ts('connect.button')" class="switch-button" @click="connect" />
+      </div>
     </div>
     <div v-else class="switch-sign">
       <div class="current">
@@ -123,7 +128,9 @@ const connect = async () => {
   @mixin text 14px;
   margin-top: 6px;
 }
-.switch-button {
+.switch-buttons {
+  display: flex;
+  align-items: center;
   margin-top: 16px;
 }
 </style>

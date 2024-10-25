@@ -291,35 +291,35 @@ jobs:
   #           ${{needs.repo-metadata.outputs.repo_slug}}/${{env.ENVIRONMENT}}/${{env.APP_NAME}}:${{env.BRANCH_NAME}}-${{needs.repo-metadata.outputs.sha8}}-${{github.run_number}}
   #           ${{needs.repo-metadata.outputs.repo_slug}}/${{env.ENVIRONMENT}}/${{env.APP_NAME}}:latest
 
-  release:
-    needs:
-      - build-docker-db-app-prod
-      - build-docker-crowdtrust-api-prod
-      # - build-docker-web-prod
-      # - build-docker-web-admin-prod
-    name: Release
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          persist-credentials: false
-      - name: Set up NodeJS (LTS)
-        uses: actions/setup-node@v4
-        with:
-          node-version: 'lts/*'
-      - name: Install dependencies
-        run: |
-          npm install -g semantic-release@23
-          npm install -g @semantic-release/changelog@6
-          npm install -g conventional-changelog-conventionalcommits@7
-      - name: Release
-        env:
-          # Default GITHUB_TOKEN is OK as long as there no workflows triggered
-          # on "create release" event as the latter will not be emitted.
-          # See https://github.com/semantic-release/github
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git branch -avv
-          npx semantic-release --debug
+  # release:
+  #   needs:
+  #     - build-docker-db-app-prod
+  #     - build-docker-crowdtrust-api-prod
+  #     - build-docker-web-prod
+  #     - build-docker-web-admin-prod
+  #   name: Release
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 0
+  #         persist-credentials: false
+  #     - name: Set up NodeJS (LTS)
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: 'lts/*'
+  #     - name: Install dependencies
+  #       run: |
+  #         npm install -g semantic-release@23
+  #         npm install -g @semantic-release/changelog@6
+  #         npm install -g conventional-changelog-conventionalcommits@7
+  #     - name: Release
+  #       env:
+  #         # Default GITHUB_TOKEN is OK as long as there no workflows triggered
+  #         # on "create release" event as the latter will not be emitted.
+  #         # See https://github.com/semantic-release/github
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       run: |
+  #         git branch -avv
+  #         npx semantic-release --debug
