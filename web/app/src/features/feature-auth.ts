@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import { errorToKey } from '@app/util'
 import { ILoginUserApiRequest, IRegisterUserApiRequest } from '@app/types'
 import { store } from '@app/store'
+import { getUser } from './feature-user'
 
 export const authErrorKey = ref<string | undefined>()
 
@@ -48,6 +49,7 @@ export const loginUser = async (payload: ILoginUserApiRequest): Promise<void> =>
     const authRes = await apiLoginUser(payload)
     if (authRes.auth_token) {
       store.auth.logIn(authRes.auth_token)
+      await getUser()
     }
   } catch (e) {
     authErrorKey.value = errorToKey(e)

@@ -163,6 +163,7 @@ jobs:
             "S3_SECRET_ACCESS_KEY=${{ secrets.S3_SECRET_ACCESS_KEY_STG }}"
             "SENDGRID_API_KEY=${{ secrets.SENDGRID_API_KEY_STG }}"
             "APP_AUTH_SECRET=${{ secrets.APP_AUTH_SECRET_STG }}"
+            "CONFIRM_SHARED_SECRET=${{ secrets.CONFIRM_SHARED_SECRET_PROD }}"
             "LAST_COMMIT_SHA=${{needs.repo-metadata.outputs.sha8}}"
             "RELEASE_VERSION=${{needs.repo-metadata.outputs.next_version}}"
           push: true
