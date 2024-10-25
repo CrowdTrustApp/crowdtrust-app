@@ -33,7 +33,7 @@
       <div class="profile-link">
         <a :href="link" target="_blank">{{ link }}</a>
       </div>
-      <div class="profile-location profile-count count">
+      <div v-if="location" class="profile-location profile-count count">
         <Location class="location-icon count-icon" />
         {{ location }}
       </div>

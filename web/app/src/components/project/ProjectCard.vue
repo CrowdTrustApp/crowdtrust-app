@@ -70,7 +70,7 @@ const raised = computed(() => {
 @import '../../css/defines.postcss';
 
 .image-overlay {
-  background-color: rgba(255, 255, 255, 0.25);
+  background-color: rgba(200, 200, 200, 0.5);
   opacity: 0;
   transition: opacity 0.25s ease;
 }
