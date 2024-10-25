@@ -11,6 +11,7 @@
       <CTInput v-model="name" :label="ts('name')" class="edit-input" />
       <CTTextArea v-model="blurb" :label="ts('blurb')" class="edit-input" />
       <CTTextArea v-model="description" :label="ts('description')" class="edit-input" />
+      <div class="category"></div>
     </div>
   </div>
 </template>
