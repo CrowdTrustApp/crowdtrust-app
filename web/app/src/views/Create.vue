@@ -1,31 +1,50 @@
 <template>
   <div class="create-wrap">
-    <div class="placeholder f-center-col">
-      <div class="placeholder-title">Under Maintenance</div>
-      <div class="placeholder-text">
-        Project creation is currently disabled, check back in a few days.
+    <Placeholder v-if="disabled" />
+    <div v-else class="create">
+      <div class="create-title">
+        {{ ts('create.title') }}
       </div>
+      <div class="create-text">
+        {{ ts('create.text') }}
+      </div>
+      <CTInput v-model="name" :label="ts('name')" class="edit-input" />
+      <CTTextArea v-model="blurb" :label="ts('blurb')" class="edit-input" />
+      <CTTextArea v-model="description" :label="ts('description')" class="edit-input" />
     </div>
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { ref } from 'vue'
+import Placeholder from '../components/create/Placeholder.vue'
+import CTInput from '../components/widgets/CTInput.vue'
+import CTTextArea from '../components/widgets/CTTextArea.vue'
+import { ts } from '../i18n'
+
+const disabled = true
+
+const name = ref('')
+const blurb = ref('')
+const description = ref('')
+</script>
 
 <style lang="postcss" scoped>
 @import '../css/defines.postcss';
 
-.placeholder {
-  padding: 96px 40px 120px;
-  min-height: calc(100vh - 360px);
-  text-align: center;
+.create {
+  max-width: 940px;
+  padding: 80px 32px 120px;
+  margin: 0 auto;
+  position: relative;
 }
-.placeholder-title {
-  @mixin semibold 32px;
-  color: $text3;
+.create-title {
+  @mixin bold 36px;
 }
-.placeholder-text {
-  @mixin medium 20px;
-  color: $text-light;
-  margin-top: 24px;
+.create-text {
+  @mixin text 18px;
+}
+.edit-input {
+  margin-top: 16px;
 }
 </style>
