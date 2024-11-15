@@ -5,7 +5,7 @@
     @click="click"
   >
     <div v-if="animate" class="ct-button-animate">
-      <Spinner class="ct-button-spinner" />
+      <Spinner class="ct-button-spinner" color="rgb(1, 98, 162)" />
     </div>
     <div v-else class="button-text">
       <span>

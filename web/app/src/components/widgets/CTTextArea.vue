@@ -2,7 +2,7 @@
   <div class="ct-textarea-wrap">
     <textarea
       ref="inputRef"
-      :class="['ct-textarea', inputClass]"
+      :class="['ct-textarea', inputClass, suffix && 'has-suffix']"
       :value="modelValue"
       :type="type"
       :disabled="isDisabled"
@@ -23,6 +23,7 @@
     >
       <span>{{ label }}</span>
     </label>
+    <span v-if="suffix" class="ct-input-suffix"> {{ suffix }}</span>
     <slot />
   </div>
 </template>
@@ -40,6 +41,7 @@ const props = withDefaults(
     rows?: string
     isDisabled?: boolean
     inputClass?: string | null
+    suffix?: string | null
     maxLength?: number
   }>(),
   {
@@ -50,6 +52,7 @@ const props = withDefaults(
     rows: '5',
     name: undefined,
     inputClass: null,
+    suffix: null,
     maxLength: undefined,
   },
 )
@@ -132,6 +135,11 @@ const handleInput = (e: Event) => {
     opacity: 0.5;
   }
 
+  &.has-suffix {
+    padding-right: 32px;
+    padding-top: 20px;
+  }
+
   &:focus {
     border-color: $blue1;
     background-color: white;
@@ -170,5 +178,13 @@ const handleInput = (e: Event) => {
     -webkit-appearance: none;
     margin: 0;
   }
+}
+
+.ct-input-suffix {
+  @mixin medium 13px;
+  color: $text2;
+  position: absolute;
+  top: 0px;
+  right: 6px;
 }
 </style>

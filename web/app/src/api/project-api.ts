@@ -1,4 +1,6 @@
 import {
+  ICreateProjectApiRequest,
+  ICreateProjectApiResponse,
   IGetProjectApiResponse,
   IListProjectsApiRequest,
   IListProjectsApiResponse,
@@ -21,6 +23,17 @@ export const apiGetProject = async (id: string): Promise<IGetProjectApiResponse>
   const { data } = await rootApi.authRequest<IGetProjectApiResponse>({
     url: `projects/${id}`,
     method: 'GET',
+  })
+  return data
+}
+
+export const apiCreateProject = async (
+  payload: ICreateProjectApiRequest,
+): Promise<ICreateProjectApiResponse> => {
+  const { data } = await rootApi.authRequest<ICreateProjectApiResponse>({
+    url: 'projects',
+    method: 'POST',
+    data: payload,
   })
   return data
 }

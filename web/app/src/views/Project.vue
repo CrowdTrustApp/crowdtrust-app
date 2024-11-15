@@ -1,5 +1,5 @@
 <template>
-  <div v-if="state.loading" class="spinner-wrap">
+  <div v-if="state.loading">
     <Spinner :size="40" />
   </div>
   <div v-else-if="state.project" class="project-wrap">

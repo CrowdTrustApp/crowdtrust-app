@@ -7,7 +7,7 @@
       <span>{{ ts('project.text') }}</span>
       <router-link :to="{ name: 'Create' }">{{ ts('project.create') }}</router-link>
     </div>
-    <ProjectList :projects="state.projects" />
+    <ProjectList :projects="state.projects" :loading="state.loading" />
   </div>
 </template>
 
