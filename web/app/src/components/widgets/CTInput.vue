@@ -295,11 +295,11 @@ const clear = () => {
 }
 
 .ct-input-suffix {
-  @mixin medium 14px;
+  @mixin medium 13px;
   color: $text2;
   position: absolute;
-  top: 10px;
-  right: 12px;
+  top: 3px;
+  right: 6px;
 }
 
 :deep(.ibw) {

@@ -1,6 +1,9 @@
 <template>
   <div class="project-list">
-    <div v-if="projects.length === 0" class="projects-empty">
+    <div v-if="loading" class="spinner-wrap f-center-col">
+      <Spinner :size="40" color="rgb(1, 98, 162)" />
+    </div>
+    <div v-else-if="projects.length === 0" class="projects-empty">
       {{ ts('project.empty') }}
     </div>
     <div v-else class="projects f-col">
@@ -25,9 +28,11 @@ import { IProjectViewModel } from '@app/types'
 import { useResize } from '@app/util-app'
 import { ts } from '../../i18n'
 import ProjectCard from './ProjectCard.vue'
+import Spinner from '../widgets/Spinner.vue'
 
 const { projects } = defineProps<{
   projects: IProjectViewModel[]
+  loading: boolean
 }>()
 
 const { innerWidth } = useResize()
@@ -50,6 +55,10 @@ const listDimension = computed(() => {
 .projects-empty {
   @mixin semibold 24px;
   color: $text-light2;
+  margin-top: 32px;
+}
+.spinner-wrap {
+  width: 100%;
   margin-top: 32px;
 }
 .projects {

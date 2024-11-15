@@ -11,4 +11,6 @@
 import HomeBg from '../components/home/HomeBg.vue'
 import AppHeader from '../components/nav/AppHeader.vue'
 import CTFooter from '../components/nav/CTFooter.vue'
+
+import '@vuepic/vue-datepicker/dist/main.css'
 </script>

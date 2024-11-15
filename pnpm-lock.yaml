@@ -77,9 +77,12 @@ importers:
       '@samatech/vue3-eth':
         specifier: 0.8.0
         version: 0.8.0(vue@3.5.8(typescript@5.6.2))
+      '@vuepic/vue-datepicker':
+        specifier: ^10.0.0
+        version: 10.0.0(vue@3.5.8(typescript@5.6.2))
       date-fns:
-        specifier: ^3.6.0
-        version: 3.6.0
+        specifier: ^4.1.0
+        version: 4.1.0
       jwt-decode:
         specifier: ^4.0.0
         version: 4.0.0
@@ -960,6 +963,12 @@ packages:
   '@vue/shared@3.5.8':
     resolution: {integrity: sha512-mJleSWbAGySd2RJdX1RBtcrUBX6snyOc0qHpgk3lGi4l9/P/3ny3ELqFWqYdkXIwwNN/kdm8nD9ky8o6l/Lx2A==}
 
+  '@vuepic/vue-datepicker@10.0.0':
+    resolution: {integrity: sha512-ujlk3ahftVQpyCJ8hq7TmOOHrf/XFJI1ZcAh/FRB5Ci62Vq5HmHf6xux5KVi5SPUFRTJY78m+uDhYy1M+8RZ9w==}
+    engines: {node: '>=18.12.0'}
+    peerDependencies:
+      vue: '>=3.2.0'
+
   acorn@8.13.0:
     resolution: {integrity: sha512-8zSiw54Oxrdym50NlZ9sUusyO1Z1ZchgRLWRaK6c86XJFClyCgFKetdowBg5bKxyp/u+CDBJG4Mpp0m3HLZl9w==}
     engines: {node: '>=0.4.0'}
@@ -1291,8 +1300,8 @@ packages:
   csstype@3.1.3:
     resolution: {integrity: sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==}
 
-  date-fns@3.6.0:
-    resolution: {integrity: sha512-fRHTG8g/Gif+kSh50gaGEdToemgfj74aRX3swtiouboip5JDLAyDE9F11nHMIcvOaXeOC6D7SpNhi7uFyB7Uww==}
+  date-fns@4.1.0:
+    resolution: {integrity: sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==}
 
   debug@4.3.7:
     resolution: {integrity: sha512-Er2nc/H7RrMXZBFCEim6TCmMk02Z8vLC2Rbi1KEBggpo0fS6l0S1nnapwmIi3yW/+GOJap1Krg4w0Hg80oCqgQ==}
@@ -3769,6 +3778,11 @@ snapshots:
 
   '@vue/shared@3.5.8': {}
 
+  '@vuepic/vue-datepicker@10.0.0(vue@3.5.8(typescript@5.6.2))':
+    dependencies:
+      date-fns: 4.1.0
+      vue: 3.5.8(typescript@5.6.2)
+
   acorn@8.13.0: {}
 
   aes-js@4.0.0-beta.5: {}
@@ -4165,7 +4179,7 @@ snapshots:
 
   csstype@3.1.3: {}
 
-  date-fns@3.6.0: {}
+  date-fns@4.1.0: {}
 
   debug@4.3.7:
     dependencies:
