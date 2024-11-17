@@ -7,7 +7,6 @@ use strum::{Display, EnumString};
 pub enum AssetState {
     Created,
     Uploaded,
-    Replacing,
     Expired,
 }
 

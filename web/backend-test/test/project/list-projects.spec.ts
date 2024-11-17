@@ -37,7 +37,7 @@ describe('List Projects', () => {
       expect(body.results.length).toEqual(TotalProjects)
     })
 
-    test('returns 200 status and sites when filtering from 1 to 2', async () => {
+    test('returns 200 status and projects when filtering from 1 to 2', async () => {
       query = { from: 1, to: 2 }
 
       const response = await api

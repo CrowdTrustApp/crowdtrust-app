@@ -1,4 +1,4 @@
-use crate::error::api_error::ApiError;
+use crate::{error::api_error::ApiError, util::config::Config};
 use reqwest::Url;
 use rusty_s3::{Bucket, Credentials, S3Action, UrlStyle};
 use std::time::Duration;
@@ -7,26 +7,35 @@ use tracing::warn;
 #[derive(Clone)]
 pub struct S3Client {
     credentials: Credentials,
-    pub site_asset_bucket: Bucket,
+    pub project_asset_bucket: Bucket,
 }
 
 impl S3Client {
-    pub fn new(s3_url: String, s3_access_key_id: String, s3_secret_access_key: String) -> S3Client {
-        if s3_url.is_empty() || s3_secret_access_key.is_empty() || s3_access_key_id.is_empty() {
+    pub fn new(config: &Config) -> S3Client {
+        let project_asset_name = config.s3_assets_bucket_name.clone();
+
+        if config.s3_url.is_empty()
+            || config.s3_secret_access_key.is_empty()
+            || config.s3_access_key_id.is_empty()
+            || project_asset_name.is_empty()
+        {
             warn!("Missing S3 configuration, please check the following information is provided: S3_URL, S3_ACCESS_KEY_ID, S3_SECRET_ACCESS_KEY")
         }
-        let endpoint: Url = s3_url.parse().expect("s3 endpoint is invalid");
+        let endpoint: Url = config.s3_url.parse().expect("s3 endpoint is invalid");
         let path_style = UrlStyle::Path;
-        let site_asset_name = "site-assets";
         let region = "auto";
-        let site_asset_bucket = Bucket::new(endpoint.clone(), path_style, site_asset_name, region)
-            .expect("site-asset bucket url is invalid");
+        let project_asset_bucket =
+            Bucket::new(endpoint.clone(), path_style, project_asset_name, region)
+                .expect("project-asset bucket url is invalid");
 
-        let credentials = Credentials::new(s3_access_key_id, s3_secret_access_key);
+        let credentials = Credentials::new(
+            config.s3_access_key_id.clone(),
+            config.s3_secret_access_key.clone(),
+        );
 
         S3Client {
             credentials,
-            site_asset_bucket,
+            project_asset_bucket,
         }
     }
 
@@ -77,7 +86,7 @@ impl S3Client {
         }
     }
 
-    pub fn presign_put_site_asset(
+    pub fn presign_put_project_asset(
         &self,
         filename: &str,
         expires: u64,
@@ -85,7 +94,7 @@ impl S3Client {
         size: i64,
     ) -> Result<Url, ApiError> {
         self.presign_put(
-            &self.site_asset_bucket,
+            &self.project_asset_bucket,
             filename,
             expires,
             content_type,
@@ -93,9 +102,9 @@ impl S3Client {
         )
     }
 
-    pub async fn verify_site_asset(&self, object_key: &str) -> Result<bool, ApiError> {
+    pub async fn verify_project_asset(&self, object_key: &str) -> Result<bool, ApiError> {
         let head_object = self
-            .site_asset_bucket
+            .project_asset_bucket
             .head_object(Some(&self.credentials), &object_key);
 
         let expires_in = Duration::from_secs(600);
@@ -108,7 +117,8 @@ impl S3Client {
         }
     }
 
-    pub async fn delete_site_asset(&self, object_key: &str) -> Result<(), ApiError> {
-        self.delete_asset(&self.site_asset_bucket, object_key).await
+    pub async fn delete_project_asset(&self, object_key: &str) -> Result<(), ApiError> {
+        self.delete_asset(&self.project_asset_bucket, object_key)
+            .await
     }
 }

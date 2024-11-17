@@ -23,7 +23,7 @@ data:
     http://127.0.0.1:8091,\
     http://web.localhost:8080"
   APP_WEB_URL: 'http://localhost:8080'
-  S3_URL: https://dev.r2.cloudflarestorage.com
-  S3_ACCESS_KEY_ID: dev
+  S3_BACKUPS_BUCKET: crowdtrust-db-backups-dev
+  S3_ASSETS_BUCKET: project-assets-dev
   CONFIRM_SHARED_SECRET: 'pTHHvgH2P+ea/LzWMYJEYGZ3cbsRx9nO9RhPT5QeF+k='
   APP_AUTH_SECRET: 'K0EKfNOtfZ8wTQB2UPydgN1wJXnOgmOXyJvIYDXVces='

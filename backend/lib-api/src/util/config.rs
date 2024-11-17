@@ -60,4 +60,12 @@ pub struct Config {
     /// S3 secret key
     #[clap(long, env = "S3_SECRET_ACCESS_KEY", value_parser = NonEmptyStringValueParser::new())]
     pub s3_secret_access_key: String,
+
+    /// S3 db backups bucket name
+    #[clap(long, env = "S3_BACKUPS_BUCKET", value_parser = NonEmptyStringValueParser::new())]
+    pub s3_backups_bucket_name: String,
+
+    /// S3 assets bucket name
+    #[clap(long, env = "S3_ASSETS_BUCKET", value_parser = NonEmptyStringValueParser::new())]
+    pub s3_assets_bucket_name: String,
 }

@@ -12,7 +12,7 @@ use axum::{
     Router,
 };
 
-use super::health;
+use super::{health, project_asset};
 
 pub fn app_router(context: &ApiContext) -> Router<ApiContext> {
     Router::new().nest("/api", api_router(context))
@@ -79,6 +79,23 @@ pub fn api_router(context: &ApiContext) -> Router<ApiContext> {
                 project::update_project::update_project
                     .layer(from_fn_with_state(context.clone(), auth_admin_user)),
             ),
+        )
+        .route(
+            "/project-assets",
+            post(project_asset::create_project_asset::create_project_asset)
+                .get(project_asset::list_project_assets::list_project_assets)
+                .route_layer(from_fn_with_state(context.clone(), auth_admin_user)),
+        )
+        .route(
+            "/project-assets/:asset_id",
+            patch(project_asset::update_project_asset::update_project_asset)
+                .delete(project_asset::delete_project_asset::delete_project_asset)
+                .route_layer(from_fn_with_state(context.clone(), auth_admin_user)),
+        )
+        .route(
+            "/project-assets/:asset_id/actions/verify",
+            post(project_asset::verify_project_asset::verify_project_asset)
+                .route_layer(from_fn_with_state(context.clone(), auth_admin_user)),
         )
         .route("/*path", get(handler_404)) // Handle unknown routes under /api
 }

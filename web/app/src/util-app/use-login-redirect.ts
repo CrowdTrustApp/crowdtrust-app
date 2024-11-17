@@ -72,7 +72,7 @@ export const useLoginRedirect = (
         const newRoute = router.resolve(redirect)
         // Make sure we don't remain on the AuthConnect page
         if (newRoute?.name === 'Login') {
-          return router.push({ name: defaultRedirect ?? 'Sites' })
+          return router.push({ name: defaultRedirect ?? 'Projects' })
         } else {
           return router.push({ path: redirect })
         }
@@ -86,7 +86,7 @@ export const useLoginRedirect = (
         }
       }
     } else {
-      return router.push({ name: defaultRedirect ?? 'Sites' })
+      return router.push({ name: defaultRedirect ?? 'Projects' })
     }
   }
 

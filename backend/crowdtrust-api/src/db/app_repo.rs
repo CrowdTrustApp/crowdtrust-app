@@ -7,6 +7,7 @@ use lib_api::{
 use sqlx::{PgPool, Postgres, Transaction};
 
 use super::{
+    project_asset_repo::{DynProjectAssetRepo, ProjectAssetRepo},
     project_repo::{DynProjectRepo, ProjectRepo},
     user_repo::{DynUserRepo, UserRepo},
 };
@@ -16,6 +17,7 @@ pub struct AppRepo {
     pub db: PgPool,
     pub user: DynUserRepo,
     pub project: DynProjectRepo,
+    pub project_asset: DynProjectAssetRepo,
 }
 
 impl AppRepo {
@@ -27,6 +29,7 @@ impl AppRepo {
             db: db.clone(),
             user: Arc::new(UserRepo { db: db.clone() }) as DynUserRepo,
             project: Arc::new(ProjectRepo { db: db.clone() }) as DynProjectRepo,
+            project_asset: Arc::new(ProjectAssetRepo { db: db.clone() }) as DynProjectAssetRepo,
         })
     }
 

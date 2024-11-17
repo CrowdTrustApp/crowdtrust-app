@@ -2400,6 +2400,7 @@ dependencies = [
  "bigdecimal",
  "cbc",
  "chrono",
+ "clap",
  "file-rotate",
  "jsonwebtoken",
  "lazy_static",

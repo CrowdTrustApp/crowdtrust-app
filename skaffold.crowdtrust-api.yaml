@@ -1,75 +1,69 @@
-apiVersion: skaffold/v3alpha1
+apiVersion: skaffold/v4beta11
 kind: Config
 metadata:
   name: crowdtrust-api
 requires:
   - path: ./skaffold.db.yaml
 build:
-  local:
-    useBuildkit: true
-    push: false
   artifacts:
     - image: crowdtrust-api.dev
       context: .
       sync:
         manual:
-          - src: 'backend/crowdtrust-api/src/**/*'
-            dest: '/usr/src'
-          # Copy shared libs
-          - src: 'backend/lib-api/src/**/*'
-            dest: '/usr/src'
-          - src: 'backend/lib-types/src/**/*'
-            dest: '/usr/src'
-          # Copy pre-built app binaries
-          - src: 'backend/target/aarch64-unknown-linux-gnu/debug/crowdtrust-api*'
-            dest: '/usr/src'
-          - src: 'backend/target/aarch64-unknown-linux-gnu/debug/libcrowdtrust_api.*'
-            dest: '/usr/src'
+          - src: backend/crowdtrust-api/src/**/*
+            dest: /usr/src
+          - src: backend/lib-api/src/**/*
+            dest: /usr/src
+          - src: backend/lib-types/src/**/*
+            dest: /usr/src
+          - src: backend/target/aarch64-unknown-linux-gnu/debug/crowdtrust-api*
+            dest: /usr/src
+          - src: backend/target/aarch64-unknown-linux-gnu/debug/libcrowdtrust_api.*
+            dest: /usr/src
       docker:
         dockerfile: backend/crowdtrust-api/Dockerfile
         target: dev
         buildArgs:
-          # These vars can be overridden in order to manually test stg/prod environments
-          S3_SECRET_ACCESS_KEY: '{{or .S3_SECRET_ACCESS_KEY "dev"}}'
-          SENDGRID_API_KEY: '{{or .SENDGRID_API_KEY "dev"}}'
-          APP_AUTH_SECRET: '{{or .APP_AUTH_SECRET "dev"}}'
+          APP_AUTH_SECRET: "{{or .APP_AUTH_SECRET \"dev\"}}"
+          S3_ACCESS_KEY_ID: "{{or .CT_S3_ACCESS_KEY_ID \"dev\"}}"
+          S3_SECRET_ACCESS_KEY: "{{or .CT_S3_SECRET_ACCESS_KEY \"dev\"}}"
+          S3_URL: "{{or .CT_S3_URL \"https://dev.r2.cloudflarestorage.com\"}}"
+          SENDGRID_API_KEY: "{{or .SENDGRID_API_KEY \"dev\"}}"
     - image: api-test-helper.dev
       context: .
       sync:
         manual:
-          - src: 'backend/api-test-helper/src/**/*'
-            dest: '/usr/src'
-          - src: 'backend/lib-api/src/**/*'
-            dest: '/usr/src'
-          - src: 'backend/lib-types/src/**/*'
-            dest: '/usr/src'
-          - src: 'backend/db-app/src/**/*'
-            dest: '/usr/src'
-          - src: 'backend/target/aarch64-unknown-linux-gnu/debug/api-test-helper*'
-            dest: '/usr/src'
-          - src: 'backend/target/aarch64-unknown-linux-gnu/debug/libapi_test_helper.*'
-            dest: '/usr/src'
+          - src: backend/api-test-helper/src/**/*
+            dest: /usr/src
+          - src: backend/lib-api/src/**/*
+            dest: /usr/src
+          - src: backend/lib-types/src/**/*
+            dest: /usr/src
+          - src: backend/db-app/src/**/*
+            dest: /usr/src
+          - src: backend/target/aarch64-unknown-linux-gnu/debug/api-test-helper*
+            dest: /usr/src
+          - src: backend/target/aarch64-unknown-linux-gnu/debug/libapi_test_helper.*
+            dest: /usr/src
       docker:
         dockerfile: backend/api-test-helper/Dockerfile
         target: dev
         buildArgs:
-          APP_AUTH_SECRET: '{{or .APP_AUTH_SECRET}}'
-
+          APP_AUTH_SECRET: "{{or .APP_AUTH_SECRET \"dev\"}}"
+  local:
+    push: false
+    useBuildkit: true
 manifests:
   rawYaml:
     - tools/k8s/dev/shared/*.yaml
     - tools/k8s/dev/crowdtrust-api/*.yaml
-
 deploy:
-  # kubeContext: rancher-desktop
-  kubeContext: docker-desktop
   kubectl: {}
+  kubeContext: docker-desktop
 portForward:
-  # Expose API for local E2E run
   - resourceType: service
     resourceName: crowdtrust-api
     port: 3000
-  # Expose state manager app localhost connection
   - resourceType: service
     resourceName: api-test-helper
     port: 3001

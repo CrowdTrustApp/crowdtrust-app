@@ -167,6 +167,8 @@ jobs:
           # Fake values can be overridden with Github secrets as needed
           build-args: |
             "S3_SECRET_ACCESS_KEY=${{ secrets.S3_SECRET_ACCESS_KEY_CI }}"
+            "S3_ACCESS_KEY_ID=${{ secrets.S3_ACCESS_KEY_ID_CI }}"
+            "S3_URL=${{ secrets.S3_URL_CI }}"
             "SENDGRID_API_KEY=ci"
           file: ${{env.WORKSPACE_ROOT}}/backend/${{env.APP_NAME}}/Dockerfile
           target: prod
