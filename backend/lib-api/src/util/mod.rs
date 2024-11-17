@@ -1,3 +1,4 @@
+pub mod config;
 pub mod conversion;
 pub mod json_extractor;
 pub mod log;

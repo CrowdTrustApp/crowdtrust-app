@@ -9,6 +9,7 @@ pub mod auth;
 pub mod health;
 pub mod helpers;
 pub mod project;
+pub mod project_asset;
 pub mod user;
 
 // Workaround for query string arrays

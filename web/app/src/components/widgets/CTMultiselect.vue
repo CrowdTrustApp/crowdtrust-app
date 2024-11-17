@@ -369,6 +369,21 @@ $padding-x: 8px;
   background: var(--ms-bg);
   cursor: pointer;
   border: var(--ms-border-width, 1px) solid var(--ms-border-color, #d1d5db);
+  font-family: $font-text;
+  color: $text1;
+  height: 40px;
+  --ms-font-size: 13px;
+  --ms-bg: rgba(255, 255, 255, 0.6);
+  --ms-option-font-size: 13px;
+  --ms-line-height: 1;
+  --ms-radius: 2px;
+  --ms-caret-color: $text3;
+  --ms-placeholder-color: $text-light;
+  --ms-dropdown-bg: #fff;
+  --ms-option-bg-selected: $bg-light1;
+  --ms-option-bg-pointed: $bg-light2;
+  --ms-option-bg-selected-pointed: $text-light2;
+  --ms-ring-color: rgba($text-light2, 0.2);
   .ct-ms-search {
     height: 100%;
     .ct-input {
@@ -464,23 +479,6 @@ $padding-x: 8px;
   transform: scaleY(0);
 }
 
-.ct-multiselect {
-  font-family: $font-text;
-  color: $text1;
-  height: 40px;
-  --ms-font-size: 13px;
-  --ms-bg: rgba(255, 255, 255, 0.6);
-  --ms-option-font-size: 13px;
-  --ms-line-height: 1;
-  --ms-radius: 2px;
-  --ms-caret-color: $text3;
-  --ms-placeholder-color: $text-light;
-  --ms-dropdown-bg: #fff;
-  --ms-option-bg-selected: $bg-light1;
-  --ms-option-bg-pointed: $bg-light2;
-  --ms-option-bg-selected-pointed: $text-light2;
-  --ms-ring-color: rgba($text-light2, 0.2);
-}
 .ct-ms-label {
   width: 100%;
   height: 100%;
@@ -496,7 +494,7 @@ $padding-x: 8px;
   &:hover {
     background: var(--ms-option-bg-pointed);
   }
-  &:lact-child {
+  &:last-child {
     padding-bottom: 8px;
   }
 }

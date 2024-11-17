@@ -7,4 +7,4 @@ export const WEB_URL =
   EXEC_ENV === ExecEnv.Production ? 'crowdtrust.app' : `${EXEC_ENV}.crowdtrust.app`
 
 // R2 public bucket URL
-export const S3_SITE_ASSETS_URL = import.meta.env.VITE_S3_SITE_ASSETS_URL || ''
+export const S3_PROJECT_ASSETS_URL = import.meta.env.VITE_S3_PROJECT_ASSETS_URL || ''

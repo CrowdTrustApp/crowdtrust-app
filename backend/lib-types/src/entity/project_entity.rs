@@ -3,10 +3,7 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use crate::shared::{
-    asset::{AssetContentType, AssetState},
-    project::{BlockchainStatus, PaymentCurrency, ProjectCategory, ProjectStatus},
-};
+use crate::shared::project::{BlockchainStatus, PaymentCurrency, ProjectCategory, ProjectStatus};
 
 use super::reward_entity::RewardEntity;
 
@@ -55,20 +52,6 @@ pub struct ProjectEntityRelations {
     pub transaction_hash: Option<String>,
     pub rewards: Vec<RewardEntity>,
     pub rewards_order: Vec<String>,
-    pub created_at: DateTime<Utc>,
-    pub updated_at: DateTime<Utc>,
-}
-
-#[derive(Debug, Deserialize, Serialize, sqlx::Type)]
-pub struct ProjectAssetEntity {
-    pub id: Uuid,
-    pub project_id: Uuid,
-    pub user_id: Uuid,
-    pub size: i64,
-    pub name: String,
-    pub content_type: AssetContentType,
-    pub state: AssetState,
-    pub upload_expires_at: DateTime<Utc>,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
 }

@@ -13,7 +13,7 @@ lazy_static! {
     pub static ref REGEX_FLOAT: Regex = Regex::new(r#"^-?\d+?\.^-?\d*$"#).unwrap();
     pub static ref REGEX_ARRAY: Regex = Regex::new(r"^\[.*\]$").unwrap();
     pub static ref REGEX_PORT: Regex = Regex::new(r":\d+$").unwrap();
-    pub static ref REGEX_SITE_NAME: Regex = Regex::new(r"^[a-zA-Z0-9 ]{2,50}$").unwrap();
+    pub static ref REGEX_PROJECT_NAME: Regex = Regex::new(r"^[a-zA-Z0-9 ]{2,50}$").unwrap();
     pub static ref REGEX_EMAIL: Regex =
         Regex::new(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$").unwrap();
     pub static ref REGEX_TABLE_NAME: Regex = Regex::new(r"^[a-zA-Z][a-zA-Z0-9_-]{1,99}$").unwrap();

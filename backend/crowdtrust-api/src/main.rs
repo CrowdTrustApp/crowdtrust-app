@@ -5,9 +5,9 @@ use axum::Router;
 use clap::Parser;
 use crowdtrust_api::api_context::ApiContext;
 use crowdtrust_api::app::app_router::app_router;
-use crowdtrust_api::config::Config;
 use crowdtrust_api::db::app_repo::AppRepo;
 use lib_api::clients::s3_client::S3Client;
+use lib_api::util::config::Config;
 use lib_api::util::log::{create_trace_layer, setup_logging};
 use tower::ServiceBuilder;
 use tower_http::cors::CorsLayer;
@@ -42,11 +42,7 @@ async fn main() {
         .await
         .unwrap();
 
-    let s3_client = S3Client::new(
-        config.s3_url.clone(),
-        config.s3_access_key_id.clone(),
-        config.s3_secret_access_key.clone(),
-    );
+    let s3_client = S3Client::new(&config);
 
     let context = ApiContext {
         config: Arc::new(config),

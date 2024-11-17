@@ -25,7 +25,6 @@ pub struct RewardAssetEntity {
     pub reward_id: Uuid,
     pub user_id: Uuid,
     pub size: i64,
-    pub name: String,
     pub content_type: AssetContentType,
     pub state: AssetState,
     pub upload_expires_at: DateTime<Utc>,

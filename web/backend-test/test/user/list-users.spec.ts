@@ -49,7 +49,7 @@ describe('List Users', () => {
     expect(body.results.length).toEqual(4)
   })
 
-  test('returns 200 status and sites when filtering from 1 to 2', async () => {
+  test('returns 200 status and users when filtering from 1 to 2', async () => {
     query = { from: 1, to: 2 }
 
     const response = await api

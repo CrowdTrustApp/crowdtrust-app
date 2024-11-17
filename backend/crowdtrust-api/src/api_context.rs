@@ -1,6 +1,6 @@
-use lib_api::clients::s3_client::S3Client;
+use lib_api::{clients::s3_client::S3Client, util::config::Config};
 
-use crate::{config::Config, db::app_repo::AppRepo};
+use crate::db::app_repo::AppRepo;
 use std::sync::Arc;
 
 #[derive(Clone)]
