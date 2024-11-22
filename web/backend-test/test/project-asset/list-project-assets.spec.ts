@@ -52,7 +52,7 @@ describe('List Project Assets', () => {
       const body: IListAssetsResponse = response.body
       const assets = body.results
 
-      expect(assets.length).toEqual(2)
+      expect(assets.length).toEqual(3)
       expect(assets[0].id).toEqual('7d9cb4c7-06c3-4de4-a77c-4311386387c6')
       expect(assets[0].content_type).toEqual(AssetContentType.Jpeg)
       expect(assets[0].state).toEqual(AssetState.Created)
@@ -64,6 +64,12 @@ describe('List Project Assets', () => {
       expect(assets[1].state).toEqual(AssetState.Created)
       expect(assets[1].user_id).toEqual('45013993-2a1a-4ee5-8dbd-b4b63d9af34f')
       expect(assets[1].project_id).toEqual('14bfe82a-1003-446b-b6bb-20a176e848e0')
+
+      expect(assets[2].id).toEqual('4cba9ed0-eb4e-4764-8458-a4ca6eecb35c')
+      expect(assets[2].content_type).toEqual(AssetContentType.Jpeg)
+      expect(assets[2].state).toEqual(AssetState.Uploaded)
+      expect(assets[2].user_id).toEqual('45013993-2a1a-4ee5-8dbd-b4b63d9af34f')
+      expect(assets[2].project_id).toEqual('14bfe82a-1003-446b-b6bb-20a176e848e0')
     })
 
     it('returns 200 status and assets when filtered by user_id', async () => {
@@ -80,7 +86,7 @@ describe('List Project Assets', () => {
       const body: IListAssetsResponse = response.body
       const assets = body.results
 
-      expect(assets.length).toEqual(2)
+      expect(assets.length).toEqual(4)
       expect(assets[0].id).toEqual('7d9cb4c7-06c3-4de4-a77c-4311386387c6')
       expect(assets[1].id).toEqual('b59ba8f3-3b53-426a-b3db-52b2f8557798')
     })
@@ -94,7 +100,7 @@ describe('List Project Assets', () => {
       const body: IListAssetsResponse = response.body
       const assets = body.results
 
-      expect(assets.length).toEqual(3)
+      expect(assets.length).toEqual(5)
     })
 
     it('returns 200 status and empty response when querying for non-existent assets', async () => {
@@ -128,10 +134,12 @@ describe('List Project Assets', () => {
       const body: IListAssetsResponse = response.body
       const assets = body.results
 
-      expect(assets.length).toEqual(3)
+      expect(assets.length).toEqual(5)
       expect(assets[0].id).toEqual('873aa935-87e1-4e4c-8a7c-a7d8f083ed08')
-      expect(assets[1].id).toEqual('b59ba8f3-3b53-426a-b3db-52b2f8557798')
-      expect(assets[2].id).toEqual('7d9cb4c7-06c3-4de4-a77c-4311386387c6')
+      expect(assets[1].id).toEqual('439f93a5-bbb6-4353-b3aa-0f766612dc53')
+      expect(assets[2].id).toEqual('4cba9ed0-eb4e-4764-8458-a4ca6eecb35c')
+      expect(assets[3].id).toEqual('b59ba8f3-3b53-426a-b3db-52b2f8557798')
+      expect(assets[4].id).toEqual('7d9cb4c7-06c3-4de4-a77c-4311386387c6')
     })
 
     it('returns 400 status when user_id is not valid', async () => {
@@ -173,9 +181,11 @@ describe('List Project Assets', () => {
       const body: IListAssetsResponse = response.body
       const assets = body.results
 
-      expect(assets.length).toEqual(2)
+      expect(assets.length).toEqual(4)
       expect(assets[0].id).toEqual('7d9cb4c7-06c3-4de4-a77c-4311386387c6')
       expect(assets[1].id).toEqual('b59ba8f3-3b53-426a-b3db-52b2f8557798')
+      expect(assets[2].id).toEqual('4cba9ed0-eb4e-4764-8458-a4ca6eecb35c')
+      expect(assets[3].id).toEqual('439f93a5-bbb6-4353-b3aa-0f766612dc53')
     })
 
     it('returns 200 status with no filters', async () => {
@@ -186,9 +196,11 @@ describe('List Project Assets', () => {
       const body: IListAssetsResponse = response.body
       const assets = body.results
 
-      expect(assets.length).toEqual(2)
+      expect(assets.length).toEqual(4)
       expect(assets[0].id).toEqual('7d9cb4c7-06c3-4de4-a77c-4311386387c6')
       expect(assets[1].id).toEqual('b59ba8f3-3b53-426a-b3db-52b2f8557798')
+      expect(assets[2].id).toEqual('4cba9ed0-eb4e-4764-8458-a4ca6eecb35c')
+      expect(assets[3].id).toEqual('439f93a5-bbb6-4353-b3aa-0f766612dc53')
     })
 
     it('returns 200 status when filtering by content_type Png and state', async () => {
@@ -238,9 +250,11 @@ describe('List Project Assets', () => {
       const body: IListAssetsResponse = response.body
       const assets = body.results
 
-      expect(assets.length).toEqual(2)
+      expect(assets.length).toEqual(4)
       expect(assets[0].id).toEqual('7d9cb4c7-06c3-4de4-a77c-4311386387c6')
       expect(assets[1].id).toEqual('b59ba8f3-3b53-426a-b3db-52b2f8557798')
+      expect(assets[2].id).toEqual('4cba9ed0-eb4e-4764-8458-a4ca6eecb35c')
+      expect(assets[3].id).toEqual('439f93a5-bbb6-4353-b3aa-0f766612dc53')
     })
 
     it('returns 200 status when ordering by size', async () => {
@@ -257,9 +271,11 @@ describe('List Project Assets', () => {
       const body: IListAssetsResponse = response.body
       const assets = body.results
 
-      expect(assets.length).toEqual(2)
-      expect(assets[0].id).toEqual('b59ba8f3-3b53-426a-b3db-52b2f8557798')
-      expect(assets[1].id).toEqual('7d9cb4c7-06c3-4de4-a77c-4311386387c6')
+      expect(assets.length).toEqual(4)
+      expect(assets[0].id).toEqual('439f93a5-bbb6-4353-b3aa-0f766612dc53')
+      expect(assets[1].id).toEqual('4cba9ed0-eb4e-4764-8458-a4ca6eecb35c')
+      expect(assets[2].id).toEqual('b59ba8f3-3b53-426a-b3db-52b2f8557798')
+      expect(assets[3].id).toEqual('7d9cb4c7-06c3-4de4-a77c-4311386387c6')
     })
 
     it('returns 401 when user token has expired', async () => {

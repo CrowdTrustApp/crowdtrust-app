@@ -17,7 +17,7 @@ pub async fn user_exists(
     let user = context
         .repo
         .user
-        .get_user_by_eth_address(query.eth_address)
+        .get_user_by_eth_address(query.eth_address.to_ascii_lowercase())
         .await;
 
     Ok(Json(UserExistsResponse {

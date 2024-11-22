@@ -47,7 +47,7 @@ const price = (wei: string): string => {
 }
 
 const delivery = (time: number): string => {
-  return format(new Date(time * 1000), 'LLLL yyyy')
+  return format(new Date(time * 1000), 'LLL yyyy')
 }
 </script>
 

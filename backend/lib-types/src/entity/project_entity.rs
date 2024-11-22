@@ -3,7 +3,13 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use crate::shared::project::{BlockchainStatus, PaymentCurrency, ProjectCategory, ProjectStatus};
+use crate::{
+    dto::project::project_view_model::ProjectAssetViewModelRelation,
+    shared::{
+        asset::AssetContentType,
+        project::{BlockchainStatus, PaymentCurrency, ProjectCategory, ProjectStatus},
+    },
+};
 
 use super::reward_entity::RewardEntity;
 
@@ -24,6 +30,7 @@ pub struct ProjectEntity {
     pub backer_count: i32,
     pub base_currency: PaymentCurrency,
     pub status: ProjectStatus,
+    pub assets_order: Vec<String>,
     pub blockchain_status: BlockchainStatus,
     pub transaction_hash: Option<String>,
     pub rewards_order: Vec<String>,
@@ -48,12 +55,33 @@ pub struct ProjectEntityRelations {
     pub backer_count: i32,
     pub base_currency: PaymentCurrency,
     pub status: ProjectStatus,
+    pub assets: Vec<ProjectAssetEntityRelation>,
+    pub assets_order: Vec<String>,
     pub blockchain_status: BlockchainStatus,
     pub transaction_hash: Option<String>,
     pub rewards: Vec<RewardEntity>,
     pub rewards_order: Vec<String>,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
+}
+
+#[derive(Debug, Deserialize, Serialize, sqlx::Type)]
+pub struct ProjectAssetEntityRelation {
+    pub id: Uuid,
+    pub size: i64,
+    pub content_type: AssetContentType,
+    pub project_id: Uuid,
+}
+
+impl ProjectAssetEntityRelation {
+    pub fn to_api_response(&self) -> ProjectAssetViewModelRelation {
+        return ProjectAssetViewModelRelation {
+            id: self.id,
+            size: self.size,
+            content_type: self.content_type,
+            project_id: self.project_id,
+        };
+    }
 }
 
 #[derive(Debug)]

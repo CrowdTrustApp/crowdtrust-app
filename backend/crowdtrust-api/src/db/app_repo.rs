@@ -9,6 +9,8 @@ use sqlx::{PgPool, Postgres, Transaction};
 use super::{
     project_asset_repo::{DynProjectAssetRepo, ProjectAssetRepo},
     project_repo::{DynProjectRepo, ProjectRepo},
+    reward_asset_repo::{DynRewardAssetRepo, RewardAssetRepo},
+    reward_repo::{DynRewardRepo, RewardRepo},
     user_repo::{DynUserRepo, UserRepo},
 };
 
@@ -18,6 +20,8 @@ pub struct AppRepo {
     pub user: DynUserRepo,
     pub project: DynProjectRepo,
     pub project_asset: DynProjectAssetRepo,
+    pub reward: DynRewardRepo,
+    pub reward_asset: DynRewardAssetRepo,
 }
 
 impl AppRepo {
@@ -30,6 +34,8 @@ impl AppRepo {
             user: Arc::new(UserRepo { db: db.clone() }) as DynUserRepo,
             project: Arc::new(ProjectRepo { db: db.clone() }) as DynProjectRepo,
             project_asset: Arc::new(ProjectAssetRepo { db: db.clone() }) as DynProjectAssetRepo,
+            reward: Arc::new(RewardRepo { db: db.clone() }) as DynRewardRepo,
+            reward_asset: Arc::new(RewardAssetRepo { db: db.clone() }) as DynRewardAssetRepo,
         })
     }
 

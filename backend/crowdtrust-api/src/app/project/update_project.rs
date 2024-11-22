@@ -32,7 +32,7 @@ pub async fn update_project(
     let project_to_be_updated = context
         .repo
         .project
-        .get_project_by_id(project_id)
+        .get_project_relations_by_id(project_id)
         .await
         .map_err(|_| {
             ApiError::not_found().message(format!("Project with ID {} not found", project_id))
@@ -52,6 +52,20 @@ pub async fn update_project(
     } else {
         None
     };
+    if let Some(assets_order) = &dto.assets_order {
+        if assets_order.len() != project_to_be_updated.assets.len() {
+            return Err(ApiError::bad_request()
+                .code(ApiErrorCode::InvalidFormData)
+                .message("Assets order length"));
+        }
+    }
+    if let Some(rewards_order) = &dto.rewards_order {
+        if rewards_order.len() != project_to_be_updated.rewards.len() {
+            return Err(ApiError::bad_request()
+                .code(ApiErrorCode::InvalidFormData)
+                .message("Rewards order length"));
+        }
+    }
     if !is_admin {
         // Verify active project name can't change
         if let Some(_) = dto.name {
@@ -89,6 +103,8 @@ pub async fn update_project(
         total_pledged: None,
         base_currency: None,
         status: dto.status,
+        rewards_order: dto.rewards_order,
+        assets_order: dto.assets_order,
         blockchain_status: None,
     };
 

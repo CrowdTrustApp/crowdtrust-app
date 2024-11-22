@@ -18,7 +18,6 @@
 
 <script lang="ts" setup>
 import { useId } from 'vue'
-import { formatISO } from 'date-fns'
 import Datepicker from '@vuepic/vue-datepicker'
 
 defineProps<{

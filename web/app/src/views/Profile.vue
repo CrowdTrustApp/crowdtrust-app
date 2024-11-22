@@ -7,12 +7,15 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import { useProfile } from '@app/util-app'
 import { IRoute } from '@app/types'
 import RouterTabView from '../components/nav/RouterTabView.vue'
 import ProfileTop from '../components/profile/ProfileTop.vue'
 import { ts } from '../i18n'
 import EditProfileModal from '../components/profile/EditProfileModal.vue'
+
+const { loadProjects } = useProfile()
 
 const routes: IRoute[] = [
   {
@@ -33,6 +36,10 @@ const routes: IRoute[] = [
 ]
 
 const showEditModal = ref(false)
+
+onMounted(async () => {
+  await loadProjects()
+})
 </script>
 
 <style lang="postcss" scoped>

@@ -6,7 +6,7 @@ import {
   TEST_PRIVATE_KEY1,
   testagent,
   TestAgent,
-  USER1_PRIVATE_KEY,
+  USER3_PRIVATE_KEY,
 } from '../helpers'
 import { testConfig } from '../test.config'
 import { beforeAll, beforeEach, describe, expect, test } from 'vitest'
@@ -32,8 +32,8 @@ describe('Login User', () => {
 
   beforeEach(async () => {
     await dbResetService.resetDb()
-    userEthAddress = '0x0bfcaae5Abf40A828e6b37379F99dCbEDA712345'
-    payload = { email: 'user1@crowdtrust.app', password: 'password1' }
+    userEthAddress = '0x0bfcaae5abf40a828e6b37379f99dcbeda712345'
+    payload = { email: 'user3@crowdtrust.app', password: 'password3' }
   })
 
   describe('when requestor is admin', () => {
@@ -57,7 +57,7 @@ describe('Login User', () => {
     test('logs in user with eth_address', async () => {
       payload = {
         eth_address: userEthAddress,
-        eth_address_signature: await sign(USER1_PRIVATE_KEY, userEthAddress),
+        eth_address_signature: await sign(USER3_PRIVATE_KEY, userEthAddress),
       }
       const response = await api.post(testEndpoint).send(payload).expect(201)
       const body: ILoginUserApiResponse = response.body

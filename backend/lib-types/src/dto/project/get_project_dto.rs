@@ -9,6 +9,8 @@ use crate::{
     shared::project::{BlockchainStatus, PaymentCurrency, ProjectCategory, ProjectStatus},
 };
 
+use super::project_view_model::ProjectAssetViewModelRelation;
+
 #[derive(Serialize)]
 pub struct GetProjectResponse {
     pub id: Uuid,
@@ -30,6 +32,8 @@ pub struct GetProjectResponse {
     pub transaction_hash: Option<String>,
     pub rewards: Vec<RewardViewModel>,
     pub rewards_order: Vec<String>,
+    pub assets: Vec<ProjectAssetViewModelRelation>,
+    pub assets_order: Vec<String>,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
 }
@@ -63,6 +67,12 @@ pub fn to_api_response(user_entity: ProjectEntityRelations) -> GetProjectRespons
             .map(reward_view_model::to_api_response)
             .collect(),
         rewards_order: user_entity.rewards_order,
+        assets: user_entity
+            .assets
+            .into_iter()
+            .map(|a| a.to_api_response())
+            .collect(),
+        assets_order: user_entity.assets_order,
         created_at: user_entity.created_at,
         updated_at: user_entity.updated_at,
     };

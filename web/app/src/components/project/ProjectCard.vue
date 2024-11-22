@@ -44,20 +44,17 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { IProjectViewModel } from '@app/types'
 import { toEthDisplay } from '@samatech/vue3-eth'
+import { IProjectViewModel } from '@app/types'
+import { getMainImage, getProgress } from '@app/util'
 import { ts } from '../../i18n'
-import { getMainImage } from '@app/util'
 
 const { project } = defineProps<{
   project: IProjectViewModel | undefined
 }>()
 
 const progress = computed(() => {
-  if (!project) return 0
-  const pledged = BigInt(project.total_pledged)
-  const goal = BigInt(project.funding_goal)
-  return Math.min(Number(pledged / goal) * 100)
+  return getProgress(project)
 })
 
 const raised = computed(() => {

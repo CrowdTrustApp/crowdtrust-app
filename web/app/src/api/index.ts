@@ -1,3 +1,6 @@
 export * from './root-api'
 export * from './user-api'
 export * from './project-api'
+export * from './project-asset-api'
+export * from './reward-api'
+export * from './reward-asset-api'

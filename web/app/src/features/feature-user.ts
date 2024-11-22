@@ -9,6 +9,11 @@ export const getUser = async () => {
   if (id) {
     try {
       const user = await apiGetUser(id)
+      // We're not logged in!
+      if (user.email === undefined) {
+        store.auth.logOut()
+        return
+      }
       store.user.updateUser({
         id: user.id,
         name: user.name,

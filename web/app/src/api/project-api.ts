@@ -4,6 +4,7 @@ import {
   IGetProjectApiResponse,
   IListProjectsApiRequest,
   IListProjectsApiResponse,
+  IUpdateProjectApiRequest,
 } from '@app/types'
 import { rootApi } from './root-api'
 import { RequestParams } from '@samatech/fetch-api'
@@ -33,6 +34,18 @@ export const apiCreateProject = async (
   const { data } = await rootApi.authRequest<ICreateProjectApiResponse>({
     url: 'projects',
     method: 'POST',
+    data: payload,
+  })
+  return data
+}
+
+export const apiUpdateProject = async (
+  id: string,
+  payload: IUpdateProjectApiRequest,
+): Promise<ICreateProjectApiResponse> => {
+  const { data } = await rootApi.authRequest<ICreateProjectApiResponse>({
+    url: `projects/${id}`,
+    method: 'PATCH',
     data: payload,
   })
   return data

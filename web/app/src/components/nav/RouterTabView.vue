@@ -15,7 +15,6 @@
         {{ tabRoute.label }}
       </router-link>
     </div>
-    <slot name="tab-body" />
     <router-view v-bind="routerViewProps" />
   </div>
 </template>

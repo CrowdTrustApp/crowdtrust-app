@@ -8,11 +8,11 @@ use axum::{
     http::StatusCode,
     middleware::from_fn_with_state,
     response::IntoResponse,
-    routing::{get, patch, post},
+    routing::{delete, get, patch, post},
     Router,
 };
 
-use super::{health, project_asset};
+use super::{health, project_asset, reward, reward_asset};
 
 pub fn app_router(context: &ApiContext) -> Router<ApiContext> {
     Router::new().nest("/api", api_router(context))
@@ -79,6 +79,34 @@ pub fn api_router(context: &ApiContext) -> Router<ApiContext> {
                 project::update_project::update_project
                     .layer(from_fn_with_state(context.clone(), auth_admin_user)),
             ),
+        )
+        .route(
+            "/projects/:project_id/rewards",
+            post(
+                reward::create_reward::create_reward
+                    .layer(from_fn_with_state(context.clone(), auth_admin_user)),
+            ),
+        )
+        .route(
+            "/rewards/:reward_id",
+            patch(reward::update_reward::update_reward)
+                .delete(reward::delete_reward::delete_reward)
+                .route_layer(from_fn_with_state(context.clone(), auth_admin_user)),
+        )
+        .route(
+            "/reward-assets",
+            post(reward_asset::create_reward_asset::create_reward_asset)
+                .route_layer(from_fn_with_state(context.clone(), auth_admin_user)),
+        )
+        .route(
+            "/reward-assets/:asset_id",
+            delete(reward_asset::delete_reward_asset::delete_reward_asset)
+                .route_layer(from_fn_with_state(context.clone(), auth_admin_user)),
+        )
+        .route(
+            "/reward-assets/:asset_id/actions/verify",
+            post(reward_asset::verify_reward_asset::verify_reward_asset)
+                .route_layer(from_fn_with_state(context.clone(), auth_admin_user)),
         )
         .route(
             "/project-assets",
