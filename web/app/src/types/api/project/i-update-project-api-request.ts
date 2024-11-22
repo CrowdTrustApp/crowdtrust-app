@@ -11,4 +11,6 @@ export interface IUpdateProjectApiRequest {
   funding_goal?: string
   start_time?: number
   duration?: number
+  assets_order?: string[]
+  rewards_order?: string[]
 }

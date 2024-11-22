@@ -7,7 +7,7 @@
       <div class="links">
         <HeaderLink to="Back" :text="ts('back.title')" />
         <HeaderLink to="Services" :text="ts('services.title')" />
-        <HeaderLink to="Projects" :text="ts('projects.title')" />
+        <HeaderLink to="Projects" :text="ts('project.title')" />
       </div>
       <CTUserMenu v-if="loggedIn" class="user-menu" />
       <router-link v-else :to="{ name: 'Connect' }" class="join-link">
@@ -25,7 +25,7 @@
         />
         <DrawerLink
           to="Projects"
-          :text="ts('projects.title')"
+          :text="ts('project.title')"
           @click="rightActive = false"
         />
       </Drawer>

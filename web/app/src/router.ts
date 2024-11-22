@@ -14,6 +14,12 @@ const metaAuth = (title: string) => ({
   requiresAuth: true,
 })
 
+const metaAuthNoscroll = (title: string) => ({
+  title,
+  requiresAuth: true,
+  noScroll: true,
+})
+
 const router = createRouter({
   history: createWebHistory(),
   scrollBehavior(to, from, savedPosition) {
@@ -104,16 +110,19 @@ const router = createRouter({
             {
               path: 'created',
               name: 'Created',
+              meta: metaAuthNoscroll('Created'),
               component: () => import('./components/profile/CreatedProjects.vue'),
             },
             {
               path: 'backed',
               name: 'Backed',
+              meta: metaAuthNoscroll('Backed'),
               component: () => import('./components/profile/BackedProjects.vue'),
             },
             {
               path: 'settings',
               name: 'Settings',
+              meta: metaAuthNoscroll('Settings'),
               component: () => import('./components/profile/Settings.vue'),
             },
           ],
@@ -130,8 +139,36 @@ const router = createRouter({
         },
         {
           path: '/create',
+          meta: metaAuth('Create'),
           name: 'Create',
           component: () => import('./views/Create.vue'),
+        },
+        {
+          path: '/edit/:id',
+          meta: metaAuth('Edit'),
+          name: 'Edit',
+          redirect: (to) => ({ name: 'EditInfo', params: { id: to.params.id } }),
+          component: () => import('./views/Edit.vue'),
+          children: [
+            {
+              path: 'info',
+              name: 'EditInfo',
+              meta: metaAuthNoscroll('EditInfo'),
+              component: () => import('./components/project-update/EditInfo.vue'),
+            },
+            {
+              path: 'media',
+              name: 'EditMedia',
+              meta: metaAuthNoscroll('EditMedia'),
+              component: () => import('./components/project-update/EditMedia.vue'),
+            },
+            {
+              path: 'rewards',
+              name: 'EditRewards',
+              meta: metaAuthNoscroll('EditRewards'),
+              component: () => import('./components/project-update/EditRewards.vue'),
+            },
+          ],
         },
       ],
     },

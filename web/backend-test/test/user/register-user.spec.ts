@@ -9,7 +9,7 @@ import {
   TEST_PRIVATE_KEY2,
   testagent,
   TestAgent,
-  USER1_PRIVATE_KEY,
+  USER3_PRIVATE_KEY,
 } from '../helpers'
 import { testConfig } from '../test.config'
 import { describe, expect, test, beforeAll, beforeEach } from 'vitest'
@@ -114,7 +114,7 @@ describe('Register User', () => {
 
     test('when signed by the wrong wallet', async () => {
       payload.eth_address_signature = await registerSignature(
-        USER1_PRIVATE_KEY,
+        USER3_PRIVATE_KEY,
         payload.eth_address,
       )
 

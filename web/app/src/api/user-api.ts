@@ -46,7 +46,7 @@ export const apiLoginUser = async (
 }
 
 export const apiGetUser = async (id: string): Promise<IGetUserApiResponse> => {
-  const { data } = await rootApi.authRequest({
+  const { data } = await rootApi.authOptRequest({
     url: `users/${id}`,
     method: 'GET',
   })

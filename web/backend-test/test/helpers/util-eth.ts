@@ -1,7 +1,7 @@
 import { Wallet } from 'ethers'
 
-export const USER1_ADDRESS = '0x0bfcaae5Abf40A828e6b37379F99dCbEDA712345'
-export const USER1_PRIVATE_KEY =
+export const USER3_ADDRESS = '0x0bfcaae5abf40a828e6b37379f99dcbeda712345'
+export const USER3_PRIVATE_KEY =
   'b19f2325a73af5ee8592b7aaa53f337d1f404836c577879675b75c86a58896ab'
 
 // A real address/private key for testing

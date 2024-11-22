@@ -28,7 +28,7 @@ pub async fn seed(db: &PgPool) -> Result<(), DbError> {
         },
         RewardAssetEntity {
             id: Uuid::from_str("d592f9e2-0901-4bbd-907a-006b7c4e8f34").unwrap(),
-            reward_id: Uuid::from_str("1ab089a5-89eb-458f-bf04-15518e9e866f").unwrap(),
+            reward_id: Uuid::from_str("f99aa7f1-fc8a-4073-aff7-beaa1bbdfb3a").unwrap(),
             size: 1000000,
             content_type: AssetContentType::Jpeg,
             state: AssetState::Created,

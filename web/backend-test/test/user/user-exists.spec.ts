@@ -19,7 +19,7 @@ describe('User Exists query endpoint', () => {
 
   beforeEach(() => {
     testEndpoint = '/api/users/queries/exists'
-    query = { eth_address: '0x0bfcaae5Abf40A828e6b37379F99dCbEDA712345' }
+    query = { eth_address: '0x886ffe3d8b8851ecdf48888d9c630afd95c85fd1' }
   })
 
   describe('when request is valid', () => {

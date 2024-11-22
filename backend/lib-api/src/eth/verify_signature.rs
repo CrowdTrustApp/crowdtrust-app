@@ -27,6 +27,5 @@ pub fn verify_signature(
             .code(ApiErrorCode::InvalidSignature)
             .message(format!("Failed to recover signature: {}", e))
     })?;
-    println!("REC {} {}", recovered.to_string(), target_addr);
     Ok(recovered.to_string().to_lowercase() == target_addr.to_lowercase())
 }

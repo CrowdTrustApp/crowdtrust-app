@@ -4,20 +4,43 @@
       <div class="detail-title">
         {{ ts('project.detail') }}
       </div>
-      <div class="detail-text">
-        {{ project.description }}
-      </div>
+      <div class="detail-text" v-html="description"></div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue'
+import sanitizeHtml from 'sanitize-html'
+import snarkdown from 'snarkdown'
 import { IProjectViewModel } from '@app/types'
 import { ts } from '../../i18n'
 
-defineProps<{
+const { project } = defineProps<{
   project: IProjectViewModel
 }>()
+
+const description = computed(() => {
+  const html = snarkdown(project.description)
+  return sanitizeHtml(html, {
+    allowedTags: [
+      'a',
+      'b',
+      'i',
+      'em',
+      'strong',
+      'a',
+      'div',
+      'p',
+      'br',
+      'h1',
+      'h2',
+      'h3',
+      'h4',
+      'h4',
+    ],
+  })
+})
 </script>
 
 <style lang="postcss" scoped>

@@ -15,8 +15,18 @@ pub struct RewardEntity {
     pub price: BigDecimal,
     pub backer_limit: i32,
     pub backer_count: i32,
+    pub image: Option<RewardAssetEntityRelation>,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
+}
+
+#[derive(Debug, Deserialize, Serialize, sqlx::Type)]
+pub struct RewardAssetEntityRelation {
+    pub id: Uuid,
+    // Project ID used for S3 asset filename for grouping
+    pub project_id: Uuid,
+    pub size: i64,
+    pub content_type: AssetContentType,
 }
 
 #[derive(Debug, Deserialize, Serialize, sqlx::Type)]

@@ -67,7 +67,7 @@ describe('Get User', () => {
       )
       expect(body.location).toEqual('Tokyo')
       expect(body.email).toEqual('user1@crowdtrust.app')
-      expect(body.eth_address).toEqual('0x0bfcaae5Abf40A828e6b37379F99dCbEDA712345')
+      expect(body.eth_address).toEqual('0x886ffe3d8b8851ecdf48888d9c630afd95c85fd1')
       expect(body.user_type).toEqual(UserType.User)
       expect(body.email_confirmed).toEqual(true)
     })
@@ -99,6 +99,33 @@ describe('Get User', () => {
       expect(body.email_confirmed).toEqual(true)
     })
 
+    test('returns another user with limited fields', async () => {
+      const otherUserId = '276168ed-9228-4d6b-aec2-ed53bb7c1901'
+      const res = await api
+        .get(`${testEndpoint}/${otherUserId}`)
+        .set('Authorization', userAuth)
+        .expect(200)
+      const body: IGetUserApiResponse = res.body
+
+      expect(body.id).toEqual(otherUserId)
+      expect(body.eth_address).toEqual('0x0000000000000000000000000000000000000002')
+      expect(body.email).toBeUndefined()
+      expect(body.email_confirmed).toBeUndefined()
+    })
+
+    test('returns limited fields when user gets an admin', async () => {
+      const res = await api
+        .get(`${testEndpoint}/${adminId}`)
+        .set('Authorization', userAuth)
+        .expect(200)
+      const body: IGetUserApiResponse = res.body
+
+      expect(body.id).toEqual(adminId)
+      expect(body.eth_address).toEqual('0x0000000000000000000000000000000000000000')
+      expect(body.email).toBeUndefined()
+      expect(body.email_confirmed).toBeUndefined()
+    })
+
     test('returns 401 when user token has expired', async () => {
       await api
         .get(`${testEndpoint}/${userId}`)
@@ -107,29 +134,6 @@ describe('Get User', () => {
           code: 'InvalidAuth',
           message: 'Unauthorized',
           status: 401,
-        })
-    })
-
-    test('returns 403 error when user user gets another user', async () => {
-      const otherUserId = '0c069253-e45d-487c-b7c0-cbe467c33a10'
-      await api
-        .get(`${testEndpoint}/${otherUserId}`)
-        .set('Authorization', userAuth)
-        .expect(403, {
-          code: 'None',
-          message: 'Forbidden',
-          status: 403,
-        })
-    })
-
-    test('returns 403 error when user user gets an admin user', async () => {
-      await api
-        .get(`${testEndpoint}/${adminId}`)
-        .set('Authorization', userAuth)
-        .expect(403, {
-          code: 'None',
-          message: 'Forbidden',
-          status: 403,
         })
     })
   })

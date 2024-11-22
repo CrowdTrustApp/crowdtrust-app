@@ -12,7 +12,7 @@ use crate::{
 #[derive(Deserialize, Validate)]
 #[serde(deny_unknown_fields)]
 pub struct CreateProjectAssetDto {
-    #[validate(range(min = 0, max = 1000000000))]
+    #[validate(range(min = 0, max = 20000000))]
     pub content_size: i64,
     pub content_type: AssetContentType,
     #[validate(regex(path = "*REGEX_UUID"))]

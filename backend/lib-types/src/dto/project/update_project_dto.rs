@@ -24,4 +24,6 @@ pub struct UpdateProjectDto {
     pub start_time: Option<i64>,
     #[validate(range(min = 86400, max = 7776000))]
     pub duration: Option<i64>,
+    pub assets_order: Option<Vec<String>>,
+    pub rewards_order: Option<Vec<String>>,
 }

@@ -57,6 +57,13 @@ describe('Get User', () => {
       expect(body.blockchain_status).toEqual(BlockchainStatus.None)
       expect(body.transaction_hash).toBeNull()
       expect(body.rewards_order).toEqual([])
+      expect(body.assets).toHaveLength(2)
+      expect(body.assets_order).toEqual([
+        '7d9cb4c7-06c3-4de4-a77c-4311386387c6',
+        'b59ba8f3-3b53-426a-b3db-52b2f8557798',
+        '4cba9ed0-eb4e-4764-8458-a4ca6eecb35c',
+        '439f93a5-bbb6-4353-b3aa-0f766612dc53',
+      ])
       expect(body.created_at).toMatch(new RegExp(commonRegex.date))
       expect(body.updated_at).toMatch(new RegExp(commonRegex.date))
     })

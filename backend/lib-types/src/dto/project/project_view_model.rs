@@ -4,7 +4,10 @@ use uuid::Uuid;
 
 use crate::{
     entity::project_entity::ProjectEntity,
-    shared::project::{BlockchainStatus, PaymentCurrency, ProjectCategory, ProjectStatus},
+    shared::{
+        asset::AssetContentType,
+        project::{BlockchainStatus, PaymentCurrency, ProjectCategory, ProjectStatus},
+    },
 };
 
 use super::get_project_dto::serialize_big;
@@ -56,4 +59,12 @@ pub fn to_api_response(user_entity: ProjectEntity) -> ProjectViewModel {
         created_at: user_entity.created_at,
         updated_at: user_entity.updated_at,
     };
+}
+
+#[derive(Serialize)]
+pub struct ProjectAssetViewModelRelation {
+    pub id: Uuid,
+    pub content_type: AssetContentType,
+    pub size: i64,
+    pub project_id: Uuid,
 }

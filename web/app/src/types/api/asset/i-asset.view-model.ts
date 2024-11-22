@@ -1,9 +1,10 @@
+import { AssetContentType } from './asset-content-type'
 import { AssetState } from './asset-state'
 
 export interface IAssetViewModel {
   id: string
   size: number
-  content_type: string
+  content_type: AssetContentType
   state: AssetState
   user_id: string
   project_id: string

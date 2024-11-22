@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::{collections::HashSet, sync::Arc};
 
 use axum::async_trait;
 use bigdecimal::BigDecimal;
@@ -17,8 +17,10 @@ use lib_types::{
         sort_direction::SortDirection,
     },
     entity::{
-        project_entity::{ProjectEntity, ProjectEntityRelations, ProjectListResults},
-        reward_entity::RewardEntity,
+        project_entity::{
+            ProjectAssetEntityRelation, ProjectEntity, ProjectEntityRelations, ProjectListResults,
+        },
+        reward_entity::{RewardAssetEntityRelation, RewardEntity},
     },
     shared::project::{BlockchainStatus, PaymentCurrency, ProjectCategory, ProjectStatus},
 };
@@ -60,6 +62,8 @@ pub struct ProjectUpdateProps {
     pub total_pledged: Option<BigDecimal>,
     pub base_currency: Option<PaymentCurrency>,
     pub status: Option<ProjectStatus>,
+    pub rewards_order: Option<Vec<String>>,
+    pub assets_order: Option<Vec<String>>,
     pub blockchain_status: Option<BlockchainStatus>,
 }
 
@@ -85,14 +89,16 @@ pub struct ProjectRepo {
 }
 
 const PROJECT_COLUMNS: &str = formatcp!(
-    r#"{p}.id, {p}.user_id, {p}.name, {p}.description, {p}.blurb, {p}.contract_address, {p}.payment_address, {p}.category, {p}.funding_goal, {p}.start_time, {p}.duration, {p}.total_pledged, {p}.backer_count, {p}.base_currency, {p}.status, {p}.blockchain_status, {p}.transaction_hash, {p}.rewards_order, {p}.created_at, {p}.updated_at"#,
+    r#"{p}.id, {p}.user_id, {p}.name, {p}.description, {p}.blurb, {p}.contract_address, {p}.payment_address, {p}.category, {p}.funding_goal, {p}.start_time, {p}.duration, {p}.total_pledged, {p}.backer_count, {p}.base_currency, {p}.status, {p}.blockchain_status, {p}.transaction_hash, {p}.rewards_order, {p}.assets_order, {p}.created_at, {p}.updated_at"#,
     p = "projects"
 );
 
 const PROJECT_RELATION_COLUMNS: &str = formatcp!(
-    r#"{projects}, {r}.id as r_id, {r}.name as r_name, {r}.description as r_description, {r}.delivery_time as r_delivery_time, {r}.price as r_price, {r}.backer_limit as r_backer_limit, {r}.backer_count as r_backer_count, {r}.created_at as r_created_at, {r}.updated_at as r_updated_at"#,
+    r#"{projects}, {r}.id as r_id, {r}.name as r_name, {r}.description as r_description, {r}.delivery_time as r_delivery_time, {r}.price as r_price, {r}.backer_limit as r_backer_limit, {r}.backer_count as r_backer_count, {r}.created_at as r_created_at, {r}.updated_at as r_updated_at, {ri}.id as ri_id, {ri}.size as ri_size, {ri}.content_type as ri_content_type, {a}.id as a_id, {a}.size a_size, {a}.content_type as a_content_type"#,
     projects = PROJECT_COLUMNS,
-    r = "r"
+    r = "r",
+    ri = "ri",
+    a = "a"
 );
 
 fn map_project_entity(row: PgRow) -> Result<ProjectEntity, sqlx::Error> {
@@ -115,6 +121,7 @@ fn map_project_entity(row: PgRow) -> Result<ProjectEntity, sqlx::Error> {
         blockchain_status: row.try_get_unchecked("blockchain_status")?,
         transaction_hash: row.try_get("transaction_hash")?,
         rewards_order: row.try_get("rewards_order")?,
+        assets_order: row.try_get("assets_order")?,
         created_at: row.try_get("created_at")?,
         updated_at: row.try_get("updated_at")?,
     })
@@ -123,6 +130,7 @@ fn map_project_entity(row: PgRow) -> Result<ProjectEntity, sqlx::Error> {
 fn map_project_relation_entity(
     row: PgRow,
     rewards: Vec<RewardEntity>,
+    assets: Vec<ProjectAssetEntityRelation>,
 ) -> Result<ProjectEntityRelations, sqlx::Error> {
     Ok(ProjectEntityRelations {
         id: row.try_get("id")?,
@@ -144,6 +152,8 @@ fn map_project_relation_entity(
         transaction_hash: row.try_get("transaction_hash")?,
         rewards,
         rewards_order: row.try_get("rewards_order")?,
+        assets,
+        assets_order: row.try_get("assets_order")?,
         created_at: row.try_get("created_at")?,
         updated_at: row.try_get("updated_at")?,
     })
@@ -244,6 +254,10 @@ impl ProjectRepoTrait for ProjectRepo {
             props.status.and_then(|s| Some(s.to_string())),
             update_count,
         );
+        let (query, update_count) =
+            append_comma(query, "rewards_order", props.rewards_order, update_count);
+        let (query, update_count) =
+            append_comma(query, "assets_order", props.assets_order, update_count);
 
         let (mut query, update_count) = append_comma(
             query,
@@ -291,7 +305,11 @@ impl ProjectRepoTrait for ProjectRepo {
         id: Uuid,
     ) -> Result<ProjectEntityRelations, DbError> {
         let result = sqlx::query(formatcp!(
-            "SELECT {} FROM \"projects\" LEFT OUTER JOIN rewards r on r.project_id = projects.id WHERE projects.id = $1",
+            r#"SELECT {} FROM "projects"
+            LEFT OUTER JOIN rewards r on r.project_id = projects.id
+            LEFT OUTER JOIN reward_assets ri on ri.reward_id = r.id
+            LEFT OUTER JOIN project_assets a on a.project_id = projects.id AND a.state = 'Uploaded'
+            WHERE projects.id = $1"#,
             PROJECT_RELATION_COLUMNS
         ))
         .bind(id)
@@ -303,25 +321,51 @@ impl ProjectRepoTrait for ProjectRepo {
             return Err(DbError::EntityNotFound());
         }
         let mut rewards: Vec<RewardEntity> = vec![];
+        let mut assets: Vec<ProjectAssetEntityRelation> = vec![];
+        let mut used_ids: HashSet<Uuid> = HashSet::new();
         for row in result.iter() {
-            if row.try_get::<Uuid, &str>("r_id").is_err() {
-                continue;
+            if let Ok(reward_id) = row.try_get::<Uuid, &str>("r_id") {
+                if !used_ids.contains(&reward_id) {
+                    used_ids.insert(reward_id.clone());
+                    let image = if let Ok(image_id) = row.try_get("ri_id") {
+                        Some(RewardAssetEntityRelation {
+                            id: image_id,
+                            project_id: id.clone(),
+                            size: row.try_get("ri_size")?,
+                            content_type: row.try_get_unchecked("ri_content_type")?,
+                        })
+                    } else {
+                        None
+                    };
+                    rewards.push(RewardEntity {
+                        id: reward_id,
+                        project_id: id.clone(),
+                        name: row.try_get("r_name")?,
+                        description: row.try_get("r_description")?,
+                        delivery_time: row.try_get("r_delivery_time")?,
+                        price: row.try_get("r_price")?,
+                        backer_limit: row.try_get("r_backer_limit")?,
+                        image,
+                        backer_count: row.try_get("r_backer_count")?,
+                        created_at: row.try_get("r_created_at")?,
+                        updated_at: row.try_get("r_updated_at")?,
+                    });
+                }
+            };
+            if let Ok(asset_id) = row.try_get::<Uuid, &str>("a_id") {
+                if !used_ids.contains(&asset_id) {
+                    used_ids.insert(asset_id.clone());
+                    assets.push(ProjectAssetEntityRelation {
+                        id: row.try_get("a_id")?,
+                        size: row.try_get("a_size")?,
+                        content_type: row.try_get_unchecked("a_content_type")?,
+                        project_id: id.clone(),
+                    });
+                }
             }
-            rewards.push(RewardEntity {
-                id: row.try_get("r_id")?,
-                project_id: id.clone(),
-                name: row.try_get("r_name")?,
-                description: row.try_get("r_description")?,
-                delivery_time: row.try_get("r_delivery_time")?,
-                price: row.try_get("r_price")?,
-                backer_limit: row.try_get("r_backer_limit")?,
-                backer_count: row.try_get("r_backer_count")?,
-                created_at: row.try_get("r_created_at")?,
-                updated_at: row.try_get("r_updated_at")?,
-            });
         }
         if let Some(row) = result.into_iter().nth(0) {
-            Ok(map_project_relation_entity(row, rewards).map_err(map_sqlx_err)?)
+            Ok(map_project_relation_entity(row, rewards, assets).map_err(map_sqlx_err)?)
         } else {
             Err(DbError::EntityNotFound())
         }

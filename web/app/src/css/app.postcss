@@ -11,6 +11,11 @@ $overlay: rgba(0, 0, 0, 0.6);
   align-items: center;
 }
 
+.f-row {
+  display: flex;
+  flex-direction: row;
+}
+
 .f-col {
   display: flex;
   flex-direction: column;
@@ -61,6 +66,9 @@ $overlay: rgba(0, 0, 0, 0.6);
     background-color: $blue2;
     border-color: $blue2;
   }
+  .ct-button-spinner .dot {
+    background-color: white;
+  }
 }
 
 .button3 {
@@ -86,6 +94,26 @@ $overlay: rgba(0, 0, 0, 0.6);
   color: $red;
   cursor: pointer;
   user-select: none;
+}
+
+.project-fields {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 720px;
+  padding: 80px 32px 120px;
+  margin: 0 auto;
+  position: relative;
+}
+.p-update-title {
+  @mixin bold 36px;
+}
+.p-update-text {
+  @mixin text 18px;
+  margin: 16px 0 24px;
+  line-height: 1.4em;
+  max-width: 580px;
+  text-align: center;
 }
 
 .blog-content {

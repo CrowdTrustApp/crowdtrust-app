@@ -79,7 +79,6 @@ const sign = async () => {
   if (signer) {
     const msg = ethSwitchMessage(newAddress.value)
     const signature = await signer.signMessage(msg)
-    console.log('SIGNED')
     const payload: IUpdateUserApiRequest = {
       eth_address: newAddress.value,
       eth_address_signature: signature,

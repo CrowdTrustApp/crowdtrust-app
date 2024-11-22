@@ -70,7 +70,7 @@ describe('Update Project', () => {
         name: 'New name',
         description: 'New description',
         blurb: 'New blurb',
-        payment_address: '0x0bfcaae5Abf40A828e6b37379F99dCbEDA712345',
+        payment_address: '0x886ffe3d8b8851ecdf48888d9c630afd95c85fd1',
         category: ProjectCategory.Music,
         funding_goal: '11000000000000000000',
         start_time: now() + dayToSec(180),
@@ -101,7 +101,7 @@ describe('Update Project', () => {
         name: 'New name',
         description: 'New description',
         blurb: 'New blurb',
-        payment_address: '0x0bfcaae5Abf40A828e6b37379F99dCbEDA712345',
+        payment_address: '0x886ffe3d8b8851ecdf48888d9c630afd95c85fd1',
         category: ProjectCategory.Music,
         funding_goal: '11000000000000000000',
         start_time: now() + dayToSec(180),
@@ -123,6 +123,34 @@ describe('Update Project', () => {
       expect(body.funding_goal).toEqual(payload.funding_goal)
       expect(body.start_time).toEqual(payload.start_time)
       expect(body.duration).toEqual(payload.duration)
+    })
+
+    test('updates project assets_order', async () => {
+      payload = {
+        assets_order: [
+          'b59ba8f3-3b53-426a-b3db-52b2f8557798',
+          '439f93a5-bbb6-4353-b3aa-0f766612dc53',
+        ],
+      }
+      await api
+        .patch(`/api/projects/${projectId}`)
+        .set('Authorization', userAuth)
+        .send(payload)
+        .expect(200)
+    })
+
+    test('updates project rewards_order', async () => {
+      payload = {
+        assets_order: [
+          '950d06e5-8c8b-4060-a6e4-7a676fbc223e',
+          '1ab089a5-89eb-458f-bf04-15518e9e866f',
+        ],
+      }
+      await api
+        .patch(`/api/projects/${projectId}`)
+        .set('Authorization', userAuth)
+        .send(payload)
+        .expect(200)
     })
 
     test('return 400 when changing fields in active status', async () => {

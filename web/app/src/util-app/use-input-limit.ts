@@ -1,14 +1,9 @@
+import { IInputLimit, IInputLimitOptions } from '@app/types'
 import { computed, ref } from 'vue'
 
-export interface IInputLimitOptions {
-  max: number
-  min?: number
-  label: string
-}
-
-export const useInputLimit = (options: IInputLimitOptions) => {
+export const useInputLimit = (options: IInputLimitOptions): IInputLimit => {
   const { min, max, label } = options
-  const text = ref('')
+  const text = ref(options.initial ?? '')
 
   const suffix = computed(() => {
     return `${text.value.length}/${max}`
