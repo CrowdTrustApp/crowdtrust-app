@@ -1,10 +1,5 @@
 import { IProjectViewModel } from '@app/types'
-import {
-  apiDeleteReward,
-  apiGetProject,
-  apiUpdateProject,
-  IUploadFileResult,
-} from '@app/api'
+import { apiDeleteReward, apiGetProject, apiUpdateProject } from '@app/api'
 import { ref } from 'vue'
 
 const project = ref<IProjectViewModel | undefined>()
@@ -30,24 +25,6 @@ export const useEditProject = () => {
     loading.value = false
   }
 
-  // Update assets_order and local project ref after asset upload
-  const recordAddAsset = async (asset: IUploadFileResult) => {
-    if (!project.value) {
-      return
-    }
-    const assetsOrder = [...project.value.assets_order, asset.id]
-    await updateAssetsOrder(assetsOrder)
-    project.value.assets = [
-      ...project.value.assets,
-      {
-        id: asset.id,
-        content_type: asset.content_type,
-        size: asset.size,
-        project_id: asset.project_id,
-      },
-    ]
-  }
-
   const updateAssetsOrder = async (order: string[]) => {
     if (!project.value) {
       return
@@ -61,20 +38,6 @@ export const useEditProject = () => {
     } catch (e) {
       project.value.assets_order = originalOrder
       throw e
-    }
-  }
-
-  const recordDeleteAsset = async (id: string) => {
-    if (!project.value) {
-      return
-    }
-    try {
-      const newOrder = project.value.assets_order.filter((assetId) => assetId !== id)
-      await apiUpdateProject(project.value.id, { assets_order: newOrder })
-      project.value.assets_order = newOrder
-      project.value.assets = project.value.assets.filter((asset) => asset.id !== id)
-    } catch (e) {
-      console.log('Failed to delete asset:', e)
     }
   }
 
@@ -116,8 +79,6 @@ export const useEditProject = () => {
     loading,
     loadProject,
     updateAssetsOrder,
-    recordAddAsset,
-    recordDeleteAsset,
     deleteReward,
     updateRewardsOrder,
   }

@@ -23,7 +23,7 @@ pub async fn get_project(
     let project = context
         .repo
         .project
-        .get_project_relations_by_id(id)
+        .get_project_relations_by_id(id, false)
         .await
         .map_err(not_found_or_internal)?;
 

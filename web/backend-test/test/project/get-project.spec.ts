@@ -11,7 +11,7 @@ import { adminAuthHeader, userAuthHeader } from '../helpers'
 import { testConfig } from '../test.config'
 import { commonRegex } from '@app/util'
 
-describe('Get User', () => {
+describe('Get Project', () => {
   const testEndpoint = '/api/projects'
   let api: TestAgent
   let testHelperApiUrl: string
@@ -56,7 +56,10 @@ describe('Get User', () => {
       expect(body.status).toEqual(ProjectStatus.Initial)
       expect(body.blockchain_status).toEqual(BlockchainStatus.None)
       expect(body.transaction_hash).toBeNull()
-      expect(body.rewards_order).toEqual([])
+      expect(body.rewards_order).toEqual([
+        '1ab089a5-89eb-458f-bf04-15518e9e866f',
+        '950d06e5-8c8b-4060-a6e4-7a676fbc223e',
+      ])
       expect(body.assets).toHaveLength(2)
       expect(body.assets_order).toEqual([
         '7d9cb4c7-06c3-4de4-a77c-4311386387c6',

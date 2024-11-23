@@ -14,8 +14,9 @@ use lib_types::{
 use validator::Validate;
 
 use crate::{
-    api_context::ApiContext, app::helpers::verify_admin_or_user,
-    db::project_asset_repo::ProjectAssetEntityProps,
+    api_context::ApiContext,
+    app::{helpers::verify_admin_or_user, project::helpers::verify_project_exist},
+    db::{project_asset_repo::ProjectAssetEntityProps, project_repo::ProjectUpdateProps},
 };
 
 pub async fn create_project_asset(
@@ -28,13 +29,7 @@ pub async fn create_project_asset(
     let user_id = request_user.user_id.ok_or(ApiError::forbidden())?;
 
     let project_id = str_to_uuid(&dto.project_id)?;
-
-    let project = context
-        .repo
-        .project
-        .get_project_by_id(project_id.clone())
-        .await
-        .map_err(|_| ApiError::bad_request().message("Project does not exist"))?;
+    let project = verify_project_exist(&context, project_id.clone()).await?;
 
     // Check if the requester is the owner of the project or an admin
     verify_admin_or_user(&request_user, project.user_id.to_string())?;
@@ -59,6 +54,17 @@ pub async fn create_project_asset(
         .await
         .map_err(|e| {
             ApiError::internal_error().message(format!("Failed to create project asset: {}", e))
+        })?;
+
+    let mut new_order = project.assets_order.clone();
+    new_order.push(project_asset.id.to_string());
+    context
+        .repo
+        .project
+        .update_project(project.id, ProjectUpdateProps::asset_order(new_order))
+        .await
+        .map_err(|e| {
+            ApiError::internal_error().message(format!("Failed to update asset order: {}", e))
         })?;
 
     let signed_url = context.s3_client.presign_put_project_asset(

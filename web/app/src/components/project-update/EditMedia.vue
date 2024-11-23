@@ -18,7 +18,7 @@
         @dragleave="dragleave"
         @dragend="dragend"
         @drop="drop($event, index)"
-        @delete="deleteProjectAsset(image)"
+        @delete="confirmDeleteId = image.id"
       />
       <EditImage v-if="uploading" :asset="loadingAsset" :dragging="false" />
       <div v-else-if="images?.length === 0" class="no-images f-center">
@@ -28,6 +28,14 @@
     <ClickUploadFile @selectFile="selectFile">
       <CTButton :text="ts('upload')" class="upload-bottom" />
     </ClickUploadFile>
+    <ConfirmModal
+      :show="!!confirmDeleteId"
+      :title="ts('you_sure')"
+      :text="ts('edit_project.delete_asset')"
+      :loading="deleting"
+      @confirm="deleteProjectAsset"
+      @cancel="confirmDeleteId = undefined"
+    />
   </div>
 </template>
 
@@ -40,12 +48,15 @@ import { computed, ref } from 'vue'
 import EditImage, { IEditAsset } from './EditImage.vue'
 import CTButton from '../widgets/CTButton.vue'
 import ClickUploadFile from '../widgets/ClickUploadFile.vue'
+import ConfirmModal from '../widgets/ConfirmModal.vue'
 
 const { createAsset, verifyAsset, deleteAsset } = useProjectAsset()
-const { project, updateAssetsOrder, recordAddAsset, recordDeleteAsset } = useEditProject()
+const { project, updateAssetsOrder, loadProject } = useEditProject()
 
 const error = ref()
 const uploading = ref(false)
+const deleting = ref(false)
+const confirmDeleteId = ref()
 
 const {
   newPos,
@@ -120,7 +131,7 @@ const selectFile = async (file: File | null | undefined) => {
       const result = await createAsset(payload, validFile.file)
       const success = await verifyAsset(result.id)
       if (success) {
-        await recordAddAsset(result)
+        await loadProject(project.value.id)
       }
     } catch (e) {
       const key = (e as IValidateMediaError).fileErrors?.[0]
@@ -130,14 +141,20 @@ const selectFile = async (file: File | null | undefined) => {
   uploading.value = false
 }
 
-const deleteProjectAsset = async (asset: IEditAsset) => {
+const deleteProjectAsset = async () => {
+  const id = confirmDeleteId.value
+  if (!id || !project.value) {
+    return
+  }
+  deleting.value = true
   try {
-    asset.loading = true
-    await deleteAsset(asset.id)
-    await recordDeleteAsset(asset.id)
+    await deleteAsset(id)
+    await loadProject(project.value.id)
+    confirmDeleteId.value = undefined
   } catch (e) {
     error.value = ts('errors.Unknown')
   }
+  deleting.value = false
 }
 </script>
 
