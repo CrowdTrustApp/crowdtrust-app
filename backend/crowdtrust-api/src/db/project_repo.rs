@@ -67,6 +67,27 @@ pub struct ProjectUpdateProps {
     pub blockchain_status: Option<BlockchainStatus>,
 }
 
+impl ProjectUpdateProps {
+    pub fn asset_order(order: Vec<String>) -> Self {
+        Self {
+            name: None,
+            description: None,
+            blurb: None,
+            payment_address: None,
+            category: None,
+            funding_goal: None,
+            start_time: None,
+            duration: None,
+            total_pledged: None,
+            base_currency: None,
+            status: None,
+            rewards_order: None,
+            assets_order: Some(order),
+            blockchain_status: None,
+        }
+    }
+}
+
 #[async_trait]
 pub trait ProjectRepoTrait {
     fn get_db(&self) -> &PgPool;
@@ -80,6 +101,7 @@ pub trait ProjectRepoTrait {
     async fn get_project_relations_by_id(
         &self,
         id: Uuid,
+        all_assets: bool,
     ) -> Result<ProjectEntityRelations, DbError>;
     async fn list_projects(&self, query: ListProjectsQuery) -> Result<ProjectListResults, DbError>;
 }
@@ -303,14 +325,22 @@ impl ProjectRepoTrait for ProjectRepo {
     async fn get_project_relations_by_id(
         &self,
         id: Uuid,
+        all_assets: bool,
     ) -> Result<ProjectEntityRelations, DbError> {
-        let result = sqlx::query(formatcp!(
+        let asset_query = if all_assets {
+            ""
+        } else {
+            " AND a.state = 'Uploaded'"
+        }
+        .to_string();
+
+        let result = sqlx::query(&format!(
             r#"SELECT {} FROM "projects"
             LEFT OUTER JOIN rewards r on r.project_id = projects.id
             LEFT OUTER JOIN reward_assets ri on ri.reward_id = r.id
-            LEFT OUTER JOIN project_assets a on a.project_id = projects.id AND a.state = 'Uploaded'
+            LEFT OUTER JOIN project_assets a on a.project_id = projects.id{}
             WHERE projects.id = $1"#,
-            PROJECT_RELATION_COLUMNS
+            PROJECT_RELATION_COLUMNS, asset_query
         ))
         .bind(id)
         .fetch_all(&self.db)

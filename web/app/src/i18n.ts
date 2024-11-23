@@ -35,6 +35,7 @@ const fallback: I18nObject = {
   save: 'Save',
   submit: 'Submit',
   view: 'View',
+  you_sure: 'Are you sure?',
   not_found: 'Page Not Found',
   not_found_text: "Sorry, we couldn't find what you're looking for!",
   welcome_title: 'Welcome to CrowdTrust - Empowering Creators, Protecting Backers',
@@ -247,6 +248,7 @@ const fallback: I18nObject = {
     no_images: 'No images, click Upload below',
     no_rewards: 'No rewards, click below to create one.',
     new_reward: 'New Reward',
+    delete_asset: 'The asset will be deleted forever.',
   },
   footer: {
     copyright: '© 2024 CrowdTrust - All Rights Reserved.',

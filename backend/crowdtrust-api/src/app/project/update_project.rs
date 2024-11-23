@@ -32,7 +32,7 @@ pub async fn update_project(
     let project_to_be_updated = context
         .repo
         .project
-        .get_project_relations_by_id(project_id)
+        .get_project_relations_by_id(project_id, true)
         .await
         .map_err(|_| {
             ApiError::not_found().message(format!("Project with ID {} not found", project_id))
