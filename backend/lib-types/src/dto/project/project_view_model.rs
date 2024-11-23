@@ -31,6 +31,8 @@ pub struct ProjectViewModel {
     pub status: ProjectStatus,
     pub blockchain_status: BlockchainStatus,
     pub transaction_hash: Option<String>,
+    pub assets: Vec<ProjectAssetViewModelRelation>,
+    pub assets_order: Vec<String>,
     pub rewards_order: Vec<String>,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
@@ -55,6 +57,12 @@ pub fn to_api_response(user_entity: ProjectEntity) -> ProjectViewModel {
         status: user_entity.status,
         blockchain_status: user_entity.blockchain_status,
         transaction_hash: user_entity.transaction_hash,
+        assets: user_entity
+            .assets
+            .into_iter()
+            .map(|a| a.to_api_response())
+            .collect(),
+        assets_order: user_entity.assets_order,
         rewards_order: user_entity.rewards_order,
         created_at: user_entity.created_at,
         updated_at: user_entity.updated_at,

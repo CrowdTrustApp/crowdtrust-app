@@ -66,7 +66,7 @@ describe('List Users', () => {
 
     expect(users[0].id).toEqual('f481a6d5-ad06-4c3e-b3a5-4af0be50bb29')
     expect(users[0].email).toEqual('admin1@crowdtrust.app')
-    expect(users[0].eth_address).toEqual('0x0000000000000000000000000000000000000000')
+    expect(users[0].eth_address).toEqual('0xbc79345f5d78d2fd2ba5c2d3b3579c7548234ae5')
     expect(users[0].user_type).toEqual(UserType.Admin)
     expect(users[0].user_status).toEqual(UserStatus.Active)
     expect(users[0].email_confirmed).toEqual(true)

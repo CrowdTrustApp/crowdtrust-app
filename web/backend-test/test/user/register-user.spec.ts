@@ -151,7 +151,7 @@ describe('Register User', () => {
     })
 
     test('returns 400 when eth_address is already in use', () => {
-      payload.eth_address = '0x0000000000000000000000000000000000000000'
+      payload.eth_address = '0xbc79345f5d78d2fd2ba5c2d3b3579c7548234ae5'
       return api.post(testEndpoint).send(payload).expect(400, {
         code: 'UserExists',
         message: 'User with email or eth_address already exists',

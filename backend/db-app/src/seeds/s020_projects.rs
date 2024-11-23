@@ -1,21 +1,47 @@
 use std::str::FromStr;
 
-use chrono::{Duration, Utc};
+use bigdecimal::BigDecimal;
+use chrono::{DateTime, Duration, Utc};
 use lib_api::db::db_error::DbError;
-use lib_types::{
-    entity::project_entity::ProjectEntity,
-    shared::project::{BlockchainStatus, PaymentCurrency, ProjectCategory, ProjectStatus},
+use lib_types::shared::project::{
+    BlockchainStatus, PaymentCurrency, ProjectCategory, ProjectStatus,
 };
+use serde::Serialize;
 use sqlx::PgPool;
 use uuid::Uuid;
 
 use crate::util::bulk_insert;
 
+#[derive(Debug, Serialize, sqlx::Type)]
+pub struct ProjectEntityDbProps {
+    pub id: Uuid,
+    pub user_id: Uuid,
+    pub name: String,
+    pub description: String,
+    pub blurb: String,
+    pub contract_address: String,
+    pub payment_address: String,
+    pub category: ProjectCategory,
+    pub funding_goal: BigDecimal,
+    pub start_time: i64,
+    pub duration: i64,
+    pub total_pledged: BigDecimal,
+    pub backer_count: i32,
+    pub base_currency: PaymentCurrency,
+    pub status: ProjectStatus,
+    pub assets_order: Vec<String>,
+    pub blockchain_status: BlockchainStatus,
+    pub transaction_hash: Option<String>,
+    pub rewards_order: Vec<String>,
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
+}
+
 pub async fn seed(db: &PgPool) -> Result<(), DbError> {
     let table = "projects";
 
     let data = vec![
-        ProjectEntity {
+        ProjectEntityDbProps {
             id: Uuid::from_str("14bfe82a-1003-446b-b6bb-20a176e848e0").unwrap(),
             user_id: Uuid::from_str("45013993-2a1a-4ee5-8dbd-b4b63d9af34f").unwrap(),
             name: "Game Box".into(),
@@ -43,7 +69,7 @@ pub async fn seed(db: &PgPool) -> Result<(), DbError> {
             created_at: Utc::now() - Duration::days(1),
             updated_at: Utc::now(),
         },
-        ProjectEntity {
+        ProjectEntityDbProps {
             id: Uuid::from_str("a3a2b1c4-a1ee-42d5-a729-bb6ff6fdfdfe").unwrap(),
             user_id: Uuid::from_str("45013993-2a1a-4ee5-8dbd-b4b63d9af34f").unwrap(),
             name: "Super Jetpack".into(),
@@ -66,7 +92,7 @@ pub async fn seed(db: &PgPool) -> Result<(), DbError> {
             created_at: Utc::now() - Duration::days(5),
             updated_at: Utc::now(),
         },
-        ProjectEntity {
+        ProjectEntityDbProps {
             id: Uuid::from_str("d13b990d-172e-4a01-aeea-43f6ef505a7c").unwrap(),
             user_id: Uuid::from_str("45013993-2a1a-4ee5-8dbd-b4b63d9af34f").unwrap(),
             name: "Donate to the needy".into(),
@@ -89,7 +115,7 @@ pub async fn seed(db: &PgPool) -> Result<(), DbError> {
             created_at: Utc::now() - Duration::days(10),
             updated_at: Utc::now(),
         },
-        ProjectEntity {
+        ProjectEntityDbProps {
             id: Uuid::from_str("bbe3791a-96af-4de6-8796-5d2f5c8ca144").unwrap(),
             user_id: Uuid::from_str("276168ed-9228-4d6b-aec2-ed53bb7c1901").unwrap(),
             name: "Dogpedia".into(),
@@ -112,7 +138,7 @@ pub async fn seed(db: &PgPool) -> Result<(), DbError> {
             created_at: Utc::now() - Duration::days(15),
             updated_at: Utc::now(),
         },
-        ProjectEntity {
+        ProjectEntityDbProps {
             id: Uuid::from_str("f20c8b1a-16cc-4f2b-bb85-00b6fa00f4e9").unwrap(),
             user_id: Uuid::from_str("276168ed-9228-4d6b-aec2-ed53bb7c1901").unwrap(),
             name: "Some Thing".into(),
@@ -135,7 +161,7 @@ pub async fn seed(db: &PgPool) -> Result<(), DbError> {
             created_at: Utc::now() - Duration::days(20),
             updated_at: Utc::now(),
         },
-        ProjectEntity {
+        ProjectEntityDbProps {
             id: Uuid::from_str("0c9d3f3e-8027-4582-b573-99b2d6f87ebc").unwrap(),
             user_id: Uuid::from_str("00e8ee0b-843b-43e7-84c1-6d7a64cd5cfd").unwrap(),
             name: "Good Boot".into(),
@@ -158,7 +184,7 @@ pub async fn seed(db: &PgPool) -> Result<(), DbError> {
             created_at: Utc::now() - Duration::days(25),
             updated_at: Utc::now(),
         },
-        ProjectEntity {
+        ProjectEntityDbProps {
             id: Uuid::from_str("a9b3146a-1bb7-49fc-b4be-c25e103d899c").unwrap(),
             user_id: Uuid::from_str("00e8ee0b-843b-43e7-84c1-6d7a64cd5cfd").unwrap(),
             name: "Modern Classic Album".into(),
@@ -181,7 +207,7 @@ pub async fn seed(db: &PgPool) -> Result<(), DbError> {
             created_at: Utc::now() - Duration::days(30),
             updated_at: Utc::now(),
         },
-        ProjectEntity {
+        ProjectEntityDbProps {
             id: Uuid::from_str("3e42e273-546d-4989-a97c-f6eb173e8450").unwrap(),
             user_id: Uuid::from_str("00e8ee0b-843b-43e7-84c1-6d7a64cd5cfd").unwrap(),
             name: "Vintage Player".into(),
@@ -204,7 +230,7 @@ pub async fn seed(db: &PgPool) -> Result<(), DbError> {
             created_at: Utc::now() - Duration::days(35),
             updated_at: Utc::now(),
         },
-        ProjectEntity {
+        ProjectEntityDbProps {
             id: Uuid::from_str("9e8f0c6f-1edf-4d68-a096-7a2bb4625c98").unwrap(),
             user_id: Uuid::from_str("00e8ee0b-843b-43e7-84c1-6d7a64cd5cfd").unwrap(),
             name: "Repair Shop".into(),
@@ -227,7 +253,7 @@ pub async fn seed(db: &PgPool) -> Result<(), DbError> {
             created_at: Utc::now() - Duration::days(40),
             updated_at: Utc::now(),
         },
-        ProjectEntity {
+        ProjectEntityDbProps {
             id: Uuid::from_str("fa4d21c2-16a3-46cf-8162-98f4a82b59aa").unwrap(),
             user_id: Uuid::from_str("00e8ee0b-843b-43e7-84c1-6d7a64cd5cfd").unwrap(),
             name: "Hi-Fi Sphere".into(),
@@ -250,7 +276,7 @@ pub async fn seed(db: &PgPool) -> Result<(), DbError> {
             created_at: Utc::now() - Duration::days(45),
             updated_at: Utc::now(),
         },
-        ProjectEntity {
+        ProjectEntityDbProps {
             id: Uuid::from_str("00df0e23-22af-4959-874c-aca385b54eed").unwrap(),
             user_id: Uuid::from_str("00e8ee0b-843b-43e7-84c1-6d7a64cd5cfd").unwrap(),
             name: "Community Event".into(),

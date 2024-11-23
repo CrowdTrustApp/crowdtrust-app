@@ -30,6 +30,7 @@ pub struct ProjectEntity {
     pub backer_count: i32,
     pub base_currency: PaymentCurrency,
     pub status: ProjectStatus,
+    pub assets: Vec<ProjectAssetEntityRelation>,
     pub assets_order: Vec<String>,
     pub blockchain_status: BlockchainStatus,
     pub transaction_hash: Option<String>,

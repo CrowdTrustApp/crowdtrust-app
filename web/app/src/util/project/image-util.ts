@@ -1,4 +1,4 @@
-import { IProjectViewModel } from '@app/types'
+import { IProjectAssetViewModelRelation, IProjectViewModel } from '@app/types'
 import Box1 from '../../assets/img/box1.jpg'
 import Box2 from '../../assets/img/box2.jpg'
 import Box3 from '../../assets/img/box3.jpg'
@@ -14,4 +14,16 @@ export const getMainImage = (project: IProjectViewModel) => {
       '00df0e23-22af-4959-874c-aca385b54eed': Box4,
     }[project.id] ?? placeholder
   )
+}
+
+export const orderedAssets = (
+  assets: IProjectAssetViewModelRelation[],
+  order: string[],
+): IProjectAssetViewModelRelation[] => {
+  return order
+    .map((id) => {
+      const asset = assets.find((asset) => asset.id === id)
+      return asset ? { ...asset, loading: false } : undefined
+    })
+    .filter((asset) => !!asset)
 }

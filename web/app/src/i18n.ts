@@ -34,6 +34,7 @@ const fallback: I18nObject = {
   password: 'Password',
   save: 'Save',
   submit: 'Submit',
+  status: 'Status',
   view: 'View',
   you_sure: 'Are you sure?',
   not_found: 'Page Not Found',

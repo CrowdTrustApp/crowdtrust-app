@@ -46,7 +46,7 @@ describe('Get User', () => {
       expect(body.link).toEqual('https://crowdtrust.app')
       expect(body.location).toEqual('Singapore')
       expect(body.email).toEqual('admin1@crowdtrust.app')
-      expect(body.eth_address).toEqual('0x0000000000000000000000000000000000000000')
+      expect(body.eth_address).toEqual('0xbc79345f5d78d2fd2ba5c2d3b3579c7548234ae5')
       expect(body.user_type).toEqual('Admin')
       expect(body.email_confirmed).toEqual(true)
     })
@@ -121,7 +121,7 @@ describe('Get User', () => {
       const body: IGetUserApiResponse = res.body
 
       expect(body.id).toEqual(adminId)
-      expect(body.eth_address).toEqual('0x0000000000000000000000000000000000000000')
+      expect(body.eth_address).toEqual('0xbc79345f5d78d2fd2ba5c2d3b3579c7548234ae5')
       expect(body.email).toBeUndefined()
       expect(body.email_confirmed).toBeUndefined()
     })

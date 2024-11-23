@@ -1,7 +1,7 @@
 <template>
   <div class="project-top">
     <div class="image-wrap">
-      <img :src="getMainImage(project)" />
+      <ProjectCarousel :project="project" />
     </div>
     <div class="top-detail f-col">
       <div class="name">
@@ -36,7 +36,7 @@ import { computed } from 'vue'
 import { formatDistance } from 'date-fns'
 import { IProjectViewModel } from '@app/types'
 import { toEthDisplay } from '@samatech/vue3-eth'
-import { getMainImage } from '@app/util'
+import ProjectCarousel from './ProjectCarousel.vue'
 
 const { project } = defineProps<{
   project: IProjectViewModel
@@ -81,14 +81,8 @@ const goal = computed(() => {
 }
 .image-wrap {
   position: relative;
-  width: 55%;
-  background-color: #dee2e4;
-  height: 280px;
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+  width: 50%;
+  height: 400px;
 }
 .top-detail {
   padding-left: 24px;

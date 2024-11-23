@@ -101,6 +101,9 @@ importers:
       vue-router:
         specifier: 'catalog:'
         version: 4.4.5(vue@3.5.8(typescript@5.6.2))
+      vue3-carousel:
+        specifier: 0.7.1
+        version: 0.7.1(vue@3.5.8(typescript@5.6.2))
     devDependencies:
       '@rollup/plugin-terser':
         specifier: 'catalog:'
@@ -2893,6 +2896,11 @@ packages:
 
   vue-router@4.4.5:
     resolution: {integrity: sha512-4fKZygS8cH1yCyuabAXGUAsyi1b2/o/OKgu/RUb+znIYOxPRxdkytJEx+0wGcpBE1pX6vUgh5jwWOKRGvuA/7Q==}
+    peerDependencies:
+      vue: ^3.2.0
+
+  vue3-carousel@0.7.1:
+    resolution: {integrity: sha512-RpU5gJRJl8QvoA1PT0Pp2r1ofAkvIkLo7Z+/n8B8KvHobNSMGJUvNaCJzfG/3FfseLSH2ntJVvakyr8BCDq66w==}
     peerDependencies:
       vue: ^3.2.0
 
@@ -6038,6 +6046,10 @@ snapshots:
   vue-router@4.4.5(vue@3.5.8(typescript@5.6.2)):
     dependencies:
       '@vue/devtools-api': 6.6.4
+      vue: 3.5.8(typescript@5.6.2)
+
+  vue3-carousel@0.7.1(vue@3.5.8(typescript@5.6.2)):
+    dependencies:
       vue: 3.5.8(typescript@5.6.2)
 
   vue@3.5.8(typescript@5.6.2):
