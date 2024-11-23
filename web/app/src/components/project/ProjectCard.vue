@@ -2,7 +2,7 @@
   <router-link v-if="project" :to="{ name: 'Project', params: { id: project.id } }">
     <div class="project-card">
       <div class="image-wrap">
-        <img :src="getMainImage(project)" />
+        <img :src="urlFromAsset(project.assets?.[0]) || getMainImage(project)" />
         <div class="image-overlay overlay f-center">
           <div class="button1 view-button">
             {{ ts('view') }}
@@ -46,7 +46,7 @@
 import { computed } from 'vue'
 import { toEthDisplay } from '@samatech/vue3-eth'
 import { IProjectViewModel } from '@app/types'
-import { getMainImage, getProgress } from '@app/util'
+import { getMainImage, getProgress, urlFromAsset } from '@app/util'
 import { ts } from '../../i18n'
 
 const { project } = defineProps<{

@@ -130,6 +130,8 @@ describe('Update Project', () => {
         assets_order: [
           'b59ba8f3-3b53-426a-b3db-52b2f8557798',
           '439f93a5-bbb6-4353-b3aa-0f766612dc53',
+          '7d9cb4c7-06c3-4de4-a77c-4311386387c6',
+          '4cba9ed0-eb4e-4764-8458-a4ca6eecb35c',
         ],
       }
       await api
@@ -141,7 +143,7 @@ describe('Update Project', () => {
 
     test('updates project rewards_order', async () => {
       payload = {
-        assets_order: [
+        rewards_order: [
           '950d06e5-8c8b-4060-a6e4-7a676fbc223e',
           '1ab089a5-89eb-458f-bf04-15518e9e866f',
         ],

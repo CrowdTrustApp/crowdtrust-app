@@ -172,6 +172,18 @@ const router = createRouter({
         },
       ],
     },
+    {
+      path: '/admin',
+      component: () => import('./views/AdminWrap.vue'),
+      children: [
+        {
+          path: 'projects',
+          name: 'AdminProjects',
+          component: () => import('./views/AdminProjects.vue'),
+          meta: metaAuth('Admin Projects'),
+        },
+      ],
+    },
   ],
 })
 

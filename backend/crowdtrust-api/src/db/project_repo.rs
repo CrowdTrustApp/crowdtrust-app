@@ -6,10 +6,7 @@ use const_format::formatcp;
 use lib_api::db::{
     db_error::{map_sqlx_err, DbError},
     db_result::list_result,
-    util::{
-        append_and_eq, append_comma, append_in, append_limit_offset, append_order_by,
-        option_string_to_uuid,
-    },
+    util::{append_comma, append_in, append_limit_offset, append_op, append_order_by, DbOp},
 };
 use lib_types::{
     dto::{
@@ -124,8 +121,19 @@ const PROJECT_RELATION_COLUMNS: &str = formatcp!(
 );
 
 fn map_project_entity(row: PgRow) -> Result<ProjectEntity, sqlx::Error> {
+    let project_id: Uuid = row.try_get("id")?;
+    let assets = if let Ok(asset_id) = row.try_get::<Uuid, &str>("a_id") {
+        vec![ProjectAssetEntityRelation {
+            id: asset_id,
+            size: row.try_get("a_size")?,
+            content_type: row.try_get_unchecked("a_content_type")?,
+            project_id: project_id.clone(),
+        }]
+    } else {
+        vec![]
+    };
     Ok(ProjectEntity {
-        id: row.try_get("id")?,
+        id: project_id,
         user_id: row.try_get("user_id")?,
         name: row.try_get("name")?,
         description: row.try_get("description")?,
@@ -143,6 +151,7 @@ fn map_project_entity(row: PgRow) -> Result<ProjectEntity, sqlx::Error> {
         blockchain_status: row.try_get_unchecked("blockchain_status")?,
         transaction_hash: row.try_get("transaction_hash")?,
         rewards_order: row.try_get("rewards_order")?,
+        assets,
         assets_order: row.try_get("assets_order")?,
         created_at: row.try_get("created_at")?,
         updated_at: row.try_get("updated_at")?,
@@ -402,24 +411,25 @@ impl ProjectRepoTrait for ProjectRepo {
     }
 
     async fn list_projects(&self, query: ListProjectsQuery) -> Result<ProjectListResults, DbError> {
-        let filtered_query =
-            if query.categories.is_none() && query.statuses.is_none() && query.user_id.is_none() {
-                QueryBuilder::new("SELECT *, COUNT(*) OVER () FROM \"projects\"")
-            } else {
-                QueryBuilder::new("SELECT *, COUNT(*) OVER () FROM \"projects\" WHERE")
-            };
+        let mut filtered_query = QueryBuilder::new(format!("SELECT {}, a.id as a_id, a.size a_size, a.content_type as a_content_type, COUNT(projects.id) OVER () FROM \"projects\" LEFT OUTER JOIN project_assets a on a.project_id = projects.id AND projects.assets_order[1] = a.id::text", PROJECT_COLUMNS));
+
+        if query.categories.is_some() || query.statuses.is_some() || query.user_id.is_some() {
+            filtered_query.push(" WHERE");
+        }
 
         // Filter categories
         let (filtered_query, count) = append_in(filtered_query, "category", query.categories, 0);
         // Filter statuses
         let (filtered_query, count) = append_in(filtered_query, "status", query.statuses, count);
         // Filter user_id
-        let (mut filtered_query, _) = append_and_eq(
-            filtered_query,
-            "user_id",
-            option_string_to_uuid(query.user_id),
-            count,
-        );
+        let (mut filtered_query, _) = if let Some(user_id) = query.user_id {
+            let (mut q, c) = append_op(filtered_query, DbOp::And, count);
+            q.push(" projects.user_id::text = ");
+            q.push_bind(user_id);
+            (q, c)
+        } else {
+            (filtered_query, count)
+        };
         // ORDER BY
         let column = to_string(&query.column.unwrap_or(ProjectSortColumn::CreatedAt))
             .map_err(|e| DbError::Serialize(e.to_string()))?;
@@ -427,6 +437,7 @@ impl ProjectRepoTrait for ProjectRepo {
 
         filtered_query = append_order_by(filtered_query, column, direction.to_string());
         filtered_query = append_limit_offset(filtered_query, query.from, query.to);
+
         let results = filtered_query
             .build()
             .try_map(map_project_list_entity)

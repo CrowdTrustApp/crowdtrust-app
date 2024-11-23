@@ -42,7 +42,8 @@
     "sanitize-html": "1.27.5",
     "vue": "catalog:",
     "vue-gtag": "^2.0.1",
-    "vue-router": "catalog:"
+    "vue-router": "catalog:",
+    "vue3-carousel": "0.7.1"
   },
   "devDependencies": {
     "@rollup/plugin-terser": "catalog:",

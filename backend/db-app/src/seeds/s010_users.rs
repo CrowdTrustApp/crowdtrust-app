@@ -24,7 +24,7 @@ pub async fn seed(db: &PgPool) -> Result<(), DbError> {
             location: "Singapore".into(),
             email: "admin1@crowdtrust.app".into(),
             password_hash: hash("admin.password1".into()).await.unwrap(),
-            eth_address: "0x0000000000000000000000000000000000000000".into(),
+            eth_address: "0xbc79345f5d78d2fd2ba5c2d3b3579c7548234ae5".into(),
             created_at: Utc::now(),
             updated_at: Utc::now(),
             user_type: UserType::Admin,

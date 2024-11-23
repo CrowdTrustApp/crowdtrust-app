@@ -41,7 +41,7 @@
 
 <script lang="ts" setup>
 import { ALL_CONTENT_TYPES, AssetContentType, ICreateAssetRequest } from '@app/types'
-import { IValidateMediaError, validateMedia } from '@app/util'
+import { IValidateMediaError, orderedAssets, validateMedia } from '@app/util'
 import { swappedOrder, useEditProject, useListDrag, useProjectAsset } from '@app/util-app'
 import { ts } from '../../i18n'
 import { computed, ref } from 'vue'
@@ -88,13 +88,7 @@ const images = computed(() => {
     if (newPos.value !== undefined && draggingIndex.value !== undefined) {
       order = swappedOrder(order, draggingIndex.value, newPos.value)
     }
-    const assets = order
-      .map((id) => {
-        const asset = project.value?.assets.find((asset) => asset.id === id)
-        return asset ? { ...asset, loading: false } : undefined
-      })
-      .filter((asset) => !!asset)
-    return assets
+    return orderedAssets(project.value?.assets ?? [], order)
   }
   return []
 })

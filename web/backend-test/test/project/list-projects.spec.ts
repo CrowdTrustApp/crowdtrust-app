@@ -47,13 +47,14 @@ describe('List Projects', () => {
         .expect(200)
 
       const body: IListProjectsApiResponse = response.body
-      const users = body.results
+      const projects = body.results
 
       expect(body.total).toEqual(TotalProjects)
-      expect(users.length).toEqual(2)
+      expect(projects.length).toEqual(2)
 
-      expect(users[0].id).toEqual('14bfe82a-1003-446b-b6bb-20a176e848e0')
-      expect(users[1].id).toEqual('a3a2b1c4-a1ee-42d5-a729-bb6ff6fdfdfe')
+      expect(projects[0].id).toEqual('14bfe82a-1003-446b-b6bb-20a176e848e0')
+      expect(projects[0].assets).toHaveLength(1)
+      expect(projects[1].id).toEqual('a3a2b1c4-a1ee-42d5-a729-bb6ff6fdfdfe')
     })
 
     test('filters by one category', async () => {

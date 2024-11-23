@@ -9,6 +9,7 @@
 </template>
 
 <script lang="ts" setup>
+import 'vue3-carousel/dist/carousel.css'
 import HomeBg from '../components/home/HomeBg.vue'
 import AppHeader from '../components/nav/AppHeader.vue'
 import CTFooter from '../components/nav/CTFooter.vue'
