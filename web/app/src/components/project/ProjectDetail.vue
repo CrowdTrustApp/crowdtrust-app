@@ -75,4 +75,10 @@ const description = computed(() => {
   bottom: 0;
   background-color: $blue2;
 }
+
+@media (max-width: 680px) {
+  .detail {
+    width: 100%;
+  }
+}
 </style>

@@ -39,9 +39,9 @@ const { innerWidth } = useResize()
 
 const listDimension = computed(() => {
   let cols = 3
-  if (innerWidth.value < 460) {
+  if (innerWidth.value < 580) {
     cols = 1
-  } else if (innerWidth.value < 600) {
+  } else if (innerWidth.value < 880) {
     cols = 2
   }
   const rows = Math.ceil(projects.length / cols)
@@ -79,5 +79,8 @@ const listDimension = computed(() => {
 }
 .cols-1 .card {
   width: 100%;
+  :deep(.project-content) {
+    height: auto;
+  }
 }
 </style>

@@ -14,7 +14,7 @@ export const useProjectInfoFields = (project?: IProjectViewModel) => {
   const name = useInputLimit({ min: 3, max: 50, label: 'Name', initial: project?.name })
   const blurb = useInputLimit({
     min: 5,
-    max: 200,
+    max: 120,
     label: 'Blurb',
     initial: project?.blurb,
   })

@@ -85,7 +85,7 @@ const goal = computed(() => {
   height: 400px;
 }
 .top-detail {
-  padding-left: 24px;
+  padding: 8px 0 0 32px;
 }
 .name {
   @mixin bold 36px;
@@ -143,6 +143,7 @@ const goal = computed(() => {
     margin: 16px auto 0;
     width: 100%;
     max-width: 560px;
+    padding: 16px 0 0 0;
   }
 }
 </style>

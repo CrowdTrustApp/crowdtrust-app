@@ -16,6 +16,7 @@ import { onMounted, reactive } from 'vue'
 import { IListProjectParams, listProjects } from '@app/features'
 import ProjectList from '../components/project/ProjectList.vue'
 import { ts } from '../i18n'
+import { ProjectStatus } from '@app/types'
 
 const state: IListProjectParams = reactive({
   error: undefined,
@@ -24,7 +25,12 @@ const state: IListProjectParams = reactive({
 })
 
 onMounted(() => {
-  listProjects({}, state)
+  listProjects(
+    {
+      statuses: [ProjectStatus.Prelaunch, ProjectStatus.Complete, ProjectStatus.Active],
+    },
+    state,
+  )
 })
 </script>
 

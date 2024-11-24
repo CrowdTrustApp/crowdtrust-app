@@ -1,34 +1,36 @@
 <template>
-  <div v-if="rewards.length" class="rewards-wrap">
-    <div v-for="reward in rewards" class="reward">
-      <div class="reward-image"></div>
-      <div class="reward-content">
-        <div class="reward-text">
-          <div class="reward-top">
-            <div class="name">
-              {{ reward.name }}
+  <div class="project-rewards">
+    <div v-if="rewards.length" class="rewards-wrap">
+      <div v-for="reward in rewards" class="reward">
+        <img :src="urlFromAsset(reward.image)" class="reward-image" />
+        <div class="reward-content">
+          <div class="reward-text">
+            <div class="reward-top">
+              <div class="name">
+                {{ reward.name }}
+              </div>
+              <div class="price">
+                {{ price(reward.price) }}
+              </div>
             </div>
-            <div class="price">
-              {{ price(reward.price) }}
+            <div class="description">
+              {{ reward.description }}
             </div>
           </div>
-          <div class="description">
-            {{ reward.description }}
-          </div>
-        </div>
-        <div class="delivery">
-          <div class="delivery-text">
-            {{ ts('project.delivery') }}
-          </div>
-          <div class="time">
-            {{ delivery(reward.delivery_time) }}
+          <div class="delivery">
+            <div class="delivery-text">
+              {{ ts('project.delivery') }}
+            </div>
+            <div class="time">
+              {{ delivery(reward.delivery_time) }}
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <div v-else class="rewards-empty">
-    {{ ts('project.no_rewards') }}
+    <div v-else class="rewards-empty">
+      {{ ts('project.no_rewards') }}
+    </div>
   </div>
 </template>
 
@@ -37,6 +39,7 @@ import { IRewardViewModel } from '@app/types'
 import { toEthDisplay } from '@samatech/vue3-eth'
 import { ts } from '../../i18n'
 import { format } from 'date-fns'
+import { urlFromAsset } from '@app/util'
 
 defineProps<{
   rewards: IRewardViewModel[]
@@ -54,12 +57,16 @@ const delivery = (time: number): string => {
 <style lang="postcss" scoped>
 @import '../../css/defines.postcss';
 
+.project-rewards {
+  display: flex;
+  align-items: flex-start;
+}
 .rewards-wrap {
   display: flex;
   flex-wrap: wrap;
-  width: 100%;
+  justify-content: center;
   border-bottom: 1px solid $border1;
-  padding: 24px 0 32px;
+  padding: 0 0 32px;
 }
 .rewards-empty {
   @mixin semibold 24px;
@@ -71,6 +78,8 @@ const delivery = (time: number): string => {
 .reward {
   width: calc(25% - 12px);
   max-width: 240px;
+  min-width: 220px;
+  margin-top: 24px;
   color: $text2;
   &:not(:first-child) {
     margin-left: 16px;
@@ -80,6 +89,7 @@ const delivery = (time: number): string => {
   width: 100%;
   height: 140px;
   background-color: #bec2c4;
+  object-fit: cover;
 }
 .reward-content {
   padding: 6px 8px;
@@ -99,8 +109,8 @@ const delivery = (time: number): string => {
 }
 .description {
   @mixin text 14px;
-  line-height: 140%;
-  margin-top: 8px;
+  line-height: 120%;
+  margin-top: 4px;
 }
 .delivery-text {
   @mixin semibold 12px;

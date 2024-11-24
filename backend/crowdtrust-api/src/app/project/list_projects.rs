@@ -38,9 +38,15 @@ pub async fn list_projects(
         if query.user_id.is_some() && str_opt_to_uuid(&query.user_id) == request_user.user_id {
             query.statuses
         } else if let Some(statuses) = query.statuses.clone() {
-            let restricted_status = statuses
-                .iter()
-                .find(|s| matches!(s, ProjectStatus::Active | ProjectStatus::Complete));
+            let restricted_status = statuses.iter().find(|s| {
+                matches!(
+                    s,
+                    ProjectStatus::Initial
+                        | ProjectStatus::Review
+                        | ProjectStatus::Approved
+                        | ProjectStatus::Denied
+                )
+            });
             if let Some(restricted) = restricted_status {
                 return Err(ApiError::bad_request()
                     .code(ApiErrorCode::RestrictedStatus)
