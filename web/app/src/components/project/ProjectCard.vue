@@ -103,7 +103,7 @@ const raised = computed(() => {
   }
 }
 .image-wrap {
-  height: 180px;
+  height: 240px;
   background-color: #bec2c4;
   position: relative;
   border-radius: 12px;

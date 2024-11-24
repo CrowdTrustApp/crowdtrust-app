@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
 import { watch } from 'vue'
-import { useEditProject, useRewardInfo, useRewardInfoFields } from '@app/util-app'
+import { useRewardInfo, useRewardInfoFields } from '@app/util-app'
 import { IRewardViewModel } from '@app/types'
 import Modal from '../widgets/Modal.vue'
 import RewardInfo from './RewardInfo.vue'
@@ -32,8 +32,6 @@ const emit = defineEmits<{
   (e: 'complete'): void
   (e: 'cancel'): void
 }>()
-
-const { project } = useEditProject()
 
 const feature = useRewardInfo()
 

@@ -7,8 +7,8 @@
 
   <Carousel
     class="thumbnails"
-    :itemsToShow="4"
-    :height="50"
+    :itemsToShow="4.5"
+    :height="60"
     :wrapAround="images.length > 4"
     :gap="10"
     v-model="currentSlide"
@@ -68,5 +68,14 @@ const galleryConfig = {
 .thumbnails {
   margin-top: 10px;
   cursor: pointer;
+  --vc-nav-width: 40px;
+  --vc-nav-height: 50px;
+  :deep(.carousel__prev) {
+    left: -10px;
+  }
+  :deep(.carousel__icon) {
+    stroke: white;
+    stroke-width: 0.8;
+  }
 }
 </style>

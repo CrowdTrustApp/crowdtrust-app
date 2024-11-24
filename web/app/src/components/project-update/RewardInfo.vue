@@ -39,7 +39,7 @@
       </div>
       <div class="start-time bottom-item">
         <div class="label">
-          {{ ts('create.start') }}
+          {{ ts('reward.delivery') }}
         </div>
         <CTDatePicker
           :date="deliveryTime"
@@ -188,7 +188,7 @@ const submit = async () => {
   const parsedPrice = parsePrice()
   submitting.value = true
 
-  if (!validatedFile.value) {
+  if (!reward && !validatedFile.value) {
     error.value = 'Reward image required.'
   } else if (name.error.value) {
     error.value = name.error.value
@@ -208,7 +208,9 @@ const submit = async () => {
       delivery_time: deliveryTime.value.getTime() / 1000,
       backer_limit: parsedLimit.limit as number,
     })
-    await replaceRewardImage(validatedFile.value, reward)
+    if (validatedFile.value) {
+      await replaceRewardImage(validatedFile.value, reward)
+    }
   } else {
     const id = await submitCreate(project.value, {
       name: name.text.value,
@@ -217,7 +219,7 @@ const submit = async () => {
       delivery_time: Math.round(deliveryTime.value.getTime() / 1000),
       backer_limit: parsedLimit.limit as number,
     })
-    if (id) {
+    if (id && validatedFile.value) {
       await uploadRewardImage(validatedFile.value, id)
     }
   }

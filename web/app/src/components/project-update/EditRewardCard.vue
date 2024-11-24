@@ -99,6 +99,7 @@ const backers = computed(() => {
   cursor: pointer;
   color: $text1;
   width: 220px;
+  min-width: 220px;
   &:hover {
     .image-overlay {
       opacity: 1;
