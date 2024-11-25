@@ -2,17 +2,17 @@
 pragma solidity ^0.8.13;
 
 import {Script, console} from "forge-std/Script.sol";
-import {Counter} from "../src/Counter.sol";
+import {CrowdTrustV1} from "../src/CrowdTrustV1.sol";
 
-contract CounterScript is Script {
-    Counter public counter;
+contract CrowdTrustV1Script is Script {
+    CrowdTrustV1 public crowdtrust;
 
     function setUp() public {}
 
     function run() public {
         vm.startBroadcast();
 
-        counter = new Counter();
+        crowdtrust = new CrowdTrustV1();
 
         vm.stopBroadcast();
     }
