@@ -9,3 +9,4 @@ echo "[INFO] Bulding local docker images..."
 docker build -t crowdtrust-api.prod -f backend/crowdtrust-api/Dockerfile --build-arg="S3_SECRET_ACCESS_KEY=dev" --build-arg="SENDGRID_API_KEY=dev" --target=prod .
 docker build -t api-test-helper.prod -f backend/api-test-helper/Dockerfile --target=prod .
 docker build -t db-app.prod -f backend/db-app/Dockerfile --target=prod .
+docker build -t blockchain-dev -f backend/blockchain-dev/Dockerfile .

@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blockchain-dev
+  labels:
+    component: blockchain-dev
+    tier: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: blockchain-dev
+      tier: backend
+  template:
+    metadata:
+      labels:
+        component: blockchain-dev
+        tier: backend
+    spec:
+      containers:
+        - name: blockchain-dev
+          image: blockchain-dev
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8545
+          envFrom:
+            - configMapRef:
+                name: blockchain-dev-config

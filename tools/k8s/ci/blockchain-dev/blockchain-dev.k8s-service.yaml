@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: blockchain-dev
+  labels:
+    component: blockchain-dev
+    tier: backend
+spec:
+  type: NodePort
+  selector:
+    component: blockchain-dev
+    tier: backend
+  ports:
+    - port: 8545
+      targetPort: 38545
+      nodePort: 38545

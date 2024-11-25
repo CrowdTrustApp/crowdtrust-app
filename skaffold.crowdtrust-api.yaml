@@ -4,6 +4,7 @@ metadata:
   name: crowdtrust-api
 requires:
   - path: ./skaffold.db.yaml
+  - path: ./skaffold.blockchain.yaml
 build:
   artifacts:
     - image: crowdtrust-api.dev

@@ -1,0 +1,23 @@
+apiVersion: skaffold/v4beta11
+kind: Config
+metadata:
+  name: blockchain
+build:
+  artifacts:
+    - image: blockchain-dev
+      context: .
+      docker:
+        dockerfile: backend/blockchain-dev/Dockerfile
+  local:
+    push: false
+    useBuildkit: true
+manifests:
+  rawYaml:
+    - tools/k8s/dev/blockchain-dev/*.yaml
+deploy:
+  kubectl: {}
+  kubeContext: docker-desktop
+portForward:
+  - resourceType: service
+    resourceName: blockchain-dev
+    port: 8545
