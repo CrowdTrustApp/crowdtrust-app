@@ -1,6 +1,7 @@
 <template>
   <div class="project-info">
     <CTInput
+      v-if="!isActive()"
       v-model="name.text.value"
       :suffix="name.suffix.value"
       :label="ts('name')"
@@ -20,7 +21,7 @@
       class="edit-input"
     />
     <div class="info-bottom">
-      <div class="goal bottom-item">
+      <div v-if="!isActive()" class="goal bottom-item">
         <div class="label">
           {{ ts('funding_goal') }}
         </div>
@@ -42,7 +43,7 @@
           @select="category = $event?.value as ProjectCategory | undefined"
         />
       </div>
-      <div class="start-time bottom-item">
+      <div v-if="!isActive()" class="start-time bottom-item">
         <div class="label">
           {{ ts('create.start') }}
         </div>
@@ -80,7 +81,11 @@
 
 <script lang="ts" setup>
 import { useRouter } from 'vue-router'
-import { IUpdateProjectFeature, ProjectCategory } from '@app/types'
+import {
+  IUpdateProjectApiRequest,
+  IUpdateProjectFeature,
+  ProjectCategory,
+} from '@app/types'
 import { tr, ts } from '../../i18n'
 import CTButton from '../widgets/CTButton.vue'
 import CTMultiselect from '../widgets/CTMultiselect.vue'
@@ -100,7 +105,10 @@ const {
   error,
   submitUpdate,
   submitCreate,
+  updateProjectFields,
   submitting,
+  addChangedField,
+  isActive,
   name,
   description,
   blurb,
@@ -163,15 +171,17 @@ const submit = async () => {
   } else if (parsedGoal.error) {
     error.value = parsedDuration.error
   } else if (projectId) {
-    await submitUpdate(projectId, {
-      name: name.text.value,
-      blurb: blurb.text.value,
-      description: description.text.value,
-      category: category.value,
-      start_time: startTime.value.getTime() / 1000,
-      duration: parsedDuration.value as number,
-      funding_goal: parsedGoal.value as string,
-    })
+    const request: IUpdateProjectApiRequest = {}
+    addChangedField(request, 'name', name.text.value)
+    addChangedField(request, 'blurb', blurb.text.value)
+    addChangedField(request, 'description', description.text.value)
+    addChangedField(request, 'category', category.value)
+    const start = Math.round(startTime.value.getTime() / 1000)
+    addChangedField(request, 'start_time', start)
+    addChangedField(request, 'duration', parsedDuration.value)
+    addChangedField(request, 'funding_goal', parsedGoal.value)
+    await submitUpdate(projectId, request)
+    updateProjectFields(request)
     if (!error.value) {
       addToast({ text: 'Project saved!', duration: 1500 })
     }
@@ -220,10 +230,13 @@ const submit = async () => {
   margin-bottom: 4px;
 }
 .start-time {
-  margin: 0 16px;
+  margin: 0 0 0 16px;
   :deep(input) {
     width: 180px;
   }
+}
+.duration {
+  margin-left: 16px;
 }
 .category {
   margin-left: 16px;

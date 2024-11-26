@@ -11,3 +11,7 @@ cache
 logs
 log
 skaffold*.yaml
+
+
+# Auto generated
+web/app/src/util-app/blockchain/crowdtrust-abi.ts
