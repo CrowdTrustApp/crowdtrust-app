@@ -16,6 +16,13 @@ export interface IUpdateProjectFeature {
   duration: Ref<string>
   goal: Ref<string>
   submitting: Ref<boolean>
+  isActive: () => boolean
   submitUpdate: (id: string, payload: IUpdateProjectApiRequest) => Promise<void>
   submitCreate: (payload: ICreateProjectApiRequest) => Promise<string | undefined>
+  updateProjectFields: (request: IUpdateProjectApiRequest) => void
+  addChangedField: (
+    request: IUpdateProjectApiRequest,
+    field: string,
+    value: unknown,
+  ) => boolean
 }

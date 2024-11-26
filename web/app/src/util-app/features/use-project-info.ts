@@ -4,6 +4,7 @@ import {
   IProjectViewModel,
   IUpdateProjectApiRequest,
   IUpdateProjectFeature,
+  ProjectStatus,
 } from '@app/types'
 import { ref } from 'vue'
 import { addDays } from 'date-fns'
@@ -48,6 +49,40 @@ export const useProjectInfo = (project?: IProjectViewModel): IUpdateProjectFeatu
   const submitting = ref(false)
   const fields = useProjectInfoFields(project)
 
+  const isActive = (): boolean => {
+    const status = project?.status
+    if (!status) {
+      return false
+    }
+    return [ProjectStatus.Active, ProjectStatus.Complete, ProjectStatus.Denied].includes(
+      status,
+    )
+  }
+
+  const addChangedField = (
+    request: IUpdateProjectApiRequest,
+    field: string,
+    value: unknown,
+  ): boolean => {
+    if (project) {
+      const proj = project as any
+      if (proj[field] !== value) {
+        const req = request as any
+        req[field] = value
+      }
+    }
+    return true
+  }
+
+  const updateProjectFields = (request: IUpdateProjectApiRequest) => {
+    if (project) {
+      for (const [field, value] of Object.entries(request)) {
+        const proj = project as any
+        proj[field] = value
+      }
+    }
+  }
+
   const submitUpdate = async (id: string, payload: IUpdateProjectApiRequest) => {
     submitting.value = true
     try {
@@ -77,6 +112,9 @@ export const useProjectInfo = (project?: IProjectViewModel): IUpdateProjectFeatu
     error,
     submitting,
     ...fields,
+    isActive,
+    updateProjectFields,
+    addChangedField,
     submitUpdate,
     submitCreate,
   }
