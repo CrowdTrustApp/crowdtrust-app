@@ -6,6 +6,16 @@ build:
   artifacts:
     - image: blockchain-dev
       context: .
+      sync:
+        manual:
+          - src: contracts/lib/**/*
+            dest: /anvil
+          - src: contracts/script/**/*
+            dest: /anvil
+          - src: contracts/src/**/*
+            dest: /anvil
+          - src: backend/blockchain-dev/start-chain.bash
+            dest: /anvil
       docker:
         dockerfile: backend/blockchain-dev/Dockerfile
   local:

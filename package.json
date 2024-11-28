@@ -25,6 +25,7 @@
     "prod:backend:build": "cd backend && cargo build --release",
     "backend-test": "cd web/backend-test && nx jest --",
     "skaffold:basic": "(skaffold dev --platform linux/arm64 -f skaffold.basic.yaml --cache-artifacts=true)",
+    "generate-abi": "tools/scripts/generate-abi.bash",
     "prune": "tools/scripts/prune-all.sh"
   },
   "repository": {

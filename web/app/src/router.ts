@@ -168,6 +168,12 @@ const router = createRouter({
               meta: metaAuthNoscroll('EditRewards'),
               component: () => import('./components/project-update/EditRewards.vue'),
             },
+            {
+              path: 'publish',
+              name: 'EditPublish',
+              meta: metaAuthNoscroll('EditPublish'),
+              component: () => import('./components/project-update/EditPublish.vue'),
+            },
           ],
         },
       ],

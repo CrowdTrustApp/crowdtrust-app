@@ -75,8 +75,8 @@ importers:
         specifier: ^0.6.0
         version: 0.6.0(vue@3.5.8(typescript@5.6.2))
       '@samatech/vue3-eth':
-        specifier: 0.8.0
-        version: 0.8.0(vue@3.5.8(typescript@5.6.2))
+        specifier: ^0.10.1
+        version: 0.10.1(vue@3.5.8(typescript@5.6.2))
       '@vuepic/vue-datepicker':
         specifier: ^10.0.0
         version: 10.0.0(vue@3.5.8(typescript@5.6.2))
@@ -820,8 +820,8 @@ packages:
     peerDependencies:
       vue: '>=3.2.0'
 
-  '@samatech/vue3-eth@0.8.0':
-    resolution: {integrity: sha512-I6blXL8QhtbnFT0szs0cl+RCReUdXulDs104xFRIRhvNOymyyo+6JQO+2ZQiZoHnK3vL7mXt4aULgW2xkSHVxQ==}
+  '@samatech/vue3-eth@0.10.1':
+    resolution: {integrity: sha512-EuB3doVwI/AUKlidxia7y1LaNKGGO8oDE28LclNTosCg2tIaNqiV83qLPJeybdjysVpfkj8uir2W1gZ/G5XO6w==}
     peerDependencies:
       vue: ^3.5.0
 
@@ -884,6 +884,9 @@ packages:
 
   '@types/node@20.17.0':
     resolution: {integrity: sha512-a7zRo0f0eLo9K5X9Wp5cAqTUNGzuFLDG2R7C4HY2BhcMAsxgSPuRvAC1ZB6QkuUQXf0YZAgfOX2ZyrBa2n4nHQ==}
+
+  '@types/node@22.7.5':
+    resolution: {integrity: sha512-jML7s2NAzMWc//QSJ1a3prpk78cOPchGvXJsC3C6R6PSMoooztvRVQEz89gmBTBY1SPMaqo5teB4uNHPdetShQ==}
 
   '@types/stack-utils@2.0.3':
     resolution: {integrity: sha512-9aEbYZ3TbYMznPdcdr3SmIrLXwC/AKZXQeCf9Pgao5CKb8CyHuEX5jzWPTkvregvhRJHcpRO6BFoGW9ycaOkYw==}
@@ -1474,6 +1477,10 @@ packages:
 
   ethers@6.13.2:
     resolution: {integrity: sha512-9VkriTTed+/27BGuY1s0hf441kqwHJ1wtN2edksEtiRvXx+soxRX3iSXTfFqq2+YwrOqbDoTHjIhQnjJRlzKmg==}
+    engines: {node: '>=14.0.0'}
+
+  ethers@6.13.4:
+    resolution: {integrity: sha512-21YtnZVg4/zKkCQPjrDj38B1r4nQvTZLopUGMLQ1ePU2zV/joCfDC3t3iKQjWRzjjjbzR+mdAIoikeBRNkdllA==}
     engines: {node: '>=14.0.0'}
 
   events@3.3.0:
@@ -2759,6 +2766,9 @@ packages:
   tslib@2.4.0:
     resolution: {integrity: sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==}
 
+  tslib@2.7.0:
+    resolution: {integrity: sha512-gLXCKdN1/j47AiHiOkJN69hJmcbGTHI0ImLmbYLHykhgeN0jVGola9yVjFgzCUklsZQMW55o+dW7IXv3RCXDzA==}
+
   tty-browserify@0.0.1:
     resolution: {integrity: sha512-C3TaO7K81YvjCgQH9Q1S3R3P3BtN3RIM8n+OvX4il1K1zgE8ZhI0op7kClgkxtutIE8hQrcrHBXvIheqKUUCxw==}
 
@@ -3618,10 +3628,10 @@ snapshots:
     dependencies:
       vue: 3.5.8(typescript@5.6.2)
 
-  '@samatech/vue3-eth@0.8.0(vue@3.5.8(typescript@5.6.2))':
+  '@samatech/vue3-eth@0.10.1(vue@3.5.8(typescript@5.6.2))':
     dependencies:
       '@metamask/detect-provider': 2.0.0
-      ethers: 6.13.2
+      ethers: 6.13.4
       vue: 3.5.8(typescript@5.6.2)
     transitivePeerDependencies:
       - bufferutil
@@ -3698,6 +3708,10 @@ snapshots:
       undici-types: 6.13.0
 
   '@types/node@20.17.0':
+    dependencies:
+      undici-types: 6.19.8
+
+  '@types/node@22.7.5':
     dependencies:
       undici-types: 6.19.8
 
@@ -4408,6 +4422,19 @@ snapshots:
       '@types/node': 18.15.13
       aes-js: 4.0.0-beta.5
       tslib: 2.4.0
+      ws: 8.17.1
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+
+  ethers@6.13.4:
+    dependencies:
+      '@adraffy/ens-normalize': 1.10.1
+      '@noble/curves': 1.2.0
+      '@noble/hashes': 1.3.2
+      '@types/node': 22.7.5
+      aes-js: 4.0.0-beta.5
+      tslib: 2.7.0
       ws: 8.17.1
     transitivePeerDependencies:
       - bufferutil
@@ -5899,6 +5926,8 @@ snapshots:
       typescript: 5.6.2
 
   tslib@2.4.0: {}
+
+  tslib@2.7.0: {}
 
   tty-browserify@0.0.1: {}
 

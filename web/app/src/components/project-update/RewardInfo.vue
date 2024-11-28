@@ -276,20 +276,6 @@ const submit = async () => {
   padding-left: 24px;
   padding-right: 24px;
 }
-.error {
-  @mixin text 15px;
-  color: $red;
-  text-align: center;
-  max-width: 400px;
-  width: 100%;
-  min-height: 44px;
-  padding: 12px 0;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  &.show {
-    opacity: 1;
-  }
-}
 @media (max-width: 700px) {
   .info-bottom {
     flex-wrap: wrap;

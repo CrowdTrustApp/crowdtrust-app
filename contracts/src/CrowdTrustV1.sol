@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-import "forge-std/console2.sol";
-
 contract CrowdTrustV1 {
     bool private _entered;
 
@@ -13,6 +11,7 @@ contract CrowdTrustV1 {
         _entered = false;
     }
 
+    event Create(uint64 indexed project_id, address indexed owner);
     event Refund(uint64 indexed project_id, address indexed owner, uint256 amount);
     event Back(uint64 indexed project_id, address indexed owner, uint256 amount);
 
@@ -66,6 +65,7 @@ contract CrowdTrustV1 {
         projects[id].goal = goal;
         projects[id].total_pledged = 0;
         next_id += 1;
+        emit Create(id, msg.sender);
         return id;
     }
 

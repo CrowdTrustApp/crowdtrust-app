@@ -2,8 +2,8 @@ use serde::Deserialize;
 use validator::Validate;
 
 use crate::{
-    shared::project::{ProjectCategory, ProjectStatus},
-    type_util::{REGEX_ETH_ADDRESS, REGEX_POSITIVE_NUMBER},
+    shared::project::{BlockchainStatus, ProjectCategory, ProjectStatus},
+    type_util::{REGEX_ETH_ADDRESS, REGEX_ETH_TX, REGEX_POSITIVE_NUMBER},
 };
 
 #[derive(Deserialize, Validate)]
@@ -26,4 +26,7 @@ pub struct UpdateProjectDto {
     pub duration: Option<i64>,
     pub assets_order: Option<Vec<String>>,
     pub rewards_order: Option<Vec<String>>,
+    pub blockchain_status: Option<BlockchainStatus>,
+    #[validate(regex(path = "*REGEX_ETH_TX"))]
+    pub transaction_hash: Option<String>,
 }

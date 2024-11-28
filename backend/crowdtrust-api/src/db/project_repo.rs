@@ -62,6 +62,7 @@ pub struct ProjectUpdateProps {
     pub rewards_order: Option<Vec<String>>,
     pub assets_order: Option<Vec<String>>,
     pub blockchain_status: Option<BlockchainStatus>,
+    pub transaction_hash: Option<String>,
 }
 
 impl ProjectUpdateProps {
@@ -81,6 +82,7 @@ impl ProjectUpdateProps {
             rewards_order: None,
             assets_order: Some(order),
             blockchain_status: None,
+            transaction_hash: None,
         }
     }
 }
@@ -290,6 +292,12 @@ impl ProjectRepoTrait for ProjectRepo {
         let (query, update_count) =
             append_comma(query, "assets_order", props.assets_order, update_count);
 
+        let (query, update_count) = append_comma(
+            query,
+            "transaction_hash",
+            props.transaction_hash,
+            update_count,
+        );
         let (mut query, update_count) = append_comma(
             query,
             "blockchain_status",
