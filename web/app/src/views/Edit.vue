@@ -53,6 +53,11 @@ const routes: IRoute[] = [
     label: ts('rewards'),
     labelClass: 'rewards-tab',
   },
+  {
+    name: 'EditPublish',
+    label: ts('publish'),
+    labelClass: 'publish-tab',
+  },
 ]
 
 onMounted(async () => {

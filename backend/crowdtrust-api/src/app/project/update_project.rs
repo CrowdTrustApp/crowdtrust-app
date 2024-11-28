@@ -85,9 +85,16 @@ pub async fn update_project(
                 return Err(ApiError::bad_request().code(ApiErrorCode::ProjectStart));
             }
         }
-        // Only admin can update status
-        if dto.status.is_some() {
-            return Err(ApiError::forbidden());
+        // User can submit for review, and toggle Prelaunch/Approved status
+        if let Some(status) = dto.status {
+            let prev_status = project_to_be_updated.status.clone();
+            let allowed = (prev_status == ProjectStatus::Initial
+                && status == ProjectStatus::Review)
+                || (prev_status == ProjectStatus::Approved && status == ProjectStatus::Prelaunch)
+                || (prev_status == ProjectStatus::Prelaunch && status == ProjectStatus::Approved);
+            if !allowed {
+                return Err(ApiError::forbidden());
+            }
         }
     }
 
@@ -105,7 +112,8 @@ pub async fn update_project(
         status: dto.status,
         rewards_order: dto.rewards_order,
         assets_order: dto.assets_order,
-        blockchain_status: None,
+        blockchain_status: dto.blockchain_status,
+        transaction_hash: dto.transaction_hash,
     };
 
     // Update project

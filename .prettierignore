@@ -14,4 +14,7 @@ skaffold*.yaml
 
 
 # Auto generated
-web/app/src/util-app/blockchain/crowdtrust-abi.ts
+/web/app/src/util-app/blockchain/crowdtrust-abi.ts
+/contracts/out
+/contracts/lib
+/contracts/broadcast

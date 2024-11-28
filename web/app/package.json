@@ -34,7 +34,7 @@
     "@floating-ui/vue": "^1.1.5",
     "@samatech/fetch-api": "catalog:",
     "@samatech/vue-store": "^0.6.0",
-    "@samatech/vue3-eth": "0.8.0",
+    "@samatech/vue3-eth": "^0.10.1",
     "@vuepic/vue-datepicker": "^10.0.0",
     "date-fns": "^4.1.0",
     "jwt-decode": "^4.0.0",

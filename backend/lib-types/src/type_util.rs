@@ -18,6 +18,7 @@ lazy_static! {
         Regex::new(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$").unwrap();
     pub static ref REGEX_TABLE_NAME: Regex = Regex::new(r"^[a-zA-Z][a-zA-Z0-9_-]{1,99}$").unwrap();
     pub static ref REGEX_ETH_ADDRESS: Regex = Regex::new(r"^(0x)?[0-9a-fA-F]{40}$").unwrap();
+    pub static ref REGEX_ETH_TX: Regex = Regex::new(r"^(0x)?[0-9a-fA-F]{64}$").unwrap();
 }
 
 pub fn is_uuid(str: &str) -> bool {

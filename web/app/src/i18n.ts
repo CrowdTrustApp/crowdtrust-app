@@ -5,6 +5,7 @@ const fallback: I18nObject = {
   future: '<span>The</span>Future<span>of</span>Crowdfunding <span>is Here</span> ',
   start: 'GET STARTED',
   amount: 'Amount',
+  blockchain: 'Blockchain',
   browse: 'BROWSE PROJECTS',
   backed: 'Backed',
   blurb: 'Blurb',
@@ -32,9 +33,12 @@ const fallback: I18nObject = {
   link: 'Link',
   location: 'Location',
   password: 'Password',
+  publish: 'Publish',
+  unpublish: 'Unpublish',
   save: 'Save',
   submit: 'Submit',
   status: 'Status',
+  chain: 'Blockchain',
   view: 'View',
   you_sure: 'Are you sure?',
   not_found: 'Page Not Found',
@@ -91,6 +95,12 @@ const fallback: I18nObject = {
     support: 'Support <span>Innovation</span>',
     support_text:
       'Help bring groundbreaking ideas to life and be part of a global community of forward-thinkers.',
+  },
+  blockchain_status: {
+    None: 'Not submitted',
+    Pending: 'Pending',
+    Error: 'Error',
+    Success: 'Success',
   },
   services: {
     title: 'Our Services',
@@ -250,6 +260,18 @@ const fallback: I18nObject = {
     no_rewards: 'No rewards, click below to create one.',
     new_reward: 'New Reward',
     delete_asset: 'The asset will be deleted forever.',
+    submit_text:
+      'Submit your project for review. If successful, it will automatically be published on your chosen start date.',
+    publish_text:
+      'Project approved! It will be published automatically on the start date. You can choose to make it visible on the site at any time.',
+    review_text: 'Your project is under review.',
+    unpublish_text:
+      'Your project is published. You can hide it from users by un-publishing, it can be shown again at any time.',
+    complete_text: 'The project is complete.',
+    denied_text:
+      'Sorry, your project has been denied. It is still available via smart contract, but cannot be listed on CrowdTrust.',
+    active_text: 'Project active!',
+    end: 'End Date',
   },
   footer: {
     copyright: '© 2024 CrowdTrust - All Rights Reserved.',
@@ -271,6 +293,8 @@ const fallback: I18nObject = {
     password_length: 'Password must be at least 8 characters.',
     name_len: 'Name must be between 2 and 20 characters.',
     bio_len: 'Bio must be less than 400 characters.',
+    no_reward: 'You must set up at least one reward.',
+    no_media: 'You must upload at least one image.',
     confirm_password: 'Passwords do not match.',
     signer: 'Error connecting to MetaMask',
     signature_failed: 'Wallet signature failed',

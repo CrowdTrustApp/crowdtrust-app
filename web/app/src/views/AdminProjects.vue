@@ -20,6 +20,14 @@
           @select="setStatus(row, $event?.value)"
         />
       </template>
+      <template #blockchain="{ row }">
+        <CTMultiselect
+          :value="row.blockchain_status"
+          :placeholder="ts('chain')"
+          :options="blockchainStatuses"
+          @select="setBlockchainStatus(row, $event?.value)"
+        />
+      </template>
     </CTAdminTable>
   </div>
 </template>
@@ -27,6 +35,7 @@
 <script lang="ts" setup>
 import {
   AdminTablePageSize,
+  BlockchainStatus,
   Column,
   IAdminTableAction,
   IAdminTableActionEvent,
@@ -57,6 +66,11 @@ const statuses = Object.entries(ProjectStatus).map(([value, label]) => ({
   value,
 }))
 
+const blockchainStatuses = Object.entries(BlockchainStatus).map(([value, label]) => ({
+  label,
+  value,
+}))
+
 const projectsData: Ref<IAdminProjectsTableData> = ref({
   total: 0,
   page: 1,
@@ -80,8 +94,13 @@ const columns: Column<IAdminProjectRecord>[] = [
   },
   {
     label: ts('status'),
-    width: '10%',
+    width: '5%',
     slot: 'status',
+  },
+  {
+    label: ts('chain'),
+    width: '10%',
+    slot: 'blockchain',
   },
   {
     label: ts('created'),
@@ -123,6 +142,17 @@ const setStatus = async (row: IAdminProjectRecord, newStatus: string | undefined
     const status = newStatus as ProjectStatus
     await apiUpdateProject(row.id, { status })
     row.status = status
+  }
+}
+
+const setBlockchainStatus = async (
+  row: IAdminProjectRecord,
+  newStatus: string | undefined,
+) => {
+  if (newStatus) {
+    const status = newStatus as BlockchainStatus
+    await apiUpdateProject(row.id, { blockchain_status: status })
+    row.blockchain_status = status
   }
 }
 
