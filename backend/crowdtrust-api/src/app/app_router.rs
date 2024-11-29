@@ -81,6 +81,13 @@ pub fn api_router(context: &ApiContext) -> Router<ApiContext> {
             ),
         )
         .route(
+            "/projects/:project_id/actions/back",
+            post(
+                project::back_project::back_project
+                    .layer(from_fn_with_state(context.clone(), auth_admin_user)),
+            ),
+        )
+        .route(
             "/projects/:project_id/rewards",
             post(
                 reward::create_reward::create_reward

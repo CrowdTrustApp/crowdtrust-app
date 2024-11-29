@@ -6,8 +6,10 @@ use const_format::formatcp;
 use lib_api::db::{db_error::DbError, util::append_comma};
 use lib_types::entity::reward_entity::RewardEntity;
 use serde::{Deserialize, Serialize};
-use sqlx::{postgres::PgRow, PgPool, QueryBuilder, Row};
+use sqlx::{postgres::PgRow, PgPool, Postgres, QueryBuilder, Row, Transaction};
 use uuid::Uuid;
+
+use super::app_repo::start_transaction;
 
 pub type DynRewardRepo = Arc<dyn RewardRepoTrait + Send + Sync>;
 
@@ -27,9 +29,23 @@ pub struct RewardUpdateProps {
     pub description: Option<String>,
     pub price: Option<BigDecimal>,
     pub delivery_time: Option<i64>,
-    pub backer_count: Option<BigDecimal>,
+    pub backer_count: Option<i32>,
     pub backer_limit: Option<i64>,
     pub visible: Option<bool>,
+}
+
+impl RewardUpdateProps {
+    pub fn backer_count(backer_count: i32) -> Self {
+        Self {
+            name: None,
+            description: None,
+            price: None,
+            delivery_time: None,
+            backer_count: Some(backer_count),
+            backer_limit: None,
+            visible: None,
+        }
+    }
 }
 
 #[async_trait]
@@ -37,6 +53,12 @@ pub trait RewardRepoTrait {
     fn get_db(&self) -> &PgPool;
     async fn create_reward(&self, props: RewardCreateProps) -> Result<Uuid, DbError>;
     async fn update_reward(&self, id: Uuid, props: RewardUpdateProps) -> Result<(), DbError>;
+    async fn update_reward_tx(
+        &self,
+        tx: &mut Transaction<'_, Postgres>,
+        id: Uuid,
+        props: RewardUpdateProps,
+    ) -> Result<(), DbError>;
     async fn get_reward_by_id(&self, id: Uuid) -> Result<RewardEntity, DbError>;
     async fn delete_reward_by_id(&self, id: Uuid) -> Result<(), DbError>;
 }
@@ -95,6 +117,18 @@ impl RewardRepoTrait for RewardRepo {
     }
 
     async fn update_reward(&self, id: Uuid, props: RewardUpdateProps) -> Result<(), DbError> {
+        let mut tx = start_transaction(&self.db).await?;
+        self.update_reward_tx(&mut tx, id, props).await?;
+        tx.commit().await.map_err(|e| DbError::SqlxError(e))?;
+        Ok(())
+    }
+
+    async fn update_reward_tx(
+        &self,
+        tx: &mut Transaction<'_, Postgres>,
+        id: Uuid,
+        props: RewardUpdateProps,
+    ) -> Result<(), DbError> {
         let query = QueryBuilder::new("UPDATE rewards SET");
         let update_count = 0;
 
@@ -120,10 +154,14 @@ impl RewardRepoTrait for RewardRepo {
         query.push(" WHERE id = ");
         query.push_bind(id);
 
-        query.build().execute(&self.db).await.map_err(|e| match e {
-            sqlx::Error::RowNotFound => DbError::EntityNotFound(),
-            _ => DbError::Query(e.to_string()),
-        })?;
+        query
+            .build()
+            .execute(tx.as_mut())
+            .await
+            .map_err(|e| match e {
+                sqlx::Error::RowNotFound => DbError::EntityNotFound(),
+                _ => DbError::Query(e.to_string()),
+            })?;
 
         Ok(())
     }

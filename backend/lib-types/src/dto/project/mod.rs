@@ -1,3 +1,4 @@
+pub mod back_project_dto;
 pub mod create_project_dto;
 pub mod get_project_dto;
 pub mod list_projects_dto;

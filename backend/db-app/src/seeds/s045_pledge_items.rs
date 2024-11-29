@@ -2,7 +2,10 @@ use std::str::FromStr;
 
 use chrono::Utc;
 use lib_api::db::db_error::DbError;
-use lib_types::{entity::pledge_entity::PledgeItemEntity, shared::project::PaymentCurrency};
+use lib_types::{
+    entity::pledge_entity::PledgeItemEntity,
+    shared::project::{BlockchainStatus, PaymentCurrency},
+};
 use sqlx::PgPool;
 use uuid::Uuid;
 
@@ -19,6 +22,8 @@ pub async fn seed(db: &PgPool) -> Result<(), DbError> {
             quantity: 2,
             paid_price: 50000000000000000i128.into(),
             paid_currency: PaymentCurrency::Ethereum,
+            blockchain_status: BlockchainStatus::None,
+            transaction_hash: None,
             created_at: Utc::now(),
             updated_at: Utc::now(),
         },
@@ -29,6 +34,8 @@ pub async fn seed(db: &PgPool) -> Result<(), DbError> {
             quantity: 1,
             paid_price: 100000000000000000i128.into(),
             paid_currency: PaymentCurrency::Ethereum,
+            blockchain_status: BlockchainStatus::None,
+            transaction_hash: None,
             created_at: Utc::now(),
             updated_at: Utc::now(),
         },
@@ -39,6 +46,22 @@ pub async fn seed(db: &PgPool) -> Result<(), DbError> {
             quantity: 1,
             paid_price: 50000000000000000i128.into(),
             paid_currency: PaymentCurrency::Ethereum,
+            blockchain_status: BlockchainStatus::None,
+            transaction_hash: None,
+            created_at: Utc::now(),
+            updated_at: Utc::now(),
+        },
+        PledgeItemEntity {
+            id: Uuid::from_str("d80c42bf-2cd0-422f-96b9-b78d98f72589").unwrap(),
+            pledge_id: Uuid::from_str("23c0599a-7990-4949-820c-3254079955f2").unwrap(),
+            reward_id: Uuid::from_str("8fe4b678-e9ac-4e1d-b37a-1254ec33656f").unwrap(),
+            quantity: 1,
+            paid_price: 100000000000000000i128.into(),
+            paid_currency: PaymentCurrency::Ethereum,
+            blockchain_status: BlockchainStatus::Success,
+            transaction_hash: Some(
+                "0x123454292f1680730fe8803949c8ddf9fbe8256da1ff86bc9b304b35a3f00000".into(),
+            ),
             created_at: Utc::now(),
             updated_at: Utc::now(),
         },

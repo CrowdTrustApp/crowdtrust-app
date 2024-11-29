@@ -24,6 +24,11 @@ pub struct AppRepo {
     pub reward_asset: DynRewardAssetRepo,
 }
 
+pub async fn start_transaction(db: &PgPool) -> Result<Transaction<'_, Postgres>, DbError> {
+    let transaction = db.begin().await.map_err(|e| DbError::SqlxError(e))?;
+    Ok(transaction)
+}
+
 impl AppRepo {
     pub async fn new(db_url: &str, db_name: &str) -> Result<Self, DbError> {
         let db_url = format!("{}{}", db_url, db_name);
@@ -40,11 +45,8 @@ impl AppRepo {
     }
 
     pub async fn start_transaction(&self) -> Result<Transaction<'_, Postgres>, ApiError> {
-        let transaction = self
-            .db
-            .begin()
+        start_transaction(&self.db)
             .await
-            .map_err(|e| ApiError::internal_error().message(e))?;
-        Ok(transaction)
+            .map_err(|e| ApiError::internal_error().message(e))
     }
 }
