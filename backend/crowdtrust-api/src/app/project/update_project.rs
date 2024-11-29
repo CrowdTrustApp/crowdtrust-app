@@ -108,6 +108,7 @@ pub async fn update_project(
         start_time: dto.start_time,
         duration: dto.duration,
         total_pledged: None,
+        backer_count: None,
         base_currency: None,
         status: dto.status,
         rewards_order: dto.rewards_order,

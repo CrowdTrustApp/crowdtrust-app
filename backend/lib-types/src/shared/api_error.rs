@@ -22,6 +22,8 @@ pub enum ApiErrorCode {
     ProjectDuration,
     ProjectStart,
     ProjectActive,
+    ProjectInactive,
+    UnknownReward,
     RewardDelivery,
     RestrictedStatus,
     SignatureRequired,

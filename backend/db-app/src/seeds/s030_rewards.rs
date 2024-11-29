@@ -75,6 +75,30 @@ pub async fn seed(db: &PgPool) -> Result<(), DbError> {
             created_at: Utc::now(),
             updated_at: Utc::now(),
         },
+        RewardEntityDbProps {
+            id: Uuid::from_str("8fe4b678-e9ac-4e1d-b37a-1254ec33656f").unwrap(),
+            project_id: Uuid::from_str("3e42e273-546d-4989-a97c-f6eb173e8450").unwrap(),
+            name: "Record Player Early".into(),
+            description: "Early bird reward for our advanced vintage record player.".into(),
+            delivery_time: (Utc::now() + Duration::weeks(36)).timestamp(),
+            price: 100000000000000000i128.into(),
+            backer_limit: 2,
+            backer_count: 1,
+            created_at: Utc::now(),
+            updated_at: Utc::now(),
+        },
+        RewardEntityDbProps {
+            id: Uuid::from_str("b63ae027-4c66-496d-87ff-cf610a161309").unwrap(),
+            project_id: Uuid::from_str("3e42e273-546d-4989-a97c-f6eb173e8450").unwrap(),
+            name: "Record Player".into(),
+            description: "Our advanced vintage record player.".into(),
+            delivery_time: (Utc::now() + Duration::weeks(40)).timestamp(),
+            price: 150000000000000000i128.into(),
+            backer_limit: 1000,
+            backer_count: 0,
+            created_at: Utc::now(),
+            updated_at: Utc::now(),
+        },
     ];
 
     Ok(bulk_insert(&db, table, &data).await?)

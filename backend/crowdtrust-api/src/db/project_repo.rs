@@ -14,6 +14,7 @@ use lib_types::{
         sort_direction::SortDirection,
     },
     entity::{
+        pledge_entity::{PledgeEntity, PledgeItemEntity},
         project_entity::{
             ProjectAssetEntityRelation, ProjectEntity, ProjectEntityRelations, ProjectListResults,
         },
@@ -23,8 +24,10 @@ use lib_types::{
 };
 use serde::{Deserialize, Serialize};
 use serde_json::to_string;
-use sqlx::{postgres::PgRow, PgPool, QueryBuilder, Row};
+use sqlx::{postgres::PgRow, PgPool, Postgres, QueryBuilder, Row, Transaction};
 use uuid::Uuid;
+
+use super::app_repo::start_transaction;
 
 pub type DynProjectRepo = Arc<dyn ProjectRepoTrait + Send + Sync>;
 
@@ -56,6 +59,7 @@ pub struct ProjectUpdateProps {
     pub funding_goal: Option<BigDecimal>,
     pub start_time: Option<i64>,
     pub duration: Option<i64>,
+    pub backer_count: Option<i32>,
     pub total_pledged: Option<BigDecimal>,
     pub base_currency: Option<PaymentCurrency>,
     pub status: Option<ProjectStatus>,
@@ -77,6 +81,7 @@ impl ProjectUpdateProps {
             start_time: None,
             duration: None,
             total_pledged: None,
+            backer_count: None,
             base_currency: None,
             status: None,
             rewards_order: None,
@@ -85,6 +90,41 @@ impl ProjectUpdateProps {
             transaction_hash: None,
         }
     }
+    pub fn backed(backer_count: i32, total_pledged: BigDecimal) -> Self {
+        Self {
+            name: None,
+            description: None,
+            blurb: None,
+            payment_address: None,
+            category: None,
+            funding_goal: None,
+            start_time: None,
+            duration: None,
+            total_pledged: Some(total_pledged),
+            backer_count: Some(backer_count),
+            base_currency: None,
+            status: None,
+            rewards_order: None,
+            assets_order: None,
+            blockchain_status: None,
+            transaction_hash: None,
+        }
+    }
+}
+
+#[derive(Debug, Deserialize, Serialize, sqlx::Type)]
+pub struct PledgeCreateProps {
+    pub user_id: Uuid,
+    pub project_id: Uuid,
+    pub pledge_items: Vec<PledgeItemCreateProps>,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize, sqlx::Type)]
+pub struct PledgeItemCreateProps {
+    pub reward_id: Uuid,
+    pub quantity: i32,
+    pub paid_price: BigDecimal,
+    pub paid_currency: PaymentCurrency,
 }
 
 #[async_trait]
@@ -96,6 +136,12 @@ pub trait ProjectRepoTrait {
         id: Uuid,
         props: ProjectUpdateProps,
     ) -> Result<ProjectEntity, DbError>;
+    async fn update_project_tx(
+        &self,
+        tx: &mut Transaction<'_, Postgres>,
+        id: Uuid,
+        props: ProjectUpdateProps,
+    ) -> Result<ProjectEntity, DbError>;
     async fn get_project_by_id(&self, id: Uuid) -> Result<ProjectEntity, DbError>;
     async fn get_project_relations_by_id(
         &self,
@@ -103,6 +149,11 @@ pub trait ProjectRepoTrait {
         all_assets: bool,
     ) -> Result<ProjectEntityRelations, DbError>;
     async fn list_projects(&self, query: ListProjectsQuery) -> Result<ProjectListResults, DbError>;
+    async fn back_project(
+        &self,
+        tx: &mut Transaction<'_, Postgres>,
+        props: PledgeCreateProps,
+    ) -> Result<PledgeEntity, DbError>;
 }
 
 pub struct ProjectRepo {
@@ -198,6 +249,42 @@ fn map_project_list_entity(row: PgRow) -> Result<(ProjectEntity, i64), sqlx::Err
     Ok((entity, count))
 }
 
+const PLEDGE_COLUMNS: &str = formatcp!(
+    r#"{p}.id, {p}.user_id, {p}.project_id, {p}.comment, {p}.created_at, {p}.updated_at"#,
+    p = "pledges"
+);
+
+const PLEDGE_ITEM_COLUMNS: &str = formatcp!(
+    r#"{p}.id, {p}.pledge_id, {p}.reward_id, {p}.quantity, {p}.paid_price, {p}.paid_currency, {p}.blockchain_status, {p}.transaction_hash, {p}.created_at, {p}.updated_at"#,
+    p = "pledge_items"
+);
+
+fn map_pledge_entity(row: PgRow) -> Result<PledgeEntity, sqlx::Error> {
+    Ok(PledgeEntity {
+        id: row.try_get("id")?,
+        user_id: row.try_get("user_id")?,
+        project_id: row.try_get("project_id")?,
+        comment: row.try_get("comment")?,
+        created_at: row.try_get("created_at")?,
+        updated_at: row.try_get("updated_at")?,
+    })
+}
+
+fn map_pledge_item_entity(row: PgRow) -> Result<PledgeItemEntity, sqlx::Error> {
+    Ok(PledgeItemEntity {
+        id: row.try_get("id")?,
+        pledge_id: row.try_get("pledge_id")?,
+        reward_id: row.try_get("reward_id")?,
+        quantity: row.try_get("quantity")?,
+        paid_price: row.try_get("paid_price")?,
+        paid_currency: row.try_get_unchecked("paid_currency")?,
+        blockchain_status: row.try_get_unchecked("blockchain_status")?,
+        transaction_hash: row.try_get("transaction_hash")?,
+        created_at: row.try_get("created_at")?,
+        updated_at: row.try_get("updated_at")?,
+    })
+}
+
 #[async_trait]
 impl ProjectRepoTrait for ProjectRepo {
     fn get_db(&self) -> &PgPool {
@@ -243,6 +330,18 @@ impl ProjectRepoTrait for ProjectRepo {
         id: Uuid,
         props: ProjectUpdateProps,
     ) -> Result<ProjectEntity, DbError> {
+        let mut tx = start_transaction(&self.db).await?;
+        let result = self.update_project_tx(&mut tx, id, props).await?;
+        tx.commit().await.map_err(|e| DbError::SqlxError(e))?;
+        Ok(result)
+    }
+
+    async fn update_project_tx(
+        &self,
+        tx: &mut Transaction<'_, Postgres>,
+        id: Uuid,
+        props: ProjectUpdateProps,
+    ) -> Result<ProjectEntity, DbError> {
         let query = QueryBuilder::new("UPDATE projects SET");
         let update_count = 0;
 
@@ -273,6 +372,8 @@ impl ProjectRepoTrait for ProjectRepo {
 
         let (query, update_count) =
             append_comma(query, "total_pledged", props.total_pledged, update_count);
+        let (query, update_count) =
+            append_comma(query, "backer_count", props.backer_count, update_count);
 
         let (query, update_count) = append_comma(
             query,
@@ -316,7 +417,7 @@ impl ProjectRepoTrait for ProjectRepo {
         Ok(query
             .build()
             .try_map(map_project_entity)
-            .fetch_one(&self.db)
+            .fetch_one(tx.as_mut())
             .await
             .map_err(|e| match e {
                 sqlx::Error::RowNotFound => DbError::EntityNotFound(),
@@ -455,5 +556,54 @@ impl ProjectRepoTrait for ProjectRepo {
         let (results, total) = list_result(results);
 
         Ok(ProjectListResults { total, results })
+    }
+
+    async fn back_project(
+        &self,
+        tx: &mut Transaction<'_, Postgres>,
+        props: PledgeCreateProps,
+    ) -> Result<PledgeEntity, DbError> {
+        let pledge = sqlx::query(formatcp!(
+            // language=PostgreSQL
+            r#"
+              INSERT INTO "pledges" (user_id, project_id)
+              values ($1, $2)
+              RETURNING {}
+            "#,
+            PLEDGE_COLUMNS
+        ))
+        .bind(props.user_id)
+        .bind(props.project_id)
+        .try_map(map_pledge_entity)
+        .fetch_one(tx.as_mut())
+        .await
+        .map_err(|e| match e {
+            _ => DbError::Query(e.to_string()),
+        })?;
+
+        for item in props.pledge_items.into_iter() {
+            sqlx::query(formatcp!(
+                // language=PostgreSQL
+                r#"
+                  INSERT INTO "pledge_items" (pledge_id, reward_id, quantity, paid_price, paid_currency, blockchain_status)
+                  values ($1, $2, $3, $4, $5, $6)
+                  RETURNING {}
+                "#,
+                PLEDGE_ITEM_COLUMNS
+            ))
+            .bind(pledge.id.clone())
+            .bind(item.reward_id)
+            .bind(item.quantity)
+            .bind(item.paid_price)
+            .bind(item.paid_currency.to_string())
+            .bind(BlockchainStatus::None.to_string())
+            .try_map(map_pledge_item_entity)
+            .fetch_one(tx.as_mut())
+            .await
+            .map_err(|e| match e {
+                _ => DbError::Query(e.to_string()),
+            })?;
+        }
+        Ok(pledge)
     }
 }
