@@ -52,6 +52,7 @@ pub struct PledgeUpdateProps {
 pub trait PledgeRepoTrait {
     fn get_db(&self) -> &PgPool;
     async fn get_pledge_by_id(&self, id: Uuid) -> Result<PledgeEntity, DbError>;
+    async fn get_pledge_relations_by_id(&self, id: Uuid) -> Result<PledgeEntityRelations, DbError>;
     async fn update_pledge(
         &self,
         id: Uuid,
@@ -82,7 +83,7 @@ const PLEDGE_ITEM_COLUMNS: &str = formatcp!(
 const PLEDGE_RELATION_COLUMNS: &str = formatcp!(
     r#"{p}, {pi}.id as pi_id, {pi}.pledge_id as pi_pledge_id, {pi}.reward_id as pi_reward_id, {pi}.quantity as pi_quantity, {pi}.paid_price as pi_paid_price, {pi}.paid_currency as pi_paid_currency, {pi}.blockchain_status as pi_blockchain_status, {pi}.transaction_hash as pi_transaction_hash, {pi}.created_at as pi_created_at, {pi}.updated_at as pi_updated_at"#,
     p = PLEDGE_COLUMNS,
-    pi = "pledge_items"
+    pi = "pi"
 );
 
 fn map_pledge_entity(row: PgRow) -> Result<PledgeEntity, sqlx::Error> {
@@ -160,6 +161,32 @@ impl PledgeRepoTrait for PledgeRepo {
         .fetch_one(&self.db)
         .await
         .map_err(map_sqlx_err)?)
+    }
+
+    async fn get_pledge_relations_by_id(&self, id: Uuid) -> Result<PledgeEntityRelations, DbError> {
+        let rows = sqlx::query(formatcp!(
+            "SELECT {} FROM \"pledges\" pledges
+            LEFT OUTER JOIN pledge_items pi on pi.pledge_id = pledges.id
+            WHERE pledges.id = $1",
+            PLEDGE_RELATION_COLUMNS
+        ))
+        .bind(id)
+        .fetch_all(&self.db)
+        .await
+        .map_err(map_sqlx_err)?;
+        let mut row_iter = rows.into_iter();
+
+        let first = (&mut row_iter)
+            .take(1)
+            .nth(0)
+            .ok_or(DbError::EntityNotFound())?;
+        let mut pledge = map_pledge_relation_entity(first)?;
+        for item in row_iter {
+            pledge
+                .pledge_items
+                .push(map_pledge_item_entity_relation(&item)?);
+        }
+        Ok(pledge)
     }
 
     async fn update_pledge(
@@ -283,11 +310,11 @@ impl PledgeRepoTrait for PledgeRepo {
         let direction = query.direction.unwrap_or(SortDirection::Desc);
 
         filtered_query.push(
-            ") as pledges LEFT OUTER JOIN \"pledge_items\" on pledge_items.pledge_id = pledges.id",
+            ") as pledges LEFT OUTER JOIN \"pledge_items\" pi on pledge_items.pledge_id = pledges.id",
         );
 
         filtered_query
-            .push(" GROUP BY pledges.id, pledges.user_id, pledges.project_id, pledges.comment, pledges.created_at, pledges.count, pledges.updated_at, pledge_items.id");
+            .push(" GROUP BY pledges.id, pledges.user_id, pledges.project_id, pledges.comment, pledges.created_at, pledges.count, pledges.updated_at, pi.id");
         filtered_query = append_order_by(filtered_query, column, direction.to_string());
         filtered_query = append_limit_offset(filtered_query, query.from, query.to);
 
