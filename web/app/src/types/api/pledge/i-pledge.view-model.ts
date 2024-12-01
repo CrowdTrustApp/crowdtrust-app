@@ -1,5 +1,4 @@
-import { BlockchainStatus } from './enum-blockchain-status'
-import { PaymentCurrency } from './enum-payment-currency'
+import { BlockchainStatus, PaymentCurrency } from '../project'
 
 export interface IPledgeViewModel {
   id: string

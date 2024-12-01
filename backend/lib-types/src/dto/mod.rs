@@ -1,4 +1,5 @@
 pub mod auth;
+pub mod pledge;
 pub mod project;
 pub mod project_asset;
 pub mod reward;

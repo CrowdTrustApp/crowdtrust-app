@@ -7,6 +7,7 @@ use lib_api::{
 use sqlx::{PgPool, Postgres, Transaction};
 
 use super::{
+    pledge_repo::{DynPledgeRepo, PledgeRepo},
     project_asset_repo::{DynProjectAssetRepo, ProjectAssetRepo},
     project_repo::{DynProjectRepo, ProjectRepo},
     reward_asset_repo::{DynRewardAssetRepo, RewardAssetRepo},
@@ -22,6 +23,7 @@ pub struct AppRepo {
     pub project_asset: DynProjectAssetRepo,
     pub reward: DynRewardRepo,
     pub reward_asset: DynRewardAssetRepo,
+    pub pledge: DynPledgeRepo,
 }
 
 pub async fn start_transaction(db: &PgPool) -> Result<Transaction<'_, Postgres>, DbError> {
@@ -41,6 +43,7 @@ impl AppRepo {
             project_asset: Arc::new(ProjectAssetRepo { db: db.clone() }) as DynProjectAssetRepo,
             reward: Arc::new(RewardRepo { db: db.clone() }) as DynRewardRepo,
             reward_asset: Arc::new(RewardAssetRepo { db: db.clone() }) as DynRewardAssetRepo,
+            pledge: Arc::new(PledgeRepo { db: db.clone() }) as DynPledgeRepo,
         })
     }
 

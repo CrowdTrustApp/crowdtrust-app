@@ -8,6 +8,7 @@ pub mod app_router;
 pub mod auth;
 pub mod health;
 pub mod helpers;
+pub mod pledge;
 pub mod project;
 pub mod project_asset;
 pub mod reward;

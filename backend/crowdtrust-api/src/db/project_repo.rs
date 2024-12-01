@@ -14,7 +14,6 @@ use lib_types::{
         sort_direction::SortDirection,
     },
     entity::{
-        pledge_entity::{PledgeEntity, PledgeItemEntity},
         project_entity::{
             ProjectAssetEntityRelation, ProjectEntity, ProjectEntityRelations, ProjectListResults,
         },
@@ -112,21 +111,6 @@ impl ProjectUpdateProps {
     }
 }
 
-#[derive(Debug, Deserialize, Serialize, sqlx::Type)]
-pub struct PledgeCreateProps {
-    pub user_id: Uuid,
-    pub project_id: Uuid,
-    pub pledge_items: Vec<PledgeItemCreateProps>,
-}
-
-#[derive(Debug, Clone, Deserialize, Serialize, sqlx::Type)]
-pub struct PledgeItemCreateProps {
-    pub reward_id: Uuid,
-    pub quantity: i32,
-    pub paid_price: BigDecimal,
-    pub paid_currency: PaymentCurrency,
-}
-
 #[async_trait]
 pub trait ProjectRepoTrait {
     fn get_db(&self) -> &PgPool;
@@ -149,11 +133,6 @@ pub trait ProjectRepoTrait {
         all_assets: bool,
     ) -> Result<ProjectEntityRelations, DbError>;
     async fn list_projects(&self, query: ListProjectsQuery) -> Result<ProjectListResults, DbError>;
-    async fn back_project(
-        &self,
-        tx: &mut Transaction<'_, Postgres>,
-        props: PledgeCreateProps,
-    ) -> Result<PledgeEntity, DbError>;
 }
 
 pub struct ProjectRepo {
@@ -247,42 +226,6 @@ fn map_project_list_entity(row: PgRow) -> Result<(ProjectEntity, i64), sqlx::Err
     let count = row.try_get("count")?;
     let entity = map_project_entity(row)?;
     Ok((entity, count))
-}
-
-const PLEDGE_COLUMNS: &str = formatcp!(
-    r#"{p}.id, {p}.user_id, {p}.project_id, {p}.comment, {p}.created_at, {p}.updated_at"#,
-    p = "pledges"
-);
-
-const PLEDGE_ITEM_COLUMNS: &str = formatcp!(
-    r#"{p}.id, {p}.pledge_id, {p}.reward_id, {p}.quantity, {p}.paid_price, {p}.paid_currency, {p}.blockchain_status, {p}.transaction_hash, {p}.created_at, {p}.updated_at"#,
-    p = "pledge_items"
-);
-
-fn map_pledge_entity(row: PgRow) -> Result<PledgeEntity, sqlx::Error> {
-    Ok(PledgeEntity {
-        id: row.try_get("id")?,
-        user_id: row.try_get("user_id")?,
-        project_id: row.try_get("project_id")?,
-        comment: row.try_get("comment")?,
-        created_at: row.try_get("created_at")?,
-        updated_at: row.try_get("updated_at")?,
-    })
-}
-
-fn map_pledge_item_entity(row: PgRow) -> Result<PledgeItemEntity, sqlx::Error> {
-    Ok(PledgeItemEntity {
-        id: row.try_get("id")?,
-        pledge_id: row.try_get("pledge_id")?,
-        reward_id: row.try_get("reward_id")?,
-        quantity: row.try_get("quantity")?,
-        paid_price: row.try_get("paid_price")?,
-        paid_currency: row.try_get_unchecked("paid_currency")?,
-        blockchain_status: row.try_get_unchecked("blockchain_status")?,
-        transaction_hash: row.try_get("transaction_hash")?,
-        created_at: row.try_get("created_at")?,
-        updated_at: row.try_get("updated_at")?,
-    })
 }
 
 #[async_trait]
@@ -556,54 +499,5 @@ impl ProjectRepoTrait for ProjectRepo {
         let (results, total) = list_result(results);
 
         Ok(ProjectListResults { total, results })
-    }
-
-    async fn back_project(
-        &self,
-        tx: &mut Transaction<'_, Postgres>,
-        props: PledgeCreateProps,
-    ) -> Result<PledgeEntity, DbError> {
-        let pledge = sqlx::query(formatcp!(
-            // language=PostgreSQL
-            r#"
-              INSERT INTO "pledges" (user_id, project_id)
-              values ($1, $2)
-              RETURNING {}
-            "#,
-            PLEDGE_COLUMNS
-        ))
-        .bind(props.user_id)
-        .bind(props.project_id)
-        .try_map(map_pledge_entity)
-        .fetch_one(tx.as_mut())
-        .await
-        .map_err(|e| match e {
-            _ => DbError::Query(e.to_string()),
-        })?;
-
-        for item in props.pledge_items.into_iter() {
-            sqlx::query(formatcp!(
-                // language=PostgreSQL
-                r#"
-                  INSERT INTO "pledge_items" (pledge_id, reward_id, quantity, paid_price, paid_currency, blockchain_status)
-                  values ($1, $2, $3, $4, $5, $6)
-                  RETURNING {}
-                "#,
-                PLEDGE_ITEM_COLUMNS
-            ))
-            .bind(pledge.id.clone())
-            .bind(item.reward_id)
-            .bind(item.quantity)
-            .bind(item.paid_price)
-            .bind(item.paid_currency.to_string())
-            .bind(BlockchainStatus::None.to_string())
-            .try_map(map_pledge_item_entity)
-            .fetch_one(tx.as_mut())
-            .await
-            .map_err(|e| match e {
-                _ => DbError::Query(e.to_string()),
-            })?;
-        }
-        Ok(pledge)
     }
 }

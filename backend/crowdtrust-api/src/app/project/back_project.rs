@@ -20,7 +20,8 @@ use validator::Validate;
 
 use crate::api_context::ApiContext;
 use crate::app::helpers::get_request_user;
-use crate::db::project_repo::{PledgeCreateProps, PledgeItemCreateProps, ProjectUpdateProps};
+use crate::db::pledge_repo::{PledgeCreateProps, PledgeItemCreateProps};
+use crate::db::project_repo::ProjectUpdateProps;
 use crate::db::reward_repo::RewardUpdateProps;
 
 use super::helpers::verify_project_exist_relations;
@@ -88,15 +89,13 @@ pub async fn back_project(
 
     let mut tx = context.repo.start_transaction().await?;
 
-    println!("BACK1");
     let pledge_result = context
         .repo
-        .project
+        .pledge
         .back_project(&mut tx, props)
         .await
         .map_err(err_fail)?;
 
-    println!("BACK2");
     context
         .repo
         .project
@@ -108,7 +107,6 @@ pub async fn back_project(
         .await
         .map_err(err_fail)?;
 
-    println!("BACK3");
     for pledge_item in pledge_items.into_iter() {
         let count = project
             .rewards
@@ -130,7 +128,6 @@ pub async fn back_project(
             .await
             .map_err(err_fail)?;
     }
-    println!("BACK4");
 
     commit_or_rollback(tx, Ok(())).await?;
 
