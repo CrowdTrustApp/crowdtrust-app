@@ -64,9 +64,17 @@ describe('List Pledges', () => {
         .expect(200)
 
       const body: IListPledgesApiResponse = response.body
+      const pledges = body.results
 
       expect(body.total).toEqual(1)
-      expect(body.results[0].id).toEqual('8e766cf6-c74a-4263-9974-4a0c201b728c')
+      expect(pledges[0].id).toEqual('8e766cf6-c74a-4263-9974-4a0c201b728c')
+      expect(pledges[0].pledge_items).toHaveLength(2)
+      expect(pledges[0].pledge_items[0].id).toEqual(
+        'bccc7f22-d8c9-4bef-adbc-e0804def90e6',
+      )
+      expect(pledges[0].pledge_items[1].id).toEqual(
+        'd028c7c7-2422-4864-b8be-5d24071f89f3',
+      )
     })
 
     test('filters by project_id', async () => {

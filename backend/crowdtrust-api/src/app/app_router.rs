@@ -101,10 +101,9 @@ pub fn api_router(context: &ApiContext) -> Router<ApiContext> {
         )
         .route(
             "/pledges/:pledge_id",
-            patch(
-                pledge::update_pledge::update_pledge
-                    .layer(from_fn_with_state(context.clone(), auth_admin_user)),
-            ),
+            patch(pledge::update_pledge::update_pledge)
+                .get(pledge::get_pledge::get_pledge)
+                .route_layer(from_fn_with_state(context.clone(), auth_admin_user)),
         )
         .route(
             "/rewards/:reward_id",

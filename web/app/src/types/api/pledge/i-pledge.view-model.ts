@@ -9,6 +9,16 @@ export interface IPledgeViewModel {
   updated_at: Date
 }
 
+export interface IGetPledgeViewModel {
+  id: string
+  project_id: string
+  user_id: string
+  comment: string
+  pledge_items: IPledgeItemViewModel[]
+  created_at: Date
+  updated_at: Date
+}
+
 export interface IPledgeItemViewModel {
   id: string
   pledge_id: string
