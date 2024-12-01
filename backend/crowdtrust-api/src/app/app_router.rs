@@ -12,7 +12,7 @@ use axum::{
     Router,
 };
 
-use super::{health, project_asset, reward, reward_asset};
+use super::{health, pledge, project_asset, reward, reward_asset};
 
 pub fn app_router(context: &ApiContext) -> Router<ApiContext> {
     Router::new().nest("/api", api_router(context))
@@ -91,6 +91,18 @@ pub fn api_router(context: &ApiContext) -> Router<ApiContext> {
             "/projects/:project_id/rewards",
             post(
                 reward::create_reward::create_reward
+                    .layer(from_fn_with_state(context.clone(), auth_admin_user)),
+            ),
+        )
+        .route(
+            "/pledges",
+            get(pledge::list_pledges::list_pledges
+                .layer(from_fn_with_state(context.clone(), auth_admin_user))),
+        )
+        .route(
+            "/pledges/:pledge_id",
+            patch(
+                pledge::update_pledge::update_pledge
                     .layer(from_fn_with_state(context.clone(), auth_admin_user)),
             ),
         )
