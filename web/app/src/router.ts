@@ -138,6 +138,11 @@ const router = createRouter({
           component: () => import('./views/Project.vue'),
         },
         {
+          path: '/project/:id/checkout',
+          name: 'Checkout',
+          component: () => import('./views/Checkout.vue'),
+        },
+        {
           path: '/create',
           meta: metaAuth('Create'),
           name: 'Create',

@@ -309,9 +309,8 @@ impl PledgeRepoTrait for PledgeRepo {
             .map_err(|e| DbError::Serialize(e.to_string()))?;
         let direction = query.direction.unwrap_or(SortDirection::Desc);
 
-        filtered_query.push(
-            ") as pledges LEFT OUTER JOIN \"pledge_items\" pi on pledge_items.pledge_id = pledges.id",
-        );
+        filtered_query
+            .push(") as pledges LEFT OUTER JOIN \"pledge_items\" pi on pi.pledge_id = pledges.id");
 
         filtered_query
             .push(" GROUP BY pledges.id, pledges.user_id, pledges.project_id, pledges.comment, pledges.created_at, pledges.count, pledges.updated_at, pi.id");
