@@ -68,6 +68,8 @@ const fallback: I18nObject = {
   start2: 'Get Started >',
   learn: 'LEARN MORE',
   about: 'About Us >',
+  pay: 'Pay',
+  total: 'Total',
   get_started: 'Get Started with CrowdTrust Today',
   start_text:
     'Whether you’re a creator or a backer, CrowdTrust is your gateway to a secure, innovative, and successful crowdfunding experience. Join us and be part of the future of crowdfunding.',
@@ -233,6 +235,7 @@ const fallback: I18nObject = {
     detail: 'Project Details',
     delivery: 'Estimated Delivery',
     no_rewards: 'No rewards',
+    add_reward: 'Add Reward',
     status: {
       Initial: 'Initial',
       Review: 'Review',
@@ -272,6 +275,15 @@ const fallback: I18nObject = {
       'Sorry, your project has been denied. It is still available via smart contract, but cannot be listed on CrowdTrust.',
     active_text: 'Project active!',
     end: 'End Date',
+  },
+  checkout: {
+    no: 'No items in cart. Add a reward below or return to the project page.',
+    all_rewards: 'All project rewards',
+    to_project: 'Return to project',
+    payment: 'Payment Status',
+    payment_synced:
+      'Payment has been recorded to the blockchain. If you add or remove rewards, you need to return here to adjust payment.',
+    payment_text: 'Pay for your rewards here with Ethereum. MetaMask required.',
   },
   footer: {
     copyright: '© 2024 CrowdTrust - All Rights Reserved.',

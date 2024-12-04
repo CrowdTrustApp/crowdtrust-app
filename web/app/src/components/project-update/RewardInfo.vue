@@ -19,7 +19,7 @@
         <CTTextArea
           v-model="description.text.value"
           :suffix="description.suffix.value"
-          rows="10"
+          rows="3"
           :label="ts('description')"
           class="edit-input"
         />

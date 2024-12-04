@@ -1,32 +1,17 @@
 <template>
   <div class="project-rewards">
-    <div v-if="rewards.length" class="rewards-wrap">
-      <div v-for="reward in rewards" class="reward">
-        <img :src="urlFromAsset(reward.image)" class="reward-image" />
-        <div class="reward-content">
-          <div class="reward-text">
-            <div class="reward-top">
-              <div class="name">
-                {{ reward.name }}
-              </div>
-              <div class="price">
-                {{ price(reward.price) }}
-              </div>
-            </div>
-            <div class="description">
-              {{ reward.description }}
-            </div>
-          </div>
-          <div class="delivery">
-            <div class="delivery-text">
-              {{ ts('project.delivery') }}
-            </div>
-            <div class="time">
-              {{ delivery(reward.delivery_time) }}
-            </div>
-          </div>
-        </div>
+    <router-link :to="{ name: 'Checkout', params: { id: projectId } }" class="cart-wrap">
+      <div v-if="cartCount" class="cart-quantity" :class="{ matches: cartMatchesPledge }">
+        {{ cartCount }}
       </div>
+      <Cart class="cart-icon" />
+    </router-link>
+    <div v-if="rewards.length" class="rewards-wrap">
+      <ProjectReward
+        v-for="reward in rewards"
+        :reward="reward"
+        @addReward="addReward(reward.id)"
+      />
     </div>
     <div v-else class="rewards-empty">
       {{ ts('project.no_rewards') }}
@@ -35,22 +20,34 @@
 </template>
 
 <script lang="ts" setup>
-import { IRewardViewModel } from '@app/types'
-import { toEthDisplay } from '@samatech/vue3-eth'
+import { computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { store } from '@app/store'
+import { IGetPledgeViewModel, IRewardViewModel } from '@app/types'
 import { ts } from '../../i18n'
-import { format } from 'date-fns'
-import { urlFromAsset } from '@app/util'
+import Cart from '../svg/Cart.vue'
+import ProjectReward from './ProjectReward.vue'
+import { compareCartPledge } from '@app/features'
 
-defineProps<{
+const router = useRouter()
+
+const { pledge, projectId } = defineProps<{
   rewards: IRewardViewModel[]
+  pledge: IGetPledgeViewModel | undefined
+  projectId: string
 }>()
 
-const price = (wei: string): string => {
-  return `${toEthDisplay(wei)} ETH`
-}
+const cartCount = computed(() => {
+  return store.cart.projects.value[projectId]?.items?.length ?? 0
+})
 
-const delivery = (time: number): string => {
-  return format(new Date(time * 1000), 'LLL yyyy')
+const cartMatchesPledge = computed(() => {
+  return compareCartPledge(projectId, pledge)
+})
+
+const addReward = (rewardId: string) => {
+  store.cart.addItem(projectId, rewardId, 1)
+  router.push({ name: 'Checkout', params: { id: projectId } })
 }
 </script>
 
@@ -60,65 +57,41 @@ const delivery = (time: number): string => {
 .project-rewards {
   display: flex;
   align-items: flex-start;
+  width: 100%;
+  position: relative;
+  padding-right: 48px;
+  border-bottom: 1px solid $border1;
 }
 .rewards-wrap {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   border-bottom: 1px solid $border1;
-  padding: 0 0 32px;
+  padding: 0 0 32px 0;
+}
+.cart-wrap {
+  position: absolute;
+  right: 0;
+  top: 24px;
+  cursor: pointer;
+  user-select: none;
+}
+.cart-icon {
+  @mixin size 28px;
+}
+.cart-quantity {
+  @mixin title 15px;
+  text-align: center;
+  color: $red;
+  &.matches {
+    color: $primary;
+  }
 }
 .rewards-empty {
   @mixin semibold 24px;
   padding: 48px 0 40px;
   text-align: center;
-  color: $text-light;
-  border-bottom: 1px solid $border1;
-}
-.reward {
-  width: calc(25% - 12px);
-  max-width: 240px;
-  min-width: 220px;
-  margin-top: 24px;
-  color: $text2;
-  &:not(:first-child) {
-    margin-left: 16px;
-  }
-}
-.reward-image {
   width: 100%;
-  height: 140px;
-  background-color: #bec2c4;
-  object-fit: cover;
-}
-.reward-content {
-  padding: 6px 8px;
-}
-.reward-top {
-  @mixin bold 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.price {
-  margin-left: 8px;
-  font-size: 14px;
-}
-.reward-text {
-  height: 80px;
-}
-.description {
-  @mixin text 14px;
-  line-height: 120%;
-  margin-top: 4px;
-}
-.delivery-text {
-  @mixin semibold 12px;
-  color: $text-light2;
-  margin-top: 4px;
-}
-.time {
-  @mixin medium 14px;
-  margin-top: 2px;
+  color: $text-light;
 }
 </style>
