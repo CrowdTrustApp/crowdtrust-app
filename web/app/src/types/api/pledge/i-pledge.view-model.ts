@@ -15,6 +15,8 @@ export interface IGetPledgeViewModel {
   user_id: string
   comment: string
   pledge_items: IPledgeItemViewModel[]
+  blockchain_status: BlockchainStatus
+  transaction_hash?: string
   created_at: Date
   updated_at: Date
 }
@@ -26,8 +28,6 @@ export interface IPledgeItemViewModel {
   quantity: number
   paid_price: string
   paid_currency: PaymentCurrency
-  blockchain_status: BlockchainStatus
-  transaction_hash?: string
   created_at: Date
   updated_at: Date
 }

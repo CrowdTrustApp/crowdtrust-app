@@ -14,6 +14,8 @@ pub struct PledgeViewModel {
     pub project_id: Uuid,
     pub user_id: Uuid,
     pub comment: String,
+    pub blockchain_status: BlockchainStatus,
+    pub transaction_hash: Option<String>,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
 }
@@ -25,6 +27,8 @@ pub struct GetPledgeViewModel {
     pub user_id: Uuid,
     pub comment: String,
     pub pledge_items: Vec<PledgeItemViewModel>,
+    pub blockchain_status: BlockchainStatus,
+    pub transaction_hash: Option<String>,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
 }
@@ -37,8 +41,6 @@ pub struct PledgeItemViewModel {
     pub quantity: i32,
     pub paid_price: String,
     pub paid_currency: PaymentCurrency,
-    pub blockchain_status: BlockchainStatus,
-    pub transaction_hash: Option<String>,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
 }
@@ -49,6 +51,8 @@ pub fn to_api_response(entity: PledgeEntity) -> PledgeViewModel {
         project_id: entity.project_id,
         user_id: entity.user_id,
         comment: entity.comment,
+        blockchain_status: entity.blockchain_status,
+        transaction_hash: entity.transaction_hash,
         created_at: entity.created_at,
         updated_at: entity.updated_at,
     };
@@ -62,8 +66,6 @@ fn pledge_item_api_response(entity: PledgeItemEntity) -> PledgeItemViewModel {
         quantity: entity.quantity,
         paid_price: serialize_big(&entity.paid_price),
         paid_currency: entity.paid_currency,
-        blockchain_status: entity.blockchain_status,
-        transaction_hash: entity.transaction_hash,
         created_at: entity.created_at,
         updated_at: entity.updated_at,
     }
@@ -80,6 +82,8 @@ pub fn to_api_response_relations(entity: PledgeEntityRelations) -> GetPledgeView
             .into_iter()
             .map(pledge_item_api_response)
             .collect(),
+        blockchain_status: entity.blockchain_status,
+        transaction_hash: entity.transaction_hash,
         created_at: entity.created_at,
         updated_at: entity.updated_at,
     };

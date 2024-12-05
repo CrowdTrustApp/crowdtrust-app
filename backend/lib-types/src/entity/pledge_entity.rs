@@ -11,6 +11,8 @@ pub struct PledgeEntity {
     pub project_id: Uuid,
     pub user_id: Uuid,
     pub comment: String,
+    pub blockchain_status: BlockchainStatus,
+    pub transaction_hash: Option<String>,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
 }
@@ -22,6 +24,8 @@ pub struct PledgeEntityRelations {
     pub user_id: Uuid,
     pub comment: String,
     pub pledge_items: Vec<PledgeItemEntity>,
+    pub blockchain_status: BlockchainStatus,
+    pub transaction_hash: Option<String>,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
 }
@@ -34,8 +38,6 @@ pub struct PledgeItemEntity {
     pub quantity: i32,
     pub paid_price: BigDecimal,
     pub paid_currency: PaymentCurrency,
-    pub blockchain_status: BlockchainStatus,
-    pub transaction_hash: Option<String>,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
 }

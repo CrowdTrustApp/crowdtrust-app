@@ -10,7 +10,7 @@
           @decrement="decreaseQuantity(cartReward.reward.id)"
         />
       </div>
-      <CartPayment :cartRewards="cartRewards" :synced="cartMatchesPledge" />
+      <CartPayment :cartRewards="cartRewards" :synced="cartMatchesPledge" @pay="pay" />
     </div>
     <div v-else class="cart-empty f-center-col">
       <div class="empty-text">
@@ -20,11 +20,17 @@
         <CTButton :text="ts('go_back')" class="back-button" />
       </router-link>
     </div>
+    <AlertModal
+      :show="showPayModal"
+      title="Back Project"
+      text="Backing is currently disabled. Please check back in a few days."
+      @done="showPayModal = false"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { IProjectViewModel } from '@app/types'
 import { compareCartPledge, IGetPledgeParams } from '@app/features'
 import { store } from '@app/store'
@@ -33,11 +39,14 @@ import { ts } from '../../i18n'
 import CTButton from '../widgets/CTButton.vue'
 import { ICartReward } from './i-cart-reward'
 import CartPayment from './CartPayment.vue'
+import AlertModal from '../widgets/AlertModal.vue'
 
 const { project, pledgeState } = defineProps<{
   project: IProjectViewModel
   pledgeState: IGetPledgeParams
 }>()
+
+const showPayModal = ref(false)
 
 const cartRewards = computed(() => {
   const rewards: ICartReward[] = []
@@ -72,6 +81,10 @@ const decreaseQuantity = (rewardId: string) => {
     store.cart.removeItem(project.id, rewardId)
   }
 }
+
+const pay = () => {
+  showPayModal.value = true
+}
 </script>
 
 <style lang="postcss" scoped>
@@ -85,6 +98,7 @@ const decreaseQuantity = (rewardId: string) => {
 }
 .cart-content {
   width: 70%;
+  padding-right: 8px;
 }
 :deep(.cart-payment) {
   width: 30%;
@@ -97,5 +111,23 @@ const decreaseQuantity = (rewardId: string) => {
 }
 .back-button {
   margin-top: 16px;
+}
+@media (max-width: 720px) {
+  .cart-wrap {
+    padding-right: 0;
+  }
+  .cart {
+    flex-direction: column;
+    align-items: center;
+  }
+  .cart-content {
+    width: 100%;
+    max-width: 440px;
+    padding: 0;
+  }
+  :deep(.cart-payment) {
+    width: 100%;
+    max-width: 360px;
+  }
 }
 </style>

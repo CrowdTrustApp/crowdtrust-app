@@ -15,7 +15,7 @@
       </div>
       <div class="total">{{ total }}<span>ETH</span></div>
     </div>
-    <CTButton :text="ts('pay')" class="pay-button" />
+    <CTButton :text="ts('pay')" class="pay-button" @click="emit('pay')" />
   </div>
 </template>
 
@@ -29,6 +29,9 @@ import CTButton from '../widgets/CTButton.vue'
 const { cartRewards } = defineProps<{
   cartRewards: ICartReward[]
   synced: boolean
+}>()
+const emit = defineEmits<{
+  (e: 'pay'): void
 }>()
 
 const total = computed(() => {
