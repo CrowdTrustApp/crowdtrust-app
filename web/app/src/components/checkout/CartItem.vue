@@ -106,4 +106,26 @@ const delivery = (time: number): string => {
 .minus {
   margin-top: 3px;
 }
+@media (max-width: 720px) {
+  .cart-reward {
+    height: 80px;
+    padding: 4px 0;
+  }
+  .item-image {
+    width: 48px;
+    height: 48px;
+  }
+  .name {
+    padding: 0 12px 0 0;
+    min-width: unset;
+    font-size: 14px;
+  }
+  .price {
+    font-size: 13px;
+    margin-left: 4px;
+  }
+  .delivery {
+    margin-left: 4px;
+  }
+}
 </style>

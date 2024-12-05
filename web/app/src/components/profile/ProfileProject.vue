@@ -5,7 +5,7 @@
   >
     <div class="project-card">
       <div class="image-wrap">
-        <img :src="getMainImage(project)" />
+        <img :src="urlFromAsset(project.assets?.[0]) || getMainImage(project)" />
         <div class="image-overlay overlay f-center-col">
           <div class="button1 view-button">
             {{ ts(edit ? 'edit' : 'view') }}
@@ -53,7 +53,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { toEthDisplay } from '@samatech/vue3-eth'
-import { getMainImage, getProgress } from '@app/util'
+import { getMainImage, urlFromAsset, getProgress } from '@app/util'
 import { IProjectViewModel } from '@app/types'
 import { ts } from '../../i18n'
 

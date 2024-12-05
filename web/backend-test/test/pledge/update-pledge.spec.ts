@@ -1,6 +1,6 @@
 import {
   BlockchainStatus,
-  IGetProjectApiResponse,
+  IListPledgesApiResponse,
   IUpdatePledgeApiRequest,
 } from '@app/types'
 import {
@@ -32,28 +32,29 @@ describe('Update Pledge', () => {
   beforeEach(async () => {
     await dbResetService.resetDb()
     adminAuth = adminAuthHeader()
-    userAuth = userAuthHeader('45013993-2a1a-4ee5-8dbd-b4b63d9af34f')
+    userAuth = userAuthHeader('00e8ee0b-843b-43e7-84c1-6d7a64cd5cfd')
     projectId = '14bfe82a-1003-446b-b6bb-20a176e848e0'
-    pledgeId = '950d06e5-8c8b-4060-a6e4-7a676fbc223e'
+    pledgeId = 'ac69089a-fbe6-4879-bbb2-ced6446092c0'
   })
 
   const verifyPledge = async (projectId: string, pledgeId: string, auth: string) => {
     const response = await api
-      .get(`/api/projects/${projectId}`)
+      .get('/api/pledges')
+      .query({ project_id: projectId })
       .set('Authorization', auth)
       .expect(200)
 
-    const body: IGetProjectApiResponse = response.body
-    const pledge = body.pledges.find((r) => r.id === pledgeId)
+    const body: IListPledgesApiResponse = response.body
+    const pledge = body.results.find((r) => r.id === pledgeId)
     expect(pledge).toBeDefined()
     if (payload.comment) {
-      expect(pledge?.name).toEqual(payload.comment)
+      expect(pledge?.comment).toEqual(payload.comment)
     }
     if (payload.blockchain_status) {
-      expect(pledge?.description).toEqual(payload.blockchain_status)
+      expect(pledge?.blockchain_status).toEqual(payload.blockchain_status)
     }
     if (payload.transaction_hash) {
-      expect(pledge?.price).toEqual(payload.transaction_hash)
+      expect(pledge?.transaction_hash).toEqual(payload.transaction_hash)
     }
   }
 
@@ -102,7 +103,7 @@ describe('Update Pledge', () => {
         .send(payload)
         .expect(200)
 
-      await verifyPledge(projectId, pledgeId, userAuth)
+      await verifyPledge(projectId, pledgeId, adminAuth)
     })
 
     test('return 400 when blockchain_status is invalid', async () => {
@@ -113,8 +114,8 @@ describe('Update Pledge', () => {
         .set('Authorization', userAuth)
         .send(payload)
         .expect(400, {
-          code: 'PledgeDelivery',
-          message: 'Failed to validate request',
+          code: 'InvalidFormData',
+          message: 'Failed to deserialize the JSON body into the target type',
           status: 400,
         })
     })
@@ -129,7 +130,7 @@ describe('Update Pledge', () => {
         .set('Authorization', userAuth)
         .send(payload)
         .expect(400, {
-          code: 'PledgeDelivery',
+          code: 'InvalidFormData',
           message: 'Failed to validate request',
           status: 400,
         })

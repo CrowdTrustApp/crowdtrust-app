@@ -286,50 +286,52 @@ watch(pageSize, changePageSize)
       padding-left: 24px;
     }
   }
-  .ct-admin-table-th-content {
-    @mixin semibold 14px;
+}
+.ct-admin-table-th-content {
+  @mixin semibold 14px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-transform: uppercase;
+  .ct-admin-table-th-order {
+    cursor: pointer;
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    text-transform: uppercase;
-    .ct-admin-table-th-order {
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      margin-left: 8px;
-      .order-up {
-        transform: rotate(180deg);
-      }
-      svg {
-        width: 9px;
-        line {
-          stroke: $primary;
-        }
-      }
-      .order.active line {
-        stroke: $blue2;
+    flex-direction: column;
+    margin-left: 8px;
+    .order-up {
+      transform: rotate(180deg);
+    }
+    svg {
+      width: 9px;
+      line {
+        stroke: $primary;
       }
     }
-  }
-  .ct-admin-table-td {
-    @mixin text 13px;
-    padding: 12px;
-    border-top: 1px solid $border1;
-    background-color: white;
-    &--actions {
-      width: 10%;
-      text-align: right;
-    }
-    :deep(.dropdown-menu-items-wrap) {
-      right: 24px;
-      top: 40px;
-    }
-    &:first-of-type {
-      padding-left: 20px;
-      padding-right: 16px;
+    .order.active line {
+      stroke: $blue2;
     }
   }
 }
+.ct-admin-table-td {
+  @mixin text 13px;
+  padding: 12px;
+  border-top: 1px solid $border1;
+  background-color: white;
+  &--actions {
+    width: 10%;
+    text-align: right;
+  }
+  :deep(.dropdown-menu-items) {
+    top: 40px;
+    min-width: 140px;
+    text-align: center;
+  }
+  &:first-of-type {
+    padding-left: 20px;
+    padding-right: 16px;
+  }
+}
+
 .collapse-cell-toggle {
   transition: transform 0.3s;
   &--on {

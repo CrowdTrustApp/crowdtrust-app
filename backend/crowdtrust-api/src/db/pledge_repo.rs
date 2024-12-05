@@ -71,17 +71,17 @@ pub struct PledgeRepo {
 }
 
 const PLEDGE_COLUMNS: &str = formatcp!(
-    r#"{p}.id, {p}.user_id, {p}.project_id, {p}.comment, {p}.created_at, {p}.updated_at"#,
+    r#"{p}.id, {p}.user_id, {p}.project_id, {p}.comment, {p}.transaction_hash, {p}.blockchain_status, {p}.created_at, {p}.updated_at"#,
     p = "pledges"
 );
 
 const PLEDGE_ITEM_COLUMNS: &str = formatcp!(
-    r#"{p}.id, {p}.pledge_id, {p}.reward_id, {p}.quantity, {p}.paid_price, {p}.paid_currency, {p}.blockchain_status, {p}.transaction_hash, {p}.created_at, {p}.updated_at"#,
+    r#"{p}.id, {p}.pledge_id, {p}.reward_id, {p}.quantity, {p}.paid_price, {p}.paid_currency, {p}.created_at, {p}.updated_at"#,
     p = "pledge_items"
 );
 
 const PLEDGE_RELATION_COLUMNS: &str = formatcp!(
-    r#"{p}, {pi}.id as pi_id, {pi}.pledge_id as pi_pledge_id, {pi}.reward_id as pi_reward_id, {pi}.quantity as pi_quantity, {pi}.paid_price as pi_paid_price, {pi}.paid_currency as pi_paid_currency, {pi}.blockchain_status as pi_blockchain_status, {pi}.transaction_hash as pi_transaction_hash, {pi}.created_at as pi_created_at, {pi}.updated_at as pi_updated_at"#,
+    r#"{p}, {pi}.id as pi_id, {pi}.pledge_id as pi_pledge_id, {pi}.reward_id as pi_reward_id, {pi}.quantity as pi_quantity, {pi}.paid_price as pi_paid_price, {pi}.paid_currency as pi_paid_currency, {pi}.created_at as pi_created_at, {pi}.updated_at as pi_updated_at"#,
     p = PLEDGE_COLUMNS,
     pi = "pi"
 );
@@ -92,6 +92,8 @@ fn map_pledge_entity(row: PgRow) -> Result<PledgeEntity, sqlx::Error> {
         user_id: row.try_get("user_id")?,
         project_id: row.try_get("project_id")?,
         comment: row.try_get("comment")?,
+        blockchain_status: row.try_get_unchecked("blockchain_status")?,
+        transaction_hash: row.try_get("transaction_hash")?,
         created_at: row.try_get("created_at")?,
         updated_at: row.try_get("updated_at")?,
     })
@@ -105,8 +107,6 @@ fn map_pledge_item_entity(row: PgRow) -> Result<PledgeItemEntity, sqlx::Error> {
         quantity: row.try_get("quantity")?,
         paid_price: row.try_get("paid_price")?,
         paid_currency: row.try_get_unchecked("paid_currency")?,
-        blockchain_status: row.try_get_unchecked("blockchain_status")?,
-        transaction_hash: row.try_get("transaction_hash")?,
         created_at: row.try_get("created_at")?,
         updated_at: row.try_get("updated_at")?,
     })
@@ -120,8 +120,6 @@ fn map_pledge_item_entity_relation(row: &PgRow) -> Result<PledgeItemEntity, sqlx
         quantity: row.try_get("pi_quantity")?,
         paid_price: row.try_get("pi_paid_price")?,
         paid_currency: row.try_get_unchecked("pi_paid_currency")?,
-        blockchain_status: row.try_get_unchecked("pi_blockchain_status")?,
-        transaction_hash: row.try_get("pi_transaction_hash")?,
         created_at: row.try_get("pi_created_at")?,
         updated_at: row.try_get("pi_updated_at")?,
     })
@@ -140,6 +138,8 @@ fn map_pledge_relation_entity(row: PgRow) -> Result<PledgeEntityRelations, sqlx:
         project_id: row.try_get("project_id")?,
         comment: row.try_get("comment")?,
         pledge_items,
+        blockchain_status: row.try_get_unchecked("blockchain_status")?,
+        transaction_hash: row.try_get("transaction_hash")?,
         created_at: row.try_get("created_at")?,
         updated_at: row.try_get("updated_at")?,
     })
@@ -239,14 +239,15 @@ impl PledgeRepoTrait for PledgeRepo {
         let pledge = sqlx::query(formatcp!(
             // language=PostgreSQL
             r#"
-              INSERT INTO "pledges" (user_id, project_id)
-              values ($1, $2)
+              INSERT INTO "pledges" (user_id, project_id, blockchain_status)
+              values ($1, $2, $3)
               RETURNING {}
             "#,
             PLEDGE_COLUMNS
         ))
         .bind(props.user_id)
         .bind(props.project_id)
+        .bind(BlockchainStatus::None.to_string())
         .try_map(map_pledge_entity)
         .fetch_one(tx.as_mut())
         .await
@@ -258,8 +259,8 @@ impl PledgeRepoTrait for PledgeRepo {
             sqlx::query(formatcp!(
                 // language=PostgreSQL
                 r#"
-                  INSERT INTO "pledge_items" (pledge_id, reward_id, quantity, paid_price, paid_currency, blockchain_status)
-                  values ($1, $2, $3, $4, $5, $6)
+                  INSERT INTO "pledge_items" (pledge_id, reward_id, quantity, paid_price, paid_currency)
+                  values ($1, $2, $3, $4, $5)
                   RETURNING {}
                 "#,
                 PLEDGE_ITEM_COLUMNS
@@ -269,7 +270,6 @@ impl PledgeRepoTrait for PledgeRepo {
             .bind(item.quantity)
             .bind(item.paid_price)
             .bind(item.paid_currency.to_string())
-            .bind(BlockchainStatus::None.to_string())
             .try_map(map_pledge_item_entity)
             .fetch_one(tx.as_mut())
             .await
@@ -313,7 +313,7 @@ impl PledgeRepoTrait for PledgeRepo {
             .push(") as pledges LEFT OUTER JOIN \"pledge_items\" pi on pi.pledge_id = pledges.id");
 
         filtered_query
-            .push(" GROUP BY pledges.id, pledges.user_id, pledges.project_id, pledges.comment, pledges.created_at, pledges.count, pledges.updated_at, pi.id");
+            .push(" GROUP BY pledges.id, pledges.user_id, pledges.project_id, pledges.comment, pledges.blockchain_status, pledges.transaction_hash, pledges.created_at, pledges.count, pledges.updated_at, pi.id");
         filtered_query = append_order_by(filtered_query, column, direction.to_string());
         filtered_query = append_limit_offset(filtered_query, query.from, query.to);
 
