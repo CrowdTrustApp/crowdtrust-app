@@ -129,7 +129,7 @@ const parseLimit = () => {
     if (backerLimit.value.includes('.')) {
       return { error: 'Backer limit must be a number without decimals' }
     } else {
-      return { error: 'Duration must be a number' }
+      return { error: 'Backer limit must be a number' }
     }
   } else if (limit > 1000000000) {
     return { error: 'Maximum backers is 1,000,000,000' }

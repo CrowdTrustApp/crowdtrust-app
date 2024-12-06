@@ -1,7 +1,7 @@
 <template>
-  <div class="reward">
+  <div class="reward f-col">
     <img :src="urlFromAsset(reward.image)" class="reward-image" />
-    <div class="reward-content">
+    <div class="reward-content f-col">
       <div class="reward-text">
         <div class="reward-top">
           <div class="name">
@@ -90,6 +90,7 @@ const delivery = (time: number): string => {
 .reward-content {
   padding: 6px 8px;
   text-align: left;
+  flex-grow: 1;
 }
 .reward-top {
   @mixin bold 16px;
@@ -102,7 +103,8 @@ const delivery = (time: number): string => {
   font-size: 14px;
 }
 .reward-text {
-  height: 80px;
+  min-height: 80px;
+  flex-grow: 1;
 }
 .description {
   @mixin text 14px;
