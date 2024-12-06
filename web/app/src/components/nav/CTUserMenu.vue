@@ -72,6 +72,8 @@ const menuItems: IDropdownMenuItem[] = [
 }
 :deep(.logout-button) {
   color: $red;
+  cursor: pointer;
+  user-select: none;
 }
 .user-email {
   display: flex;
