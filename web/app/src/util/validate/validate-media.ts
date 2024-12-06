@@ -31,6 +31,14 @@ export interface IValidateMediaError {
   fileErrors: string[]
 }
 
+const parseExt = (fileName: string): string | undefined => {
+  const ext = fileName.split('.').pop()
+  if (ext === 'jpeg') {
+    return 'jpg'
+  }
+  return ext
+}
+
 export async function validateMedia(
   requirements: MediaRequirements,
   file: File,
@@ -47,7 +55,7 @@ export async function validateMedia(
   if (reqSize && file.size > reqSize) {
     errors.push('FILE_SIZE_BIG')
   }
-  const fileExt = file.name.split('.').pop()
+  const fileExt = parseExt(file.name)
   const ext = validTypes.map(extFromContentType)
   if (!fileExt || !(ext.includes(fileExt) || !validTypes.includes(type))) {
     errors.push('FILE_TYPE')
@@ -115,7 +123,7 @@ export async function validateMedia(
       result.type = result.type || extContentType(fileExt)
       return result
     }
-  } catch (error) {
+  } catch (_e) {
     errors.push('FILE_TYPE')
   }
   throw { fileErrors: errors || ['errors.default'] }
